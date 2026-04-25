@@ -32,6 +32,10 @@ A daily-built GitHub Pages website that grows better every day.
 - Smooth scrolling
 - Interactive skill tags
 - Konami code easter egg 🎮
+- Floating particle effects
+- Timeline section
+- Stats counter section
+- Blog section
 
 ## Project Structure
 
@@ -46,7 +50,17 @@ ajh-website/
 └── README.md     # This file
 ```
 
----
+## Sections
 
+1. **Home** - Hero with code window animation
+2. **About** - Developer, Daily Builder, Gaming Hub Creator, Bronx Native
+3. **Projects** - Featured projects with links
+4. **Skills** - Frontend, Backend, DevOps, Specialties
+5. **Stats** - Animated counters
+6. **Journey** - Timeline of AJ's history
+7. **Blog** - Latest builds and updates
+8. **Contact** - Get in touch
+
+---
 *Built with ❤️ by AJ H (1ajh)*
 *Never stopping. Always building.*

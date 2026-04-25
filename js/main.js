@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initSmoothScroll();
   initAnimations();
+  initParticles();
+  initBlogAnimations();
 });
 
 function initNavigation() {
@@ -60,14 +62,14 @@ function initScrollEffects() {
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.about-card, .project-card, .skill-category, .section-header').forEach(el => {
+  document.querySelectorAll('.about-card, .project-card, .skill-category, .section-header, .stat-card, .timeline-item, .blog-card').forEach(el => {
     el.style.opacity = '0';
     observer.observe(el);
   });
 }
 
 function initCounters() {
-  const counters = document.querySelectorAll('.stat-value[data-count]');
+  const counters = document.querySelectorAll('.stat-value[data-count], .stat-number[data-count]');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -124,6 +126,35 @@ function initAnimations() {
   });
 }
 
+function initParticles() {
+  const particleContainer = document.createElement('div');
+  particleContainer.className = 'particles';
+  document.body.appendChild(particleContainer);
+  
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+    particle.style.width = (2 + Math.random() * 4) + 'px';
+    particle.style.height = particle.style.width;
+    if (Math.random() > 0.5) {
+      particle.style.background = 'var(--accent-secondary)';
+    } else if (Math.random() > 0.5) {
+      particle.style.background = 'var(--accent-tertiary)';
+    }
+    particleContainer.appendChild(particle);
+  }
+}
+
+function initBlogAnimations() {
+  const blogCards = document.querySelectorAll('.blog-card');
+  blogCards.forEach((card, index) => {
+    card.style.animationDelay = (index * 0.1) + 's';
+  });
+}
+
 // Konami Code Easter Egg
 const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 let ki = 0;
@@ -139,4 +170,26 @@ document.addEventListener('keydown', e => {
       ki = 0;
     }
   } else ki = 0;
+});
+
+// Scroll-based navbar link highlighting
+let lastScrollY = 0;
+window.addEventListener('scroll', () => {
+  const navbar = document.querySelector('.navbar');
+  if (window.scrollY > lastScrollY && window.scrollY > 100) {
+    navbar.style.transform = 'translateY(-100%)';
+  } else {
+    navbar.style.transform = 'translateY(0)';
+  }
+  lastScrollY = window.scrollY;
+});
+
+// Add keyboard navigation support
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') {
+    document.body.classList.add('keyboard-nav');
+  }
+});
+document.addEventListener('mousedown', () => {
+  document.body.classList.remove('keyboard-nav');
 });
