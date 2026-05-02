@@ -6,14 +6,33 @@
     <title>AJH | Developer & Builder</title>
     <meta name="description" content="AJ H - Full-stack developer from The Bronx, NY. Building things daily.">
     <meta name="theme-color" content="#00d4ff">
+    <link rel="canonical" href="https://ajhs.github.io">
+    <meta name="keywords" content="AJ H, developer, builder, The Bronx, gaming hub, vault, unblocked games, full-stack">
+    <meta name="author" content="AJ H">
     
     <!-- Open Graph -->
     <meta property="og:title" content="AJH | Developer & Builder">
     <meta property="og:description" content="Full-stack developer building things daily from The Bronx.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ajhs.github.io">
+    <meta property="og:image" content="https://ajhs.github.io/images/og-card.svg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@1ajh">
+    <meta name="twitter:title" content="AJH | Developer & Builder">
+    <meta name="twitter:description" content="Full-stack developer building things daily from The Bronx.">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    
+    <!-- PWA / Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AJH">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +43,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
     <!-- Animated Background -->
@@ -35,6 +55,27 @@
         <div class="nav-brand">
             <span class="brand-icon">⚡</span>
             <span class="brand-text">AJH</span>
+        </div>
+        <div class="nav-search-wrapper">
+            <button class="nav-search-btn" id="nav-search-btn" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="nav-search-modal" id="nav-search-modal">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search projects, sections..." autocomplete="off">
+                    <button class="search-close" id="search-close" aria-label="Close search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="search-results" id="search-results"></div>
+                    <div class="search-hints" id="search-hints">
+                        <span class="hint-label">Quick links:</span>
+                        <button class="hint-tag" data-section="#projects">Projects</button>
+                        <button class="hint-tag" data-section="#stats">Stats</button>
+                        <button class="hint-tag" data-section="#blog">Blog</button>
+                        <button class="hint-tag" data-section="#contact">Contact</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <button class="nav-toggle" aria-label="Toggle navigation">
             <span></span>
@@ -50,6 +91,9 @@
             <li><a href="#blog">Blog</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <button class="theme-toggle" aria-label="Toggle theme">
+            <i class="fas fa-adjust"></i>
+        </button>
     </nav>
 
     <!-- Hero Section -->
@@ -385,6 +429,12 @@
             </div>
             <div class="blog-grid">
                 <article class="blog-card">
+                    <div class="blog-date">April 27, 2026</div>
+                    <h3 class="blog-title">Day 17: Social SEO & Scroll-to-Top</h3>
+                    <p class="blog-excerpt">Added Twitter Card meta tags for better social sharing and a smooth scroll-to-top button for improved UX.</p>
+                    <a href="#home" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="blog-card">
                     <div class="blog-date">April 25, 2026</div>
                     <h3 class="blog-title">Day 15: New Features Added</h3>
                     <p class="blog-excerpt">Added timeline, stats section, and enhanced animations. The site grows better every single day.</p>
@@ -438,8 +488,142 @@
                     </div>
                 </div>
             </div>
+            <!-- Contact Form -->
+            <div class="contact-form-wrapper">
+                <form id="contact-form" action="https://formspree.io/f/xwpkgvvj" method="POST" class="contact-form">
+                    <div class="form-header">
+                        <h3><i class="fas fa-paper-plane"></i> Send a Message</h3>
+                        <p>Fill out the form below and I'll get back to you within 24 hours.</p>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required placeholder="AJ Developer">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required placeholder="aj@example.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Project Collaboration">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project or idea..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary form-submit">
+                        <i class="fas fa-rocket"></i> Send Message
+                    </button>
+                    <div class="form-status" id="form-status"></div>
+                </form>
+            </div>
         </div>
     </section>
+
+    <!-- Newsletter Section -->
+    <section id="newsletter" class="section newsletter-section">
+        <div class="container">
+            <div class="newsletter-card">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="newsletter-text">
+                        <h3>Stay Updated</h3>
+                        <p>Subscribe to the daily build newsletter. Get notified when new features drop, projects launch, or when I ship something cool.</p>
+                    </div>
+                </div>
+                <form id="newsletter-form" class="newsletter-form" action="https://formspree.io/f/xwpkgvvj" method="POST">
+                    <input type="email" name="email" required placeholder="your@email.com" class="newsletter-input">
+                    <input type="hidden" name="_subject" value="Newsletter Subscription">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Subscribe
+                    </button>
+                </form>
+                <p class="newsletter-note">No spam. Unsubscribe anytime. Built with ❤️</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Gallery Section -->
+    <section id="gallery" class="section alt-bg">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Showcase</span>
+                <h2 class="section-title">Project Gallery</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-image" style="background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);">
+                        <i class="fas fa-vault"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>AJH's Vault V6</h4>
+                        <p>100K+ games unblocked</p>
+                        <a href="https://ajhmath.org" target="_blank" class="gallery-link">
+                            <i class="fas fa-external-link-alt"></i> Visit
+                        </a>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" style="background: linear-gradient(135deg, #7b2cbf 0%, #ff006e 100%);">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>Web Development</h4>
+                        <p>Full-stack projects</p>
+                        <a href="https://github.com/1ajh" target="_blank" class="gallery-link">
+                            <i class="fab fa-github"></i> View
+                        </a>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" style="background: linear-gradient(135deg, #ff006e 0%, #ffbd2e 100%);">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>Gaming Hubs</h4>
+                        <p>Entertainment platforms</p>
+                        <a href="#projects" class="gallery-link">
+                            <i class="fas fa-arrow-right"></i> Explore
+                        </a>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-image" style="background: linear-gradient(135deg, #27c93f 0%, #00d4ff 100%);">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <h4>Dev Tools</h4>
+                        <p>Utilities & scripts</p>
+                        <a href="https://github.com/1ajh" target="_blank" class="gallery-link">
+                            <i class="fab fa-github"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard Shortcuts Panel -->
+    <div class="shortcuts-panel" id="shortcuts-panel" aria-label="Keyboard shortcuts">
+        <button class="shortcuts-toggle" id="shortcuts-toggle" aria-label="Show keyboard shortcuts">
+            <i class="fas fa-keyboard"></i>
+        </button>
+        <div class="shortcuts-content">
+            <h4><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h4>
+            <ul class="shortcuts-list">
+                <li><kbd>/</kbd> or <kbd>K</kbd> Search</li>
+                <li><kbd>Esc</kbd> Close modals</li>
+                <li><kbd>T</kbd> Toggle theme</li>
+                <li><kbd>?</kbd> Show shortcuts</li>
+                <li><kbd>↑↓</kbd> Navigate sections</li>
+            </ul>
+            <p class="shortcuts-hint">Press <kbd>?</kbd> to toggle</p>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -451,8 +635,9 @@
                 </div>
                 <p class="footer-text">Building daily. Never stopping. Since forever.</p>
                 <div class="footer-links">
-                    <a href="https://github.com/1ajh" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://discord.gg/UnDrzQQksw" target="_blank"><i class="fab fa-discord"></i></a>
+                    <a href="https://github.com/1ajh" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://discord.gg/UnDrzQQksw" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://twitter.com/1ajh" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -460,6 +645,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="js/main.js"></script>
 </body>

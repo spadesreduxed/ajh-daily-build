@@ -1,0 +1,222 @@
+/* ========================================
+   AJH Website - Theme System (Light/Dark)
+   ======================================== */
+
+:root {
+  /* Dark theme (default) */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #1a1a25;
+  --bg-card-hover: #22222f;
+  --accent-primary: #00d4ff;
+  --accent-secondary: #7b2cbf;
+  --accent-tertiary: #ff006e;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #606070;
+  --border-color: #2a2a3a;
+  --gradient-1: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 50%, #ff006e 100%);
+  --gradient-2: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+  --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.3);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #f5f5f7;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0f0f5;
+  --accent-primary: #0066cc;
+  --accent-secondary: #6b2c9f;
+  --accent-tertiary: #e6005c;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a5a;
+  --text-muted: #8a8a9a;
+  --border-color: #e0e0e8;
+  --shadow-glow: 0 4px 30px rgba(0, 102, 204, 0.15);
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .bg-grid {
+  background-image: linear-gradient(rgba(0, 102, 204, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 204, 0.05) 1px, transparent 1px);
+}
+
+[data-theme="light"] .bg-glow {
+  background: radial-gradient(circle at 30% 20%, rgba(0, 102, 204, 0.08) 0%, transparent 40%), radial-gradient(circle at 70% 80%, rgba(107, 44, 159, 0.06) 0%, transparent 40%);
+  animation: none;
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(245, 245, 247, 0.9);
+  border-bottom-color: #e0e0e8;
+}
+
+[data-theme="light"] .navbar.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+}
+
+[data-theme="light"] .brand-text {
+  background: linear-gradient(135deg, #0066cc 0%, #00cc88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .nav-toggle span {
+  background: #1a1a1a;
+}
+
+[data-theme="light"] .nav-links {
+  background: #f5f5f7;
+}
+
+[data-theme="light"] .hero-badge {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: rgba(0, 102, 204, 0.3);
+  color: #0066cc;
+}
+
+[data-theme="light"] .code-window {
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+[data-theme="light"] .window-header {
+  background: #2a2a2a;
+  border-bottom-color: #333;
+}
+
+[data-theme="light"] .window-title {
+  color: #aaa;
+}
+
+[data-theme="light"] .section-tag {
+  background: rgba(107, 44, 159, 0.1);
+  border-color: rgba(107, 44, 159, 0.3);
+  color: #6b2c9f;
+}
+
+[data-theme="light"] .about-card,
+[data-theme="light"] .project-card,
+[data-theme="light"] .skill-category,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .timeline-content,
+[data-theme="light"] .blog-card,
+[data-theme="light"] .contact-link,
+[data-theme="light"] .cta-card {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .about-card:hover,
+[data-theme="light"] .project-card:hover,
+[data-theme="light"] .skill-category:hover,
+[data-theme="light"] .stat-card:hover,
+[data-theme="light"] .blog-card:hover {
+  border-color: #0066cc;
+  box-shadow: var(--shadow-glow);
+}
+
+[data-theme="light"] .footer {
+  background: #ffffff;
+  border-top-color: #e0e0e8;
+}
+
+[data-theme="light"] .footer-links a {
+  background: #f5f5f7;
+  border-color: #e0e0e8;
+}
+
+/* Light theme for new sections */
+[data-theme="light"] .contact-form-wrapper {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .form-group input,
+[data-theme="light"] .form-group textarea {
+  background: #f5f5f7;
+  border-color: #e0e0e8;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .newsletter-card {
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.08) 0%, rgba(107, 44, 159, 0.08) 100%);
+  border-color: rgba(0, 102, 204, 0.2);
+}
+
+[data-theme="light"] .newsletter-input {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .gallery-item {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .gallery-link {
+  background: #f5f5f7;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .shortcuts-toggle {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .shortcuts-content {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .shortcuts-list kbd {
+  background: #f5f5f7;
+  border-color: #e0e0e8;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: rgba(0, 212, 255, 0.1);
+}
+
+[data-theme="light"] .theme-toggle {
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  border-color: #0066cc;
+  color: #0066cc;
+}
+
+/* Theme transition */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

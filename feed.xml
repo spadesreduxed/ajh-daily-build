@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>AJH Daily Builds - RSS Feed</title>
+  <subtitle>Latest updates from the daily-built AJH website</subtitle>
+  <link href="https://ajhs.github.io/feed.xml" rel="self"/>
+  <link href="https://ajhs.github.io"/>
+  <updated>2026-05-01T12:00:00Z</updated>
+  <id>https://ajhs.github.io</id>
+  <author>
+    <name>AJ H</name>
+    <email>aj@ajh.dev</email>
+  </author>
+  
+  <entry>
+    <title>Day 21 - PWA Installability & RSS Feed</title>
+    <link href="https://ajhs.github.io#home"/>
+    <updated>2026-05-01T12:00:00Z</updated>
+    <id>day-21-pwa-rss</id>
+    <content type="html">Added PWA manifest for installability, custom app icons, RSS feed for blog updates, and enhanced the service worker for offline support.</content>
+  </entry>
+  
+  <entry>
+    <title>Day 20 - Offline Support & SEO</title>
+    <link href="https://ajhs.github.io#home"/>
+    <updated>2026-04-30T12:00:00Z</updated>
+    <id>day-20-offline-seo</id>
+    <content type="html">Added sitemap.xml for search engine crawling, robots.txt for crawler directives, custom SVG favicon, and service worker for offline support.</content>
+  </entry>
+  
+  <entry>
+    <title>Day 19 - Page Analytics & Cursor Trail</title>
+    <link href="https://ajhs.github.io#home"/>
+    <updated>2026-04-29T12:00:00Z</updated>
+    <id>day-19-analytics-cursor</id>
+    <content type="html">Created custom SVG OG image for social sharing, added page view analytics tracking, and custom cursor glow trail effect.</content>
+  </entry>
+  
+  <entry>
+    <title>Day 18 - Contact System & Interactive Enhancements</title>
+    <link href="https://ajhs.github.io#contact"/>
+    <updated>2026-04-28T12:00:00Z</updated>
+    <id>day-18-contact-interactive</id>
+    <content type="html">Added functional contact form with Formspree, newsletter signup, project gallery, and keyboard shortcuts panel.</content>
+  </entry>
+  
+  <entry>
+    <title>Day 17 - Social Media SEO & UX Enhancement</title>
+    <link href="https://ajhs.github.io#home"/>
+    <updated>2026-04-27T12:00:00Z</updated>
+    <id>day-17-social-seo</id>
+    <content type="html">Added Twitter Card meta tags, scroll-to-top button, and improved footer social links accessibility.</content>
+  </entry>
+</feed>

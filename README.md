@@ -15,7 +15,8 @@ A daily-built GitHub Pages website that grows better every day.
 - Pure HTML/CSS/JavaScript (GitHub Pages compatible)
 - No frameworks, no build step
 - Mobile-first responsive design
-- Dark theme with neon accents
+- Dark theme with neon accents (light theme available)
+- Accessibility-focused (keyboard navigation, ARIA labels, focus styles)
 
 ## Development
 
@@ -25,6 +26,12 @@ A daily-built GitHub Pages website that grows better every day.
 
 ## Features
 
+- **Theme System** - Toggle between dark and light modes with system preference detection
+- **Scroll to Top** - Smooth scroll-to-top button appears after scrolling
+- **Contact Form** - Functional contact form with Formspree integration
+- **Newsletter Signup** - Email subscription for daily build updates
+- **Project Gallery** - Visual showcase of projects with links
+- **Keyboard Shortcuts** - Press `?` to see shortcuts panel (T for theme, etc.)
 - Responsive navigation with mobile hamburger menu
 - Animated hero section with floating code window
 - Scroll-triggered fade-in animations
@@ -36,18 +43,28 @@ A daily-built GitHub Pages website that grows better every day.
 - Timeline section
 - Stats counter section
 - Blog section
+- Full keyboard accessibility
+- SEO optimized with meta tags and Twitter cards
+- Sitemap.xml for search engine crawling
+- robots.txt for crawler directives
+- Service worker for offline support
+- Custom SVG favicon with brand identity
+- PWA manifest for installability (install as app)
+- Custom app icons (192x192 and 512x512)
+- RSS/Atom feed for blog updates
 
 ## Project Structure
 
 ```
 ajh-website/
-├── index.html    # Main HTML page
+├── index.html      # Main HTML page
 ├── css/
-│   └── style.css # All styles
+│   ├── style.css  # Core styles + responsive
+│   └── theme.css  # Light/dark theme variables
 ├── js/
-│   └── main.js  # JavaScript functionality
-├── images/       # Image assets
-└── README.md     # This file
+│   └── main.js    # JavaScript functionality
+├── images/         # Image assets
+└── README.md       # This file
 ```
 
 ## Sections
@@ -60,6 +77,15 @@ ajh-website/
 6. **Journey** - Timeline of AJ's history
 7. **Blog** - Latest builds and updates
 8. **Contact** - Get in touch
+
+## Accessibility
+
+- ARIA labels on interactive elements
+- Keyboard navigation support
+- Focus-visible styles
+- Respects `prefers-reduced-motion`
+- High contrast ratios
+- Screen reader friendly
 
 ---
 *Built with ❤️ by AJ H (1ajh)*
