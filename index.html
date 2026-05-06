@@ -46,6 +46,18 @@
     <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-content">
+            <div class="loader-icon">
+                <span class="brand-icon">⚡</span>
+            </div>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loader-progress"></div>
+            </div>
+            <div class="loader-text">Building your experience...</div>
+        </div>
+    </div>
     <!-- Animated Background -->
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
@@ -85,6 +97,7 @@
         <ul class="nav-links">
             <li><a href="#home" class="active">Home</a></li>
             <li><a href="#about">About</a></li>
+            <li><a href="#current">Current</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#stats">Stats</a></li>
             <li><a href="#journey">Journey</a></li>
@@ -420,38 +433,246 @@
         </div>
     </section>
 
+    <!-- Project Demo Section -->
+    <section id="demos" class="section alt-bg">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Live Previews</span>
+                <h2 class="section-title">Project Demos</h2>
+                <p class="section-subtitle">Click on any demo to preview the project live</p>
+            </div>
+            <div class="demos-grid">
+                <div class="demo-card" data-url="https://ajhmath.org">
+                    <div class="demo-preview">
+                        <div class="demo-overlay">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Click to Open</span>
+                        </div>
+                        <div class="demo-placeholder">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                    </div>
+                    <div class="demo-info">
+                        <h4>AJH's Vault V6</h4>
+                        <p>100K+ unblocked games</p>
+                        <span class="demo-badge">Gaming Hub</span>
+                    </div>
+                </div>
+                <div class="demo-card" data-url="https://github.com/1ajh">
+                    <div class="demo-preview">
+                        <div class="demo-overlay">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Click to Open</span>
+                        </div>
+                        <div class="demo-placeholder code-bg">
+                            <i class="fab fa-github"></i>
+                        </div>
+                    </div>
+                    <div class="demo-info">
+                        <h4>GitHub Profile</h4>
+                        <p>90+ repositories</p>
+                        <span class="demo-badge">Source Code</span>
+                    </div>
+                </div>
+                <div class="demo-card" data-url="https://ajhs.zo.space">
+                    <div class="demo-preview">
+                        <div class="demo-overlay">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Click to Open</span>
+                        </div>
+                        <div class="demo-placeholder gradient-bg">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                    </div>
+                    <div class="demo-info">
+                        <h4>Zo Space</h4>
+                        <p>Personal AI workspace</p>
+                        <span class="demo-badge">Platform</span>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-modal" id="demo-modal">
+                <div class="demo-modal-content">
+                    <div class="demo-modal-header">
+                        <h3 id="demo-modal-title">Project Preview</h3>
+                        <button class="demo-modal-close" id="demo-modal-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="demo-modal-body">
+                        <iframe id="demo-iframe" src="" frameborder="0"></iframe>
+                    </div>
+                    <div class="demo-modal-footer">
+                        <a href="#" id="demo-external-link" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Open Full Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Blog Section -->
     <section id="blog" class="section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Updates</span>
-                <h2 class="section-title">Latest Builds</h2>
+                <span class="section-tag">Latest Builds</span>
+                <h2 class="section-title">Daily Build Log</h2>
             </div>
             <div class="blog-grid">
                 <article class="blog-card">
-                    <div class="blog-date">April 27, 2026</div>
-                    <h3 class="blog-title">Day 17: Social SEO & Scroll-to-Top</h3>
-                    <p class="blog-excerpt">Added Twitter Card meta tags for better social sharing and a smooth scroll-to-top button for improved UX.</p>
-                    <a href="#home" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    <span class="blog-date">May 6, 2026</span>
+                    <h3 class="blog-title">Day 26: Currently Building Section</h3>
+                    <p class="blog-excerpt">Added new "Currently Building" section with live project status tracker cards showing active development projects, progress bars, and status indicators for AJH Website, Vault V6, and Vault V10.</p>
+                    <a href="#current" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card">
-                    <div class="blog-date">April 25, 2026</div>
-                    <h3 class="blog-title">Day 15: New Features Added</h3>
-                    <p class="blog-excerpt">Added timeline, stats section, and enhanced animations. The site grows better every single day.</p>
-                    <a href="#journey" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    <span class="blog-date">May 5, 2026</span>
+                    <h3 class="blog-title">Day 25: GitHub Actions CI/CD + 404 Page</h3>
+                    <p class="blog-excerpt">Added GitHub Actions workflow for automated deployment with validation, custom 404 error page with glitch effects, Achievements section with 4 milestone cards, and Easter Egg secret message.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card">
-                    <div class="blog-date">April 24, 2026</div>
-                    <h3 class="blog-title">Day 14: Complete UI Overhaul</h3>
-                    <p class="blog-excerpt">New dark theme with neon accents, scroll animations, and improved mobile responsiveness.</p>
-                    <a href="#about" class="blog-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    <span class="blog-date">May 4, 2026</span>
+                    <h3 class="blog-title">Day 24: Project Demos + Blog Expansion</h3>
+                    <p class="blog-excerpt">Added Project Demos section with 3 clickable demo cards that open in modal iframes. Updated Blog with 5 daily build entries.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="blog-card">
+                    <span class="blog-date">May 3, 2026</span>
+                    <h3 class="blog-title">Day 23: Loading Screen + Search</h3>
+                    <p class="blog-excerpt">Added animated loading screen with pulsing brand icon and gradient progress bar. Also implemented full search functionality with keyboard shortcuts.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="blog-card">
+                    <span class="blog-date">May 2, 2026</span>
+                    <h3 class="blog-title">Day 22: PWA & RSS Feed</h3>
+                    <p class="blog-excerpt">Added manifest.json for installability, custom app icons, and RSS/Atom feed for blog updates.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card coming-soon">
-                    <div class="blog-date">Coming Soon</div>
-                    <h3 class="blog-title">More Updates</h3>
-                    <p class="blog-excerpt">New blog posts and project updates coming daily.</p>
-                    <a href="#" class="blog-link">Stay Tuned <i class="fas fa-arrow-right"></i></a>
+                    <div class="blog-coming-soon-content">
+                        <i class="fas fa-hammer"></i>
+                        <h3>More Coming Soon</h3>
+                        <p>New blog entries added daily as the build continues...</p>
+                    </div>
                 </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Currently Working On Section -->
+    <section id="current" class="section working-on-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-code-branch"></i> Active Development</span>
+                <h2 class="section-title">Currently Building</h2>
+                <p class="section-subtitle">Follow my daily progress in real-time</p>
+            </div>
+            <div class="working-on-grid">
+                <div class="project-status-card" data-project="ajh-website">
+                    <div class="project-status-header">
+                        <div class="project-status-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="project-status-info">
+                            <h4>AJH Website</h4>
+                            <span class="project-status-badge">github.com/1ajh/ajh-website</span>
+                        </div>
+                        <div class="project-status-indicator active"></div>
+                    </div>
+                    <div class="project-status-body">
+                        <p class="project-description">Daily-built GitHub Pages site growing better every day. Pure HTML/CSS/JS, no frameworks.</p>
+                        <div class="project-progress">
+                            <div class="progress-header">
+                                <span>Build Progress</span>
+                                <span class="progress-percent">Day 26/∞</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">PWA</span>
+                        </div>
+                    </div>
+                    <div class="project-status-footer">
+                        <span class="last-updated"><i class="fas fa-clock"></i> Updated today</span>
+                        <a href="https://ajhs.github.io" target="_blank" class="btn btn-sm">View Site <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <div class="project-status-card" data-project="vaultv6">
+                    <div class="project-status-header">
+                        <div class="project-status-icon">
+                            <i class="fas fa-vault"></i>
+                        </div>
+                        <div class="project-status-info">
+                            <h4>AJH's Vault V6</h4>
+                            <span class="project-status-badge">ajhmath.org</span>
+                        </div>
+                        <div class="project-status-indicator active"></div>
+                    </div>
+                    <div class="project-status-body">
+                        <p class="project-description">Ultimate browser gaming hub with 100K+ unblocked games, proxy tools, and educational content.</p>
+                        <div class="project-progress">
+                            <div class="progress-header">
+                                <span>Scale</span>
+                                <span class="progress-percent">100K+ Games</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Games</span>
+                            <span class="tag">Proxy</span>
+                            <span class="tag">Education</span>
+                            <span class="tag">Hub</span>
+                        </div>
+                    </div>
+                    <div class="project-status-footer">
+                        <span class="last-updated"><i class="fas fa-clock"></i> Active maintenance</span>
+                        <a href="https://ajhmath.org" target="_blank" class="btn btn-sm">Visit <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+
+                <div class="project-status-card" data-project="vault-v10">
+                    <div class="project-status-header">
+                        <div class="project-status-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="project-status-info">
+                            <h4>Vault V10 "The Finale"</h4>
+                            <span class="project-status-badge">Next Gen Vault</span>
+                        </div>
+                        <div class="project-status-indicator planning"></div>
+                    </div>
+                    <div class="project-status-body">
+                        <p class="project-description">Next generation vault with enhanced features, better performance, and new gaming experiences.</p>
+                        <div class="project-progress">
+                            <div class="progress-header">
+                                <span>Development</span>
+                                <span class="progress-percent">Planning</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Planning</span>
+                            <span class="tag">Vite</span>
+                            <span class="tag">React</span>
+                        </div>
+                    </div>
+                    <div class="project-status-footer">
+                        <span class="last-updated"><i class="fas fa-clock"></i> In planning</span>
+                        <a href="https://github.com/1ajh" target="_blank" class="btn btn-sm">GitHub <i class="fab fa-github"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -606,6 +827,64 @@
             </div>
         </div>
     </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="section achievements-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Milestones</span>
+                <h2 class="section-title">Achievements</h2>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h4>100K+ Games Unblocked</h4>
+                        <p>Built and maintained gaming hubs serving over 100,000 games to users worldwide</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h4>Daily Builder Streak</h4>
+                        <p>Consistently building and shipping new features every single day</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h4>90+ Repositories</h4>
+                        <p>Active open source contributions across multiple projects and platforms</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h4>Global Reach</h4>
+                        <p>Projects and tools used by developers and gamers across the globe</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Easter Egg Section (Hidden) -->
+    <div class="secret-message" id="secret-message" style="display:none;">
+        <div class="secret-content">
+            <span class="secret-icon">🎮</span>
+            <h3>You found the secret!</h3>
+            <p>You discovered an Easter egg. Keep exploring!</p>
+            <button class="btn btn-primary" onclick="closeSecret()">Continue</button>
+        </div>
+    </div>
 
     <!-- Keyboard Shortcuts Panel -->
     <div class="shortcuts-panel" id="shortcuts-panel" aria-label="Keyboard shortcuts">

@@ -5,6 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
+  initLoader();
   initNavigation();
   initScrollEffects();
   initCounters();
@@ -21,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initPageAnalytics();
   initCursorTrail();
   initSearch();
+  initDemos();
+  initEasterEgg();
 });
 
 function initTheme() {
@@ -380,6 +383,38 @@ function initPageAnalytics() {
   console.log(`Page views today: ${views}`);
 }
 
+// Page Loader
+function initLoader() {
+  const loader = document.getElementById('loader');
+  const progress = document.getElementById('loader-progress');
+  if (!loader) return;
+
+  // Simulate loading progress
+  let width = 0;
+  const interval = setInterval(() => {
+    width += Math.random() * 30;
+    if (width >= 100) {
+      width = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }, 300);
+    }
+    if (progress) progress.style.width = width + '%';
+  }, 150);
+
+  // Fallback: hide loader after 3 seconds max
+  setTimeout(() => {
+    clearInterval(interval);
+    if (progress) progress.style.width = '100%';
+    setTimeout(() => {
+      loader.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }, 300);
+  }, 3000);
+}
+
 // Service Worker Registration
 function initServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -458,10 +493,12 @@ function initSearch() {
   const searchData = [
     { title: 'Home', desc: 'Hero section with introduction', section: '#home', icon: 'fa-home' },
     { title: 'About Me', desc: 'Learn about AJ H and skills', section: '#about', icon: 'fa-user' },
+    { title: 'Currently Building', desc: 'Live project status tracker', section: '#current', icon: 'fa-code-branch' },
     { title: 'Projects', desc: 'Featured projects including Vault V6', section: '#projects', icon: 'fa-folder-open' },
     { title: 'Skills', desc: 'Technical stack and expertise', section: '#skills', icon: 'fa-code' },
     { title: 'Stats', desc: 'Daily build numbers and metrics', section: '#stats', icon: 'fa-chart-bar' },
     { title: 'Journey', desc: 'AJ\'s development timeline', section: '#journey', icon: 'fa-road' },
+    { title: 'Demos', desc: 'Interactive project previews', section: '#demos', icon: 'fa-play-circle' },
     { title: 'Blog', desc: 'Latest builds and updates', section: '#blog', icon: 'fa-blog' },
     { title: 'Gallery', desc: 'Project showcase gallery', section: '#gallery', icon: 'fa-images' },
     { title: 'Contact', desc: 'Get in touch or send a message', section: '#contact', icon: 'fa-envelope' },
@@ -549,3 +586,77 @@ function initSearch() {
     }
   });
 }
+
+// Project Demos Modal
+function initDemos() {
+  const demoCards = document.querySelectorAll('.demo-card');
+  const demoModal = document.getElementById('demo-modal');
+  const demoIframe = document.getElementById('demo-iframe');
+  const demoModalTitle = document.getElementById('demo-modal-title');
+  const demoModalClose = document.getElementById('demo-modal-close');
+  const demoExternalLink = document.getElementById('demo-external-link');
+
+  if (!demoModal || !demoCards.length) return;
+
+  demoCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const url = card.dataset.url;
+      const title = card.querySelector('.demo-info h4')?.textContent || 'Project Preview';
+      
+      if (demoIframe) demoIframe.src = url;
+      if (demoModalTitle) demoModalTitle.textContent = title;
+      if (demoExternalLink) demoExternalLink.href = url;
+      
+      demoModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    demoModal.classList.remove('active');
+    if (demoIframe) demoIframe.src = '';
+    document.body.style.overflow = 'auto';
+  }
+
+  if (demoModalClose) {
+    demoModalClose.addEventListener('click', closeModal);
+  }
+
+  demoModal.addEventListener('click', (e) => {
+    if (e.target === demoModal) closeModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && demoModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+}
+
+// Easter Egg - Secret Message
+function initEasterEgg() {
+  // Check if user has found the secret before
+  const secretFound = localStorage.getItem('ajh_secret_found');
+  
+  // Random chance to show secret (0.1%)
+  if (!secretFound && Math.random() < 0.001) {
+    setTimeout(() => {
+      const secretMsg = document.getElementById('secret-message');
+      if (secretMsg) {
+        secretMsg.style.display = 'flex';
+        localStorage.setItem('ajh_secret_found', 'true');
+      }
+    }, 5000);
+  }
+}
+
+// Close secret message
+function closeSecret() {
+  const secretMsg = document.getElementById('secret-message');
+  if (secretMsg) {
+    secretMsg.style.display = 'none';
+  }
+}
+
+// Make closeSecret available globally
+window.closeSecret = closeSecret;

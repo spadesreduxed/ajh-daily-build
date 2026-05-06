@@ -176,6 +176,32 @@
   border-color: #e0e0e8;
 }
 
+[data-theme="light"] .demo-card {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .demo-modal-content {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .demo-modal-header {
+  background: #f5f5f7;
+  border-bottom-color: #e0e0e8;
+}
+
+[data-theme="light"] .demo-modal-footer {
+  background: #f5f5f7;
+  border-top-color: #e0e0e8;
+}
+
+[data-theme="light"] .demo-badge {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: rgba(0, 102, 204, 0.3);
+  color: #0066cc;
+}
+
 /* Theme Toggle Button */
 .theme-toggle {
   background: transparent;

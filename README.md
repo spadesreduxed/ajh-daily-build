@@ -26,14 +26,17 @@ A daily-built GitHub Pages website that grows better every day.
 
 ## Features
 
-- **Theme System** - Toggle between dark and light modes with system preference detection
+- **Page Loading Screen** - Animated loading overlay with progress bar and pulsing brand icon
+- **Theme System** - Toggle between dark and light modes with localStorage persistence
+- **Search Functionality** - Full-screen search modal with keyboard shortcuts (/ or K to open)
+- **Project Demos** - Interactive demo cards with modal iframe previews for live projects
 - **Scroll to Top** - Smooth scroll-to-top button appears after scrolling
 - **Contact Form** - Functional contact form with Formspree integration
 - **Newsletter Signup** - Email subscription for daily build updates
 - **Project Gallery** - Visual showcase of projects with links
 - **Keyboard Shortcuts** - Press `?` to see shortcuts panel (T for theme, etc.)
 - Responsive navigation with mobile hamburger menu
-- Animated hero section with floating code window
+- Hero section with floating code window animation
 - Scroll-triggered fade-in animations
 - Animated number counters
 - Smooth scrolling
@@ -42,7 +45,7 @@ A daily-built GitHub Pages website that grows better every day.
 - Floating particle effects
 - Timeline section
 - Stats counter section
-- Blog section
+- Blog section with 5 daily build entries
 - Full keyboard accessibility
 - SEO optimized with meta tags and Twitter cards
 - Sitemap.xml for search engine crawling
@@ -75,8 +78,10 @@ ajh-website/
 4. **Skills** - Frontend, Backend, DevOps, Specialties
 5. **Stats** - Animated counters
 6. **Journey** - Timeline of AJ's history
-7. **Blog** - Latest builds and updates
-8. **Contact** - Get in touch
+7. **Demos** - Interactive project preview cards with modal
+8. **Blog** - 5 latest build entries
+9. **Contact** - Get in touch
+10. **Newsletter** - Subscribe for updates
 
 ## Accessibility
 
@@ -88,5 +93,6 @@ ajh-website/
 - Screen reader friendly
 
 ---
+
 *Built with ❤️ by AJ H (1ajh)*
 *Never stopping. Always building.*

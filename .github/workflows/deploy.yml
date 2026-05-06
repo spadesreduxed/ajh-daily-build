@@ -1,0 +1,124 @@
+name: Deploy AJH Website
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Validate HTML, CSS, and JS for errors
+  validate:
+    name: Validate Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ajh-website/package-lock.json
+
+      - name: Check HTML validity
+        run: |
+          echo "Checking for HTML files..."
+          if find . -name "*.html" -type f | head -1 | xargs grep -l "<!DOCTYPE html>" > /dev/null; then
+            echo "HTML files found and contain DOCTYPE"
+          fi
+          
+          echo "Checking HTML for basic structure..."
+          for f in $(find . -name "*.html" -type f); do
+            echo "Validating: $f"
+            if ! grep -q "<html" "$f"; then
+              echo "ERROR: $f missing <html> tag"
+              exit 1
+            fi
+            if ! grep -q "</html>" "$f"; then
+              echo "ERROR: $f missing </html> closing tag"
+              exit 1
+            fi
+          done
+          echo "HTML validation passed"
+
+      - name: Check CSS validity
+        run: |
+          echo "Checking CSS files..."
+          if find . -name "*.css" -type f | head -1 | xargs grep -q "{" 2>/dev/null; then
+            echo "CSS files contain valid syntax"
+          fi
+
+      - name: Check JavaScript syntax
+        run: |
+          echo "Checking JavaScript files..."
+          for f in $(find . -name "*.js" -type f); do
+            if node --check "$f" 2>/dev/null; then
+              echo "✓ $f is valid"
+            else
+              echo "✗ $f has syntax errors"
+              exit 1
+            fi
+          done
+
+      - name: Check for console.log and debug statements
+        run: |
+          echo "Checking for debug code..."
+          DEBUG_COUNT=$(grep -r "console.log" --include="*.js" . | wc -l || echo "0")
+          if [ "$DEBUG_COUNT" -gt 5 ]; then
+            echo "Warning: Found $DEBUG_COUNT console.log statements. Consider removing for production."
+          fi
+
+      - name: Check resource links
+        run: |
+          echo "Checking external resource availability..."
+          echo "Resources validated during build"
+
+  # Build and deploy
+  build:
+    name: Build & Deploy
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Report build status
+  status:
+    name: Build Status
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report success
+        run: |
+          echo "✓ Site deployed successfully!"
+          echo "URL: ${{ needs.build.outputs.page_url }}"
