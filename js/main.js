@@ -19,11 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initShortcutsPanel();
   initKeyboardShortcuts();
   initServiceWorker();
+  initServiceWorkerUpdate();
   initPageAnalytics();
   initCursorTrail();
   initSearch();
   initDemos();
   initEasterEgg();
+  initQuickActions();
 });
 
 function initTheme() {
@@ -430,6 +432,161 @@ function initServiceWorker() {
   }
 }
 
+// Service Worker Update Notification
+function initServiceWorkerUpdate() {
+  if (!('serviceWorker' in navigator)) return;
+  
+  let updateInterval = setInterval(() => {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateNotification();
+            }
+          });
+        });
+      });
+    });
+  }, 60000); // Check every minute
+  
+  // Check immediately on load
+  navigator.serviceWorker.ready.then(() => {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        if (registration.waiting) {
+          showUpdateNotification(true);
+        }
+      });
+    });
+  });
+}
+
+function showUpdateNotification(silent = false) {
+  const existing = document.getElementById('sw-update-notification');
+  if (existing) return;
+  
+  const notification = document.createElement('div');
+  notification.id = 'sw-update-notification';
+  notification.innerHTML = `
+    <div class="sw-update-content">
+      <i class="fas fa-sync-alt"></i>
+      <div class="sw-update-text">
+        <strong>Update Available</strong>
+        <span>A new version of this site is ready!</span>
+      </div>
+    </div>
+    <button class="sw-update-btn" id="sw-update-reload">Update Now</button>
+    <button class="sw-update-close" id="sw-update-close">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+  
+  // Inject styles
+  if (!document.getElementById('sw-update-styles')) {
+    const styles = document.createElement('style');
+    styles.id = 'sw-update-styles';
+    styles.textContent = `
+      #sw-update-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--bg-card, #1a1a25);
+        border: 1px solid var(--border-color, #2a2a3a);
+        border-radius: 12px;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+        z-index: 9999;
+        animation: slideInUp 0.4s ease;
+        font-family: inherit;
+      }
+      @keyframes slideInUp {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      #sw-update-notification .sw-update-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      #sw-update-notification .sw-update-content i {
+        color: var(--accent-primary, #00d4ff);
+        font-size: 1.2rem;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      #sw-update-notification .sw-update-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      #sw-update-notification .sw-update-text strong {
+        color: var(--text-primary, #fff);
+        font-size: 0.95rem;
+      }
+      #sw-update-notification .sw-update-text span {
+        color: var(--text-secondary, #a0a0b0);
+        font-size: 0.8rem;
+      }
+      #sw-update-notification .sw-update-btn {
+        background: var(--accent-primary, #00d4ff);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+        font-family: inherit;
+      }
+      #sw-update-notification .sw-update-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+      }
+      #sw-update-notification .sw-update-close {
+        background: transparent;
+        border: none;
+        color: var(--text-muted, #606070);
+        cursor: pointer;
+        padding: 5px;
+        font-size: 1rem;
+        transition: color 0.2s ease;
+      }
+      #sw-update-notification .sw-update-close:hover {
+        color: var(--accent-primary, #00d4ff);
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+  
+  document.body.appendChild(notification);
+  
+  document.getElementById('sw-update-reload').addEventListener('click', () => {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((registration) => {
+        registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+      });
+      window.location.reload();
+    });
+  });
+  
+  document.getElementById('sw-update-close').addEventListener('click', () => {
+    notification.remove();
+  });
+  
+  if (silent) {
+    setTimeout(() => notification.remove(), 10000);
+  }
+}
+
 // Custom Cursor Glow Trail
 function initCursorTrail() {
   const trailCount = 8;
@@ -660,3 +817,184 @@ function closeSecret() {
 
 // Make closeSecret available globally
 window.closeSecret = closeSecret;
+
+// Quick Actions Floating Menu
+function initQuickActions() {
+  const existing = document.getElementById('quick-actions');
+  if (existing) return;
+  
+  const quickActions = document.createElement('div');
+  quickActions.id = 'quick-actions';
+  quickActions.innerHTML = `
+    <button class="qa-toggle" id="qa-toggle" aria-label="Quick Actions">
+      <i class="fas fa-bolt"></i>
+    </button>
+    <div class="qa-menu" id="qa-menu">
+      <button class="qa-item" data-action="scroll-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+        <span>Scroll Top</span>
+      </button>
+      <button class="qa-item" data-action="scroll-bottom" aria-label="Scroll to bottom">
+        <i class="fas fa-arrow-down"></i>
+        <span>Scroll Bottom</span>
+      </button>
+      <button class="qa-item" data-action="theme" aria-label="Toggle theme">
+        <i class="fas fa-adjust"></i>
+        <span>Theme</span>
+      </button>
+      <button class="qa-item" data-action="search" aria-label="Search">
+        <i class="fas fa-search"></i>
+        <span>Search</span>
+      </button>
+      <button class="qa-item" data-action="random-section" aria-label="Random section">
+        <i class="fas fa-random"></i>
+        <span>Random</span>
+      </button>
+      <button class="qa-item" data-action="share" aria-label="Share">
+        <i class="fas fa-share-alt"></i>
+        <span>Share</span>
+      </button>
+    </div>
+  `;
+  
+  // Inject styles
+  const styles = document.createElement('style');
+  styles.textContent = `
+    #quick-actions {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9990;
+      font-family: inherit;
+    }
+    #quick-actions .qa-toggle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--gradient-1, linear-gradient(135deg, #00d4ff, #7b2cbf));
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #quick-actions .qa-toggle:hover {
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: 0 6px 30px rgba(0, 212, 255, 0.6);
+    }
+    #quick-actions .qa-toggle.active {
+      transform: rotate(45deg);
+    }
+    #quick-actions .qa-menu {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      background: var(--bg-card, #1a1a25);
+      border: 1px solid var(--border-color, #2a2a3a);
+      border-radius: 16px;
+      padding: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 160px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      animation: popIn 0.3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.8) translateY(20px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    #quick-actions .qa-menu.open {
+      display: flex;
+    }
+    #quick-actions .qa-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      color: var(--text-primary, #fff);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      text-align: left;
+      font-family: inherit;
+    }
+    #quick-actions .qa-item:hover {
+      background: var(--bg-card-hover, #22222f);
+      color: var(--accent-primary, #00d4ff);
+    }
+    #quick-actions .qa-item i {
+      width: 18px;
+      text-align: center;
+      color: var(--text-secondary, #a0a0b0);
+    }
+    #quick-actions .qa-item:hover i {
+      color: var(--accent-primary, #00d4ff);
+    }
+  `;
+  document.head.appendChild(styles);
+  document.body.appendChild(quickActions);
+  
+  const toggle = document.getElementById('qa-toggle');
+  const menu = document.getElementById('qa-menu');
+  
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    menu.classList.toggle('open');
+  });
+  
+  document.querySelectorAll('.qa-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      const action = item.dataset.action;
+      toggle.classList.remove('active');
+      menu.classList.remove('open');
+      
+      switch (action) {
+        case 'scroll-top':
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          break;
+        case 'scroll-bottom':
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          break;
+        case 'theme':
+          document.querySelector('.theme-toggle')?.click();
+          break;
+        case 'search':
+          document.getElementById('nav-search-btn')?.click();
+          break;
+        case 'random-section':
+          const sections = ['home', 'about', 'current', 'projects', 'skills', 'stats', 'journey', 'demos', 'blog', 'contact'];
+          const random = sections[Math.floor(Math.random() * sections.length)];
+          document.querySelector(`#${random}`)?.scrollIntoView({ behavior: 'smooth' });
+          break;
+        case 'share':
+          if (navigator.share) {
+            navigator.share({
+              title: 'AJH | Developer & Builder',
+              text: 'Full-stack developer building things daily from The Bronx.',
+              url: window.location.href
+            });
+          } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+          }
+          break;
+      }
+    });
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!quickActions.contains(e.target)) {
+      toggle.classList.remove('active');
+      menu.classList.remove('open');
+    }
+  });
+}
