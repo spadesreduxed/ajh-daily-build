@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDemos();
   initEasterEgg();
   initQuickActions();
+  initClock();
 });
 
 function initTheme() {
@@ -997,4 +998,24 @@ function initQuickActions() {
       menu.classList.remove('open');
     }
   });
+}
+
+// Live Clock - Eastern Time Zone
+function initClock() {
+  const clockEl = document.getElementById('clock-time');
+  if (!clockEl) return;
+  
+  function updateClock() {
+    const now = new Date();
+    const options = {
+      timeZone: 'America/New_York',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+    clockEl.textContent = new Intl.DateTimeFormat('en-US', options).format(now);
+  }
+  
+  updateClock();
+  setInterval(updateClock, 1000);
 }

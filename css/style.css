@@ -1525,3 +1525,45 @@ button:focus-visible,
   .timeline-item { padding-left: 50px; }
   .timeline-dot { left: 10px; width: 12px; height: 12px; }
 }
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.hero-clock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.hero-clock i {
+  color: var(--accent-primary);
+}
+
+.clock-time {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.clock-zone {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+[data-theme="light"] .hero-clock {
+  background: rgba(0, 102, 204, 0.1);
+  border-color: rgba(0, 102, 204, 0.3);
+}
+
+[data-theme="light"] .hero-clock i {
+  color: #0066cc;
+}
