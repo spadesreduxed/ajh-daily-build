@@ -62,6 +62,11 @@
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
     
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="reading-progress">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand">
@@ -218,10 +223,18 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Portfolio</span>
-                <h2 class="section-title">Featured Projects</h2>
+                <h2 class="section-title">Projects</h2>
+                <p class="section-subtitle">Things I've built and shipped</p>
             </div>
-            <div class="projects-grid">
-                <article class="project-card featured">
+            <div class="project-filter" id="project-filter">
+                <button class="filter-btn active" data-filter="all">All Projects</button>
+                <button class="filter-btn" data-filter="gaming">Gaming</button>
+                <button class="filter-btn" data-filter="tools">Tools</button>
+                <button class="filter-btn" data-filter="web">Web Apps</button>
+                <button class="filter-btn" data-filter="experimental">Experimental</button>
+            </div>
+            <div class="projects-grid" id="projects-grid">
+                <article class="project-card featured clickable" data-filter="gaming">
                     <div class="project-badge">Flagship</div>
                     <div class="project-header">
                         <div class="project-icon">
@@ -247,7 +260,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-filter="gaming">
                     <div class="project-header">
                         <div class="project-icon small">
                             <i class="fas fa-vault"></i>
@@ -266,7 +279,7 @@
                     </div>
                 </article>
 
-                <article class="project-card">
+                <article class="project-card" data-filter="gaming">
                     <div class="project-header">
                         <div class="project-icon small">
                             <i class="fas fa-vault"></i>
@@ -286,7 +299,7 @@
                     </div>
                 </article>
 
-                <article class="project-card coming-soon">
+                <article class="project-card coming-soon" data-filter="experimental">
                     <div class="project-header">
                         <div class="project-icon small">
                             <i class="fas fa-construction"></i>
@@ -302,54 +315,244 @@
         </div>
     </section>
 
+    <!-- Project Detail Modal -->
+    <div class="project-modal" id="project-modal">
+        <div class="project-modal-content">
+            <div class="project-modal-header">
+                <div class="project-modal-icon" id="modal-icon">
+                    <i class="fas fa-vault"></i>
+                </div>
+                <div class="project-modal-title-wrap">
+                    <h3 class="project-modal-title" id="modal-title">Project Name</h3>
+                    <span class="project-modal-badge" id="modal-badge">Category</span>
+                </div>
+                <button class="project-modal-close" id="modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="project-modal-body">
+                <div class="project-modal-desc" id="modal-desc">
+                    <p>Project description goes here...</p>
+                </div>
+                <div class="project-modal-tech" id="modal-tech">
+                    <h4><i class="fas fa-code"></i> Tech Stack</h4>
+                    <div class="tech-tags" id="modal-tech-tags"></div>
+                </div>
+                <div class="project-modal-stats" id="modal-stats">
+                    <div class="modal-stat">
+                        <i class="fas fa-star"></i>
+                        <span id="modal-stars">0</span> Stars
+                    </div>
+                    <div class="modal-stat">
+                        <i class="fas fa-code-branch"></i>
+                        <span id="modal-forks">0</span> Forks
+                    </div>
+                    <div class="modal-stat">
+                        <i class="fas fa-eye"></i>
+                        <span id="modal-views">0</span> Views
+                    </div>
+                </div>
+            </div>
+            <div class="project-modal-footer">
+                <a href="#" class="btn btn-primary btn-sm" id="modal-github" target="_blank">
+                    <i class="fab fa-github"></i> View Code
+                </a>
+                <a href="#" class="btn btn-outline btn-sm" id="modal-live" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Skills Section -->
-    <section id="skills" class="section">
+    <section id="skills" class="section alt-bg">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Expertise</span>
                 <h2 class="section-title">Skills & Stack</h2>
             </div>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3><i class="fas fa-layer-group"></i> Frontend</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">HTML5</span>
-                        <span class="skill-tag">CSS3</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">TypeScript</span>
-                        <span class="skill-tag">React</span>
-                        <span class="skill-tag">Tailwind</span>
+            <div class="skills-filter" id="skills-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="frontend">Frontend</button>
+                <button class="filter-btn" data-filter="backend">Backend</button>
+                <button class="filter-btn" data-filter="devops">DevOps</button>
+                <button class="filter-btn" data-filter="special">Special</button>
+            </div>
+            <div class="skills-grid" id="skills-grid">
+                <div class="skill-category" data-category="frontend">
+                    <div class="skill-category-header">
+                        <i class="fas fa-code"></i>
+                        <h3>Frontend</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="html">
+                            <div class="skill-info">
+                                <span class="skill-name">HTML/CSS</span>
+                                <span class="skill-percent">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="95"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="javascript">
+                            <div class="skill-info">
+                                <span class="skill-name">JavaScript/TypeScript</span>
+                                <span class="skill-percent">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="92"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="react">
+                            <div class="skill-info">
+                                <span class="skill-name">React/Vue</span>
+                                <span class="skill-percent">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="88"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="responsive">
+                            <div class="skill-info">
+                                <span class="skill-name">Responsive Design</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="90"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h3><i class="fas fa-server"></i> Backend</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Node.js</span>
-                        <span class="skill-tag">Bun</span>
-                        <span class="skill-tag">Express</span>
-                        <span class="skill-tag">Hono</span>
-                        <span class="skill-tag">APIs</span>
+                <div class="skill-category" data-category="backend">
+                    <div class="skill-category-header">
+                        <i class="fas fa-server"></i>
+                        <h3>Backend</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="node">
+                            <div class="skill-info">
+                                <span class="skill-name">Node.js/Express</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="python">
+                            <div class="skill-info">
+                                <span class="skill-name">Python/FastAPI</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="database">
+                            <div class="skill-info">
+                                <span class="skill-name">Databases (SQL/NoSQL)</span>
+                                <span class="skill-percent">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="88"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="api">
+                            <div class="skill-info">
+                                <span class="skill-name">REST/APIs</span>
+                                <span class="skill-percent">92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="92"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h3><i class="fas fa-cloud"></i> DevOps & Tools</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Git</span>
-                        <span class="skill-tag">GitHub</span>
-                        <span class="skill-tag">Vercel</span>
-                        <span class="skill-tag">Netlify</span>
-                        <span class="skill-tag">Heroku</span>
-                        <span class="skill-tag">Deploy Buttons</span>
+                <div class="skill-category" data-category="devops">
+                    <div class="skill-category-header">
+                        <i class="fas fa-cloud"></i>
+                        <h3>DevOps</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="git">
+                            <div class="skill-info">
+                                <span class="skill-name">Git/GitHub</span>
+                                <span class="skill-percent">95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="95"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="docker">
+                            <div class="skill-info">
+                                <span class="skill-name">Docker/Containers</span>
+                                <span class="skill-percent">82%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="82"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="deploy">
+                            <div class="skill-info">
+                                <span class="skill-name">CI/CD Pipelines</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="cloud">
+                            <div class="skill-info">
+                                <span class="skill-name">Cloud Platforms</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="80"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="skill-category">
-                    <h3><i class="fas fa-shield-alt"></i> Specialties</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Web Proxies</span>
-                        <span class="skill-tag">UV Protocol</span>
-                        <span class="skill-tag">Gaming Hubs</span>
-                        <span class="skill-tag">Education Tech</span>
-                        <span class="skill-tag">Accessibility</span>
+                <div class="skill-category" data-category="special">
+                    <div class="skill-category-header">
+                        <i class="fas fa-star"></i>
+                        <h3>Specialties</h3>
+                    </div>
+                    <div class="skill-items">
+                        <div class="skill-item" data-skill="games">
+                            <div class="skill-info">
+                                <span class="skill-name">Unblocked Games Hub</span>
+                                <span class="skill-percent">96%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="96"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="proxy">
+                            <div class="skill-info">
+                                <span class="skill-name">Web Proxies</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="scale">
+                            <div class="skill-info">
+                                <span class="skill-name">High Traffic Scaling</span>
+                                <span class="skill-percent">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="88"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item" data-skill="daily">
+                            <div class="skill-info">
+                                <span class="skill-name">Daily Building</span>
+                                <span class="skill-percent">99%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-fill" data-width="99"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -527,6 +730,48 @@
                 <h2 class="section-title">Daily Build Log</h2>
             </div>
             <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-day">Day 31</div>
+                    <div class="blog-date">2026-05-11</div>
+                    <h3>Project Filter System + Enhanced Project Cards</h3>
+                    <p>Added project filter buttons to organize projects by category (All, Gaming, Tools, Web Apps, Experimental). Featured project cards now span two columns with gradient backgrounds and top accent bars.</p>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-day">Day 30</div>
+                    <div class="blog-date">2026-05-10</div>
+                    <h3>Skills Refined with Animated Bars + Filter System</h3>
+                    <p>Added animated skill bars to visualize proficiency. Skills can now be filtered by category (Frontend, Backend, DevOps, Special) with smooth transitions.</p>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-day">Day 28</div>
+                    <div class="blog-date">2026-05-08</div>
+                    <h3>Live Clock Display + Hero Meta Section</h3>
+                    <p>Added live Eastern Time clock to hero section. Shows current time with AM/PM format, updating every second. Built with Intl.DateTimeFormat API.</p>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-day">Day 27</div>
+                    <div class="blog-date">2026-05-07</div>
+                    <h3>Quick Actions + Service Worker Update Notifications</h3>
+                    <p>Created floating Quick Actions menu (bottom-right) with 6 shortcuts: scroll top/bottom, toggle theme, open search, random section, share page. Also added service worker update notifications.</p>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-day">Day 26</div>
+                    <div class="blog-date">2026-05-06</div>
+                    <h3>Currently Building Section</h3>
+                    <p>Added "Currently Building" section with live project status tracker cards showing progress bars, status indicators, and external links.</p>
+                </div>
+                <article class="blog-card">
+                    <span class="blog-date">May 9, 2026</span>
+                    <h3 class="blog-title">Day 29: Reading Progress Bar</h3>
+                    <p class="blog-excerpt">Added reading progress bar at the top of the page showing scroll progress. Shows gradient progress indicator that fills as you scroll down. Only appears after scrolling 200px with smooth fade transition.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="blog-card">
+                    <span class="blog-date">May 8, 2026</span>
+                    <h3 class="blog-title">Day 28: Live Clock + Hero Meta</h3>
+                    <p class="blog-excerpt">Added live Eastern Time clock display in the hero section, showing real-time clock using Intl.DateTimeFormat API with 12-hour format and AM/PM suffix.</p>
+                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                </article>
                 <article class="blog-card">
                     <span class="blog-date">May 7, 2026</span>
                     <h3 class="blog-title">Day 27: Quick Actions + SW Updates</h3>

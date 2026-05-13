@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initEasterEgg();
   initQuickActions();
   initClock();
+  initReadingProgress();
+  initSkillBars();
+  initSkillsFilter();
+  initProjectsFilter();
+  initProjectModal();
 });
 
 function initTheme() {
@@ -1018,4 +1023,215 @@ function initClock() {
   
   updateClock();
   setInterval(updateClock, 1000);
+}
+// Reading Progress Bar
+function initReadingProgress() {
+  const progressBar = document.getElementById('reading-progress-bar');
+  const progressContainer = document.getElementById('reading-progress');
+  if (!progressBar || !progressContainer) return;
+  
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = Math.min(progress, 100) + '%';
+    
+    // Show/hide based on scroll
+    if (scrollTop > 200) {
+      progressContainer.classList.add('visible');
+    } else {
+      progressContainer.classList.remove('visible');
+    }
+  }
+  
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+}
+
+// Skill Bars Animation
+function initSkillBars() {
+  const skillFills = document.querySelectorAll('.skill-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fill = entry.target;
+        const width = fill.getAttribute('data-width');
+        fill.style.setProperty('--target-width', width + '%');
+        fill.classList.add('animated');
+        observer.unobserve(fill);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  skillFills.forEach(fill => observer.observe(fill));
+}
+
+// Skills Filter
+function initSkillsFilter() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const skillCategories = document.querySelectorAll('.skill-category');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      skillCategories.forEach(category => {
+        if (filter === 'all') {
+          category.style.display = 'block';
+          category.style.animation = 'fadeInUp 0.4s ease forwards';
+        } else if (category.getAttribute('data-category') === filter) {
+          category.style.display = 'block';
+          category.style.animation = 'fadeInUp 0.4s ease forwards';
+        } else {
+          category.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+// Projects Filter
+function initProjectsFilter() {
+  const filterBtns = document.querySelectorAll('#project-filter .filter-btn');
+  const projectCards = document.querySelectorAll('#projects-grid .project-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      projectCards.forEach(card => {
+        const cardFilter = card.getAttribute('data-filter');
+        if (filter === 'all' || cardFilter === filter) {
+          card.style.display = 'block';
+          card.style.animation = 'fadeInUp 0.4s ease forwards';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+// Project Detail Modal
+function initProjectModal() {
+  const modal = document.getElementById('project-modal');
+  const modalClose = document.getElementById('modal-close');
+  const modalIcon = document.getElementById('modal-icon');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBadge = document.getElementById('modal-badge');
+  const modalDesc = document.getElementById('modal-desc');
+  const modalTechTags = document.getElementById('modal-tech-tags');
+  const modalGithub = document.getElementById('modal-github');
+  const modalLive = document.getElementById('modal-live');
+  
+  if (!modal) return;
+  
+  // Project data
+  const projectsData = {
+    'AJH\'s Vault V6': {
+      icon: 'fa-vault',
+      badge: 'Gaming',
+      desc: '<p>100K+ games unblocked gaming hub. The ultimate UBG experience with proxy, educational tools, apps, and endless customization. Built for performance and accessibility.</p>',
+      tech: ['JavaScript', 'Proxy', 'WebSocket', 'Node.js'],
+      github: 'https://github.com/1ajh/vaultv6',
+      live: 'https://ajhmath.org'
+    },
+    'Vault V6 Enhanced': {
+      icon: 'fa-vault',
+      badge: 'Gaming',
+      desc: '<p>Enhanced version of the vault with additional features, improved UI, and better performance. Built with modern web technologies.</p>',
+      tech: ['JavaScript', 'React', 'Node.js'],
+      github: 'https://github.com/1ajh/vault-v6f',
+      live: '#'
+    },
+    'UV Static': {
+      icon: 'fa-bolt',
+      badge: 'Tools',
+      desc: '<p>UV static proxy service for bypassing restrictions and accessing content freely. Supports multiple protocols and endpoints.</p>',
+      tech: ['Bun', 'TypeScript', 'Hono'],
+      github: 'https://github.com/1ajh/uv-static',
+      live: '#'
+    },
+    'Zo Computer': {
+      icon: 'fa-rocket',
+      badge: 'Web Apps',
+      desc: '<p>Personal AI workspace and cloud computer. A modern take on personal computing with AI integration and seamless workflow.</p>',
+      tech: ['React', 'TypeScript', 'Bun'],
+      github: 'https://github.com/1ajh',
+      live: 'https://ajhs.zo.computer'
+    },
+    'Korone Bootstrapper': {
+      icon: 'fa-download',
+      badge: 'Tools',
+      desc: '<p>Windows installer and bootstrapper for Roblox client. Handles dependencies, installations, and updates seamlessly.</p>',
+      tech: ['C++', 'CMake', 'Windows API'],
+      github: 'https://github.com/1ajh/Korone-Bootstrapper',
+      live: '#'
+    },
+    'Pekona Clients': {
+      icon: 'fa-mobile-alt',
+      badge: 'Experimental',
+      desc: '<p>Custom Roblox Android clients with modifications. Historical versions from 2017-2021 showcasing evolution of mobile gaming clients.</p>',
+      tech: ['Java', 'Kotlin', 'Android'],
+      github: 'https://github.com/1ajh/Pekone-Unofficial-Clients-1',
+      live: '#'
+    },
+    '2024 Roblox Client': {
+      icon: 'fa-gamepad',
+      badge: 'Experimental',
+      desc: '<p>Latest Roblox client build with custom modifications and optimizations. Exploring new rendering and performance improvements.</p>',
+      tech: ['C++', 'Lua', 'Roblox Studio'],
+      github: 'https://github.com/1ajh/2024-roblox',
+      live: '#'
+    }
+  };
+  
+  // Click handlers for project cards
+  const projectCards = document.querySelectorAll('.project-card.clickable');
+  
+  projectCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const title = card.querySelector('.project-title')?.textContent;
+      const data = projectsData[title];
+      
+      if (data && modal) {
+        modalIcon.innerHTML = `<i class="fas ${data.icon}"></i>`;
+        modalTitle.textContent = title;
+        modalBadge.textContent = data.badge;
+        modalDesc.innerHTML = data.desc;
+        modalTechTags.innerHTML = data.tech.map(t => `<span>${t}</span>`).join('');
+        modalGithub.href = data.github;
+        modalLive.href = data.live;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+  
+  // Close modal
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+  
+  if (modalClose) {
+    modalClose.addEventListener('click', closeModal);
+  }
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
 }
