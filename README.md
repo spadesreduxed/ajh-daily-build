@@ -4,6 +4,16 @@ A daily-built GitHub Pages website that grows better every day.
 
 **Live Site**: https://ajhs.github.io
 
+## Latest Build - Day 34 (2026-05-14)
+
+### New Features Added Today:
+- **Advanced JavaScript Utilities**: `debounce`, `throttle`, `scrollToElement`, `isInViewport` helper functions
+- **Section Transitions**: Smooth entrance animations when sections scroll into view using IntersectionObserver
+- **Hover Effects System**: 3D tilt effect on project cards, glow effects on social links, shimmer animation on skill bars, border glow on demo cards
+- **Scroll Animations**: Parallax effect for hero section, stats counter animation, timeline reveal animation
+- **Testimonials Section**: 3 testimonial cards featuring community feedback
+- **Performance Optimizations**: Reduced motion support, print styles, enhanced responsive CSS
+
 ## Projects
 
 - **AJH's Vault V6** - 100K+ games unblocked gaming hub (ajhmath.org)
