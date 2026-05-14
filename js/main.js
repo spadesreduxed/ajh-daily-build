@@ -32,7 +32,91 @@ document.addEventListener('DOMContentLoaded', () => {
   initSkillsFilter();
   initProjectsFilter();
   initProjectModal();
+  initSectionTransitions();
+  initHoverEffects();
+  initScrollAnimations();
 });
+
+/**
+ * Utility Functions
+ */
+
+// Debounce - limits function execution rate
+function debounce(func, wait = 100) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Throttle - executes at most once per interval
+function throttle(func, limit = 100) {
+  let inThrottle;
+  return function executedFunction(...args) {
+    if (!inThrottle) {
+      func(...args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}
+
+// Smooth scroll to element
+function scrollToElement(selector, offset = 80) {
+  const element = document.querySelector(selector);
+  if (element) {
+    window.scrollTo({
+      top: element.offsetTop - offset,
+      behavior: 'smooth'
+    });
+    return true;
+  }
+  return false;
+}
+
+// Check if element is in viewport
+function isInViewport(element, threshold = 0.1) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * (1 - threshold) &&
+    rect.bottom >= 0
+  );
+}
+
+// Animate number counter
+function animateCounter(element, target) {
+  const duration = 2000;
+  const startTime = performance.now();
+  function update(time) {
+    const elapsed = time - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 4);
+    element.textContent = formatNumber(Math.floor(target * eased));
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Format large numbers
+function formatNumber(num) {
+  if (num >= 100000) return (num / 100000).toFixed(0) + '00K';
+  if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+  return num.toString();
+}
+
+// Format date
+function formatDate(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
 
 function initTheme() {
   const themeToggle = document.querySelector('.theme-toggle');
@@ -120,25 +204,6 @@ function initCounters() {
     });
   }, { threshold: 0.5 });
   counters.forEach(c => observer.observe(c));
-}
-
-function animateCounter(element, target) {
-  const duration = 2000;
-  const startTime = performance.now();
-  function update(time) {
-    const elapsed = time - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 4);
-    element.textContent = formatNumber(Math.floor(target * eased));
-    if (progress < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-
-function formatNumber(num) {
-  if (num >= 100000) return (num / 100000).toFixed(0) + '00K';
-  if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
-  return num.toString();
 }
 
 function initSmoothScroll() {
@@ -1234,4 +1299,239 @@ function initProjectModal() {
       closeModal();
     }
   });
+}
+
+/**
+ * Section Transitions
+ * Adds smooth entrance animations when sections scroll into view
+ */
+function initSectionTransitions() {
+  const sections = document.querySelectorAll('section');
+  
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('section-visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '-50px' });
+
+  sections.forEach(section => {
+    section.classList.add('section-transition');
+    sectionObserver.observe(section);
+  });
+}
+
+/**
+ * Hover Effects
+ * Enhanced hover interactions for cards and interactive elements
+ */
+function initHoverEffects() {
+  // Project cards - tilt effect on hover
+  const projectCards = document.querySelectorAll('.project-card');
+  
+  projectCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 20;
+      const rotateY = (centerX - x) / 20;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+
+  // Social links - glow effect on hover
+  const socialLinks = document.querySelectorAll('.footer-links a, .social-links a');
+  
+  socialLinks.forEach(link => {
+    link.addEventListener('mouseenter', () => {
+      link.style.transform = 'translateY(-3px) scale(1.1)';
+      link.style.boxShadow = '0 5px 20px rgba(0, 212, 255, 0.4)';
+    });
+    
+    link.addEventListener('mouseleave', () => {
+      link.style.transform = 'translateY(0) scale(1)';
+      link.style.boxShadow = 'none';
+    });
+  });
+
+  // Skill bars - shimmer effect on hover
+  const skillBars = document.querySelectorAll('.skill-item');
+  
+  skillBars.forEach(bar => {
+    bar.addEventListener('mouseenter', () => {
+      const fill = bar.querySelector('.skill-fill');
+      if (fill) {
+        fill.style.background = `linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%)`;
+        fill.style.backgroundSize = '200% 100%';
+        fill.style.animation = 'shimmer 1.5s ease infinite';
+      }
+    });
+    
+    bar.addEventListener('mouseleave', () => {
+      const fill = bar.querySelector('.skill-fill');
+      if (fill) {
+        fill.style.background = '';
+        fill.style.backgroundSize = '';
+        fill.style.animation = '';
+      }
+    });
+  });
+
+  // Demo cards - border glow on hover
+  const demoCards = document.querySelectorAll('.demo-card');
+  
+  demoCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.borderColor = 'var(--accent-primary)';
+      card.style.boxShadow = '0 0 30px rgba(0, 212, 255, 0.3)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.borderColor = '';
+      card.style.boxShadow = '';
+    });
+  });
+}
+
+/**
+ * Scroll Animations
+ * Advanced scroll-based animations for various elements
+ */
+function initScrollAnimations() {
+  // Parallax effect for hero section
+  const hero = document.querySelector('.hero');
+  const heroVisual = document.querySelector('.hero-visual');
+  
+  if (hero && heroVisual) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const heroHeight = hero.offsetHeight;
+      
+      if (scrolled < heroHeight) {
+        const parallaxValue = scrolled * 0.3;
+        heroVisual.style.transform = `translateY(${parallaxValue}px)`;
+        
+        // Also adjust opacity
+        const opacityValue = 1 - (scrolled / heroHeight) * 0.5;
+        heroVisual.style.opacity = opacityValue;
+      }
+    }, { passive: true });
+  }
+
+  // Fade sections on scroll
+  const fadeElements = document.querySelectorAll('.about-card, .project-card, .timeline-item');
+  
+  fadeElements.forEach((el, index) => {
+    el.style.setProperty('--fade-delay', `${index * 0.1}s`);
+  });
+
+  // Animate stats counters on scroll
+  const statsSection = document.querySelector('#stats');
+  let statsAnimated = false;
+  
+  if (statsSection) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !statsAnimated) {
+          statsAnimated = true;
+          const counters = entry.target.querySelectorAll('.stat-number');
+          counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-count'));
+            animateCounter(counter, target);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    
+    statsObserver.observe(statsSection);
+  }
+
+  // Timeline reveal animation
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  
+  const timelineObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('timeline-visible');
+        }, index * 150);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  timelineItems.forEach(item => timelineObserver.observe(item));
+
+  // Add CSS for timeline visible state
+  if (!document.getElementById('scroll-animations-styles')) {
+    const styles = document.createElement('style');
+    styles.id = 'scroll-animations-styles';
+    styles.textContent = `
+      /* Section Transitions */
+      .section-transition {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      
+      .section-transition.section-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Timeline Animations */
+      .timeline-item {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition: all 0.5s ease;
+      }
+      
+      .timeline-item.timeline-visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      /* Shimmer animation for skill bars */
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      
+      /* Project card transition reset */
+      .project-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+      
+      /* Demo card transitions */
+      .demo-card {
+        transition: all 0.3s ease;
+      }
+      
+      /* Footer link transitions */
+      .footer-links a, .social-links a {
+        transition: all 0.3s ease;
+      }
+      
+      /* Skill item transitions */
+      .skill-item {
+        transition: all 0.3s ease;
+      }
+      
+      /* Hero visual parallax container */
+      .hero-visual {
+        will-change: transform, opacity;
+      }
+    `;
+    document.head.appendChild(styles);
+  }
 }
