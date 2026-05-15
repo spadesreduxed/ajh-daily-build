@@ -2505,3 +2505,20 @@ button:focus-visible,
     color: black;
   }
 }
+/* Random Quote Display */
+.quote-display {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 15px;
+  min-height: 1.5rem;
+}
+
+.quote-display span {
+  color: var(--accent-primary);
+  font-style: normal;
+}
+
+[data-theme="light"] .quote-display {
+  color: var(--text-muted);
+}

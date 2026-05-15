@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSectionTransitions();
   initHoverEffects();
   initScrollAnimations();
+  initRandomQuote();
 });
 
 /**
@@ -1533,5 +1534,69 @@ function initScrollAnimations() {
       }
     `;
     document.head.appendChild(styles);
+  }
+}/**
+ * Random Motivational Quote
+ * Displays a rotating inspirational quote in the hero section
+ */
+function initRandomQuote() {
+  const quotes = [
+    { text: "Build something people want to use.", author: "Paul Graham" },
+    { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+    { text: "Code is read way more than it is written.", author: "Peter Provost" },
+    { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+    { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+    { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+    { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+    { text: "The most disastrous thing you can learn is your first programming language.", author: "Alan Kay" },
+    { text: "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.", author: "Dan Salomon" },
+    { text: "Measuring programming progress by lines of code is like measuring aircraft building progress by weight.", author: "Bill Gates" },
+    { text: "Get comfortable with being uncomfortable.", author: "AJ H" },
+    { text: "Ship when it is done, not when it is perfect.", author: "AJ H" },
+    { text: "Build daily. Never stop. Always improve.", author: "AJ H" },
+    { text: "The only way to go fast is to go well.", author: "Uncle Bob" },
+    { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+  ];
+
+  const quoteDisplay = document.querySelector(".quote-display");
+
+  if (!quoteDisplay) {
+    const quoteEl = document.createElement("div");
+    quoteEl.className = "quote-display";
+    quoteEl.style.fontSize = "1rem";
+    quoteEl.style.color = "var(--text-secondary)";
+    quoteEl.style.fontStyle = "italic";
+    quoteEl.style.marginTop = "15px";
+    quoteEl.style.opacity = "0";
+    quoteEl.style.transition = "opacity 0.5s ease";
+    
+    const hero = document.querySelector(".hero");
+    const heroStats = document.querySelector(".hero-stats");
+    if (hero && heroStats) {
+      heroStats.insertAdjacentElement("afterend", quoteEl);
+    }
+  }
+
+  const newQuoteDisplay = document.querySelector(".quote-display");
+  if (!newQuoteDisplay) return;
+
+  function showRandomQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[randomIndex];
+
+    newQuoteDisplay.style.opacity = "0";
+
+    setTimeout(() => {
+      newQuoteDisplay.innerHTML = `"${quote.text}" <span style="color: var(--accent-primary);">— ${quote.author}</span>`;
+      newQuoteDisplay.style.opacity = "1";
+    }, 300);
+  }
+
+  showRandomQuote();
+  setInterval(showRandomQuote, 15000);
+
+  const quoteBtn = document.querySelector(".quote-rotate-btn");
+  if (quoteBtn) {
+    quoteBtn.addEventListener("click", showRandomQuote);
   }
 }
