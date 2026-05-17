@@ -129,24 +129,35 @@
                 Building things daily with passion and precision.
             </p>
             <div class="hero-meta">
-                <div class="hero-clock" id="hero-clock">
+                <div class="hero-clock">
                     <i class="fas fa-clock"></i>
-                    <span class="clock-time" id="clock-time">--:--</span>
+                    <span class="clock-time" id="live-clock">12:00 AM</span>
                     <span class="clock-zone">ET</span>
+                </div>
+                <div class="page-views">
+                    <i class="fas fa-eye"></i>
+                    <span class="page-views-count">0</span> views
                 </div>
             </div>
             <div class="hero-stats">
                 <div class="stat">
-                    <span class="stat-value" data-count="100000">0</span>+
-                    <span class="stat-label">Games Deployed</span>
+                    <span class="stat-value" data-count="90">0</span>
+                    <span class="stat-label">Repositories</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value">Daily</span>
-                    <span class="stat-label">Builder</span>
+                    <span class="stat-value" data-count="35">0</span>
+                    <span class="stat-label">Days Building</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value">∞</span>
-                    <span class="stat-label">Ideas</span>
+                    <span class="stat-value" data-count="100000">0</span>
+                    <span class="stat-label">Games Served</span>
+                </div>
+            </div>
+            <div class="daily-streak">
+                <span class="streak-icon">🔥</span>
+                <div class="streak-info">
+                    <span class="streak-count">35 days</span>
+                    <span class="streak-label">Daily Streak</span>
                 </div>
             </div>
             <div class="hero-cta">
@@ -729,84 +740,36 @@
                 <span class="section-tag">Latest Builds</span>
                 <h2 class="section-title">Daily Build Log</h2>
             </div>
-            <div class="blog-grid">
-                <div class="blog-card">
-                    <div class="blog-day">Day 31</div>
-                    <div class="blog-date">2026-05-11</div>
-                    <h3>Project Filter System + Enhanced Project Cards</h3>
-                    <p>Added project filter buttons to organize projects by category (All, Gaming, Tools, Web Apps, Experimental). Featured project cards now span two columns with gradient backgrounds and top accent bars.</p>
-                </div>
-                <div class="blog-card">
-                    <div class="blog-day">Day 30</div>
-                    <div class="blog-date">2026-05-10</div>
-                    <h3>Skills Refined with Animated Bars + Filter System</h3>
-                    <p>Added animated skill bars to visualize proficiency. Skills can now be filtered by category (Frontend, Backend, DevOps, Special) with smooth transitions.</p>
-                </div>
-                <div class="blog-card">
-                    <div class="blog-day">Day 28</div>
-                    <div class="blog-date">2026-05-08</div>
-                    <h3>Live Clock Display + Hero Meta Section</h3>
-                    <p>Added live Eastern Time clock to hero section. Shows current time with AM/PM format, updating every second. Built with Intl.DateTimeFormat API.</p>
-                </div>
-                <div class="blog-card">
-                    <div class="blog-day">Day 27</div>
-                    <div class="blog-date">2026-05-07</div>
-                    <h3>Quick Actions + Service Worker Update Notifications</h3>
-                    <p>Created floating Quick Actions menu (bottom-right) with 6 shortcuts: scroll top/bottom, toggle theme, open search, random section, share page. Also added service worker update notifications.</p>
-                </div>
-                <div class="blog-card">
-                    <div class="blog-day">Day 26</div>
-                    <div class="blog-date">2026-05-06</div>
-                    <h3>Currently Building Section</h3>
-                    <p>Added "Currently Building" section with live project status tracker cards showing progress bars, status indicators, and external links.</p>
-                </div>
+            <div class="blog-grid" id="blog-grid">
                 <article class="blog-card">
-                    <span class="blog-date">May 9, 2026</span>
-                    <h3 class="blog-title">Day 29: Reading Progress Bar</h3>
-                    <p class="blog-excerpt">Added reading progress bar at the top of the page showing scroll progress. Shows gradient progress indicator that fills as you scroll down. Only appears after scrolling 200px with smooth fade transition.</p>
+                    <span class="blog-date">May 16, 2026</span>
+                    <h3 class="blog-title">Day 36: Blog Section Cleanup + Interactive FAQ</h3>
+                    <p class="blog-excerpt">Fixed duplicate blog entries and consolidated cards. Added interactive FAQ section with accordion-style collapsible answers. Improved overall blog readability and navigation.</p>
+                    <a href="#blog" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="blog-card">
+                    <span class="blog-date">May 16, 2026</span>
+                    <h3 class="blog-title">Day 35: Command Palette + Canvas Animation</h3>
+                    <p class="blog-excerpt">Added Ctrl+K command palette for quick navigation with 16 commands. Canvas particle animation in hero. Daily streak tracker and page views counter.</p>
                     <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card">
-                    <span class="blog-date">May 8, 2026</span>
-                    <h3 class="blog-title">Day 28: Live Clock + Hero Meta</h3>
-                    <p class="blog-excerpt">Added live Eastern Time clock display in the hero section, showing real-time clock using Intl.DateTimeFormat API with 12-hour format and AM/PM suffix.</p>
+                    <span class="blog-date">May 14, 2026</span>
+                    <h3 class="blog-title">Day 34: Advanced JS + Enhanced CSS</h3>
+                    <p class="blog-excerpt">Added utility functions (debounce, throttle, scrollToElement). Section transitions with IntersectionObserver. 3D hover effects on cards. Testimonials section.</p>
                     <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card">
-                    <span class="blog-date">May 7, 2026</span>
-                    <h3 class="blog-title">Day 27: Quick Actions + SW Updates</h3>
-                    <p class="blog-excerpt">Added floating Quick Actions menu with 6 handy shortcuts (scroll, theme, search, random section, share) and service worker update notifications with one-click reload.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                    <span class="blog-date">May 13, 2026</span>
+                    <h3 class="blog-title">Day 33: Testimonials + Enhanced Footer</h3>
+                    <p class="blog-excerpt">Added 3 testimonial cards with community feedback. Enhanced footer with more social links (Spotify, YouTube, Instagram). Updated light theme support.</p>
+                    <a href="#testimonials" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card">
-                    <span class="blog-date">May 6, 2026</span>
-                    <h3 class="blog-title">Day 26: Currently Building Section</h3>
-                    <p class="blog-excerpt">Added new "Currently Building" section with live project status tracker cards showing active development projects, progress bars, and status indicators for AJH Website, Vault V6, and Vault V10.</p>
-                    <a href="#current" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 5, 2026</span>
-                    <h3 class="blog-title">Day 25: GitHub Actions CI/CD + 404 Page</h3>
-                    <p class="blog-excerpt">Added GitHub Actions workflow for automated deployment with validation, custom 404 error page with glitch effects, Achievements section with 4 milestone cards, and Easter Egg secret message.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 4, 2026</span>
-                    <h3 class="blog-title">Day 24: Project Demos + Blog Expansion</h3>
-                    <p class="blog-excerpt">Added Project Demos section with 3 clickable demo cards that open in modal iframes. Updated Blog with 5 daily build entries.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 3, 2026</span>
-                    <h3 class="blog-title">Day 23: Loading Screen + Search</h3>
-                    <p class="blog-excerpt">Added animated loading screen with pulsing brand icon and gradient progress bar. Also implemented full search functionality with keyboard shortcuts.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 2, 2026</span>
-                    <h3 class="blog-title">Day 22: PWA & RSS Feed</h3>
-                    <p class="blog-excerpt">Added manifest.json for installability, custom app icons, and RSS/Atom feed for blog updates.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
+                    <span class="blog-date">May 12, 2026</span>
+                    <h3 class="blog-title">Day 32: Project Detail Modal</h3>
+                    <p class="blog-excerpt">Added clickable project cards that open detailed modal with description, tech stack, and links. 7 projects now have full details.</p>
+                    <a href="#projects" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
                 </article>
                 <article class="blog-card coming-soon">
                     <div class="blog-coming-soon-content">
@@ -1177,6 +1140,73 @@
                             <h4>James T.</h4>
                             <span>Long-time Supporter</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section faq-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Questions</span>
+                <h2 class="section-title">Frequently Asked</h2>
+                <p class="section-subtitle">Quick answers to common questions</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Who is AJ H?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>AJ H is a full-stack developer from The Bronx, NY. Known for building AJH's Vault - an unblocked gaming hub with 100K+ games. Building things daily since age 6.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What is the Daily Builder streak?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Every single day, AJ ships new features, fixes bugs, or improves the website. This site has been built incrementally every single day since April 2026 with no breaks.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What projects has AJ built?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Major projects include: AJH's Vault V6 (100K+ games), Vault V6 Enhanced, UV Static proxy, Korone Bootstrapper, and this daily-built GitHub Pages site. 90+ repositories on GitHub.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How can I collaborate?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Use the contact form above or reach out via Discord. AJ is always open to collaborating on interesting projects, especially in gaming hubs, proxies, or dev tools.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Is the site open source?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! The website code is available on GitHub. Feel free to explore, learn from it, or contribute improvements. Built with pure HTML/CSS/JavaScript - no frameworks.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What's next for AJ?</span>
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Never stopping. The daily build continues - Vault V10 is in development, the GitHub Pages site gets new features every day, and more projects are always in the works.</p>
                     </div>
                 </div>
             </div>

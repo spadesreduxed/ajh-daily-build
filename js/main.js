@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initHoverEffects();
   initScrollAnimations();
   initRandomQuote();
+  initCommandPalette();
+  initDailyStreak();
+  initPageViews();
+  initCanvasAnimation();
+  initFAQ();
 });
 
 /**
@@ -1600,3 +1605,317 @@ function initRandomQuote() {
     quoteBtn.addEventListener("click", showRandomQuote);
   }
 }
+
+// ==========================================
+// COMMAND PALETTE (Ctrl+K)
+// ==========================================
+function initCommandPalette() {
+  const existing = document.getElementById('command-palette');
+  if (existing) existing.remove();
+
+  const palette = document.createElement('div');
+  palette.id = 'command-palette';
+  palette.className = 'command-palette';
+  palette.innerHTML = `
+    <div class="cp-overlay"></div>
+    <div class="cp-container">
+      <div class="cp-header">
+        <i class="fas fa-terminal"></i>
+        <input type="text" class="cp-input" placeholder="Type a command or search..." />
+        <kbd>Esc</kbd>
+      </div>
+      <div class="cp-results"></div>
+      <div class="cp-footer">
+        <span><kbd>↑↓</kbd> Navigate</span>
+        <span><kbd>↵</kbd> Select</span>
+        <span><kbd>Esc</kbd> Close</span>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(palette);
+
+  const cpInput = palette.querySelector('.cp-input');
+  const cpResults = palette.querySelector('.cp-results');
+  const cpOverlay = palette.querySelector('.cp-overlay');
+
+  const commands = [
+    { icon: 'fa-home', label: 'Go to Home', action: () => scrollTo('#home') },
+    { icon: 'fa-user', label: 'Go to About', action: () => scrollTo('#about') },
+    { icon: 'fa-code', label: 'Go to Projects', action: () => scrollTo('#projects') },
+    { icon: 'fa-tools', label: 'Go to Skills', action: () => scrollTo('#skills') },
+    { icon: 'fa-chart-bar', label: 'Go to Stats', action: () => scrollTo('#stats') },
+    { icon: 'fa-road', label: 'Go to Journey', action: () => scrollTo('#journey') },
+    { icon: 'fa-play', label: 'Go to Demos', action: () => scrollTo('#demos') },
+    { icon: 'fa-pen', label: 'Go to Blog', action: () => scrollTo('#blog') },
+    { icon: 'fa-envelope', label: 'Go to Contact', action: () => scrollTo('#contact') },
+    { icon: 'fa-bell', label: 'Go to Newsletter', action: () => scrollTo('#newsletter') },
+    { icon: 'fa-moon', label: 'Toggle Dark/Light Theme', action: () => document.querySelector('.theme-toggle')?.click() },
+    { icon: 'fa-search', label: 'Open Search', action: () => document.querySelector('.search-btn')?.click() },
+    { icon: 'fa-arrow-up', label: 'Scroll to Top', action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { icon: 'fa-arrow-down', label: 'Scroll to Bottom', action: () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) },
+    { icon: 'fa-redo', label: 'Refresh Page', action: () => location.reload() },
+    { icon: 'fa-keyboard', label: 'Show Keyboard Shortcuts', action: () => document.getElementById('shortcuts-toggle')?.click() },
+  ];
+
+  function renderResults(filter = '') {
+    const filtered = filter
+      ? commands.filter(c => c.label.toLowerCase().includes(filter.toLowerCase()))
+      : commands;
+    cpResults.innerHTML = filtered.map((c, i) => `
+      <div class="cp-result" data-index="${i}">
+        <i class="fas ${c.icon}"></i>
+        <span>${c.label}</span>
+      </div>
+    `).join('');
+
+    if (!filtered.length) {
+      cpResults.innerHTML = '<div class="cp-no-results">No commands found</div>';
+    }
+  }
+
+  function openPalette() {
+    palette.classList.add('active');
+    cpInput.focus();
+    cpInput.value = '';
+    renderResults();
+  }
+
+  function closePalette() {
+    palette.classList.remove('active');
+  }
+
+  cpInput.addEventListener('input', (e) => renderResults(e.target.value.toLowerCase()));
+
+  cpResults.addEventListener('click', (e) => {
+    const result = e.target.closest('.cp-result');
+    if (result) {
+      const index = parseInt(result.dataset.index);
+      const filtered = cpInput.value
+        ? commands.filter(c => c.label.toLowerCase().includes(cpInput.value.toLowerCase()))
+        : commands;
+      if (filtered[index]) {
+        filtered[index].action();
+        closePalette();
+      }
+    }
+  });
+
+  cpOverlay.addEventListener('click', closePalette);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      if (palette.classList.contains('active')) {
+        closePalette();
+      } else {
+        openPalette();
+      }
+    }
+    if (e.key === 'Escape' && palette.classList.contains('active')) {
+      closePalette();
+    }
+  });
+}
+
+// ==========================================
+// DAILY STREAK TRACKER
+// ==========================================
+function initDailyStreak() {
+  const STREAK_KEY = 'ajh_daily_streak';
+  const LAST_VISIT_KEY = 'ajh_last_visit';
+  
+  function getToday() {
+    return new Date().toDateString();
+  }
+  
+  function updateStreak() {
+    const lastVisit = localStorage.getItem(LAST_VISIT_KEY);
+    const today = getToday();
+    
+    if (lastVisit === today) {
+      return; // Already visited today
+    }
+    
+    let streak = parseInt(localStorage.getItem(STREAK_KEY) || '0');
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (lastVisit === yesterday.toDateString()) {
+      streak += 1; // Continuing streak
+    } else if (lastVisit !== today) {
+      streak = 1; // Reset streak
+    }
+    
+    localStorage.setItem(STREAK_KEY, streak.toString());
+    localStorage.setItem(LAST_VISIT_KEY, today);
+  }
+  
+  updateStreak();
+  
+  const streakCount = parseInt(localStorage.getItem(STREAK_KEY) || '0');
+  const streakEl = document.querySelector('.streak-count');
+  if (streakEl) {
+    streakEl.textContent = `${streakCount} day${streakCount !== 1 ? 's' : ''}`;
+  }
+}
+
+// ==========================================
+// PAGE VIEWS COUNTER
+// ==========================================
+function initPageViews() {
+  const VIEWS_KEY = 'ajh_page_views';
+  let views = parseInt(localStorage.getItem(VIEWS_KEY) || '0');
+  views += 1;
+  localStorage.setItem(VIEWS_KEY, views.toString());
+  
+  const viewsEl = document.querySelector('.page-views-count');
+  if (viewsEl) {
+    viewsEl.textContent = formatNumber(views);
+  }
+}
+
+// ==========================================
+// CANVAS PARTICLE ANIMATION
+// ==========================================
+function initCanvasAnimation() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) {
+    // Create canvas if it doesn't exist
+    const hero = document.querySelector('.hero');
+    if (hero) {
+      const newCanvas = document.createElement('canvas');
+      newCanvas.id = 'hero-canvas';
+      hero.style.position = 'relative';
+      hero.insertBefore(newCanvas, hero.firstElementChild);
+      canvas = newCanvas;
+    } else {
+      return;
+    }
+  }
+  
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animationId;
+  
+  function resizeCanvas() {
+    const hero = document.querySelector('.hero');
+    if (hero) {
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+  }
+  
+  function createParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 0.5,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      alpha: Math.random() * 0.5 + 0.2
+    };
+  }
+  
+  function initParticles() {
+    particles = [];
+    const count = Math.min(50, Math.floor(canvas.width * canvas.height / 10000));
+    for (let i = 0; i < count; i++) {
+      particles.push(createParticle());
+    }
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 212, 255, ${p.alpha})`;
+      ctx.fill();
+    });
+    
+    // Draw connections
+    particles.forEach((p1, i) => {
+      particles.slice(i + 1).forEach(p2 => {
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - dist / 100)})`;
+          ctx.stroke();
+        }
+      });
+    });
+    
+    animationId = requestAnimationFrame(animate);
+  }
+  
+  resizeCanvas();
+  initParticles();
+  animate();
+  
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initParticles();
+  });
+  
+  // Respect reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    cancelAnimationFrame(animationId);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+// Helper function for scrollTo
+function scrollTo(selector) {
+  const el = document.querySelector(selector);
+  if (el) {
+    window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+  }
+}
+
+// ==========================================
+// FAQ ACCORDION
+// ==========================================
+function initFAQ() {
+  const faqItems = document.querySelectorAll('.faq-item');
+  
+  faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    
+    question.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      
+      // Close all other items
+      faqItems.forEach(otherItem => {
+        if (otherItem !== item) {
+          otherItem.classList.remove('open');
+          otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Toggle current item
+      item.classList.toggle('open');
+      question.setAttribute('aria-expanded', !isOpen);
+    });
+  });
+}
+
+// Additional demo placeholder gradient backgrounds
+const style = document.createElement('style');
+style.textContent = `
+  .demo-placeholder.gradient-bg {
+    background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+  }
+`;
+document.head.appendChild(style);
