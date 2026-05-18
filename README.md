@@ -4,15 +4,21 @@ A daily-built GitHub Pages website that grows better every day.
 
 **Live Site**: https://ajhs.github.io
 
-## Latest Build - Day 34 (2026-05-14)
+## Latest Build - Day 37 (2026-05-18)
 
-### New Features Added Today:
-- **Advanced JavaScript Utilities**: `debounce`, `throttle`, `scrollToElement`, `isInViewport` helper functions
-- **Section Transitions**: Smooth entrance animations when sections scroll into view using IntersectionObserver
-- **Hover Effects System**: 3D tilt effect on project cards, glow effects on social links, shimmer animation on skill bars, border glow on demo cards
-- **Scroll Animations**: Parallax effect for hero section, stats counter animation, timeline reveal animation
-- **Testimonials Section**: 3 testimonial cards featuring community feedback
-- **Performance Optimizations**: Reduced motion support, print styles, enhanced responsive CSS
+### 2026 Web Design Features Added:
+- **Glassmorphism** cards with backdrop blur effects
+- **Bento Grid** layout system (12-column responsive)
+- **Kinetic Typography** with floating animation + mouse parallax
+- **Morphing Blob Background** following cursor
+- **Neon Glow Text** effects
+- **Animated Gradient Borders** with rotating colors
+- **Liquid Button** ripple effects on click
+- **Magnetic Button** hover effects
+- **3D Card Tilt** effects with perspective transforms
+- **Noise Texture Overlay** for subtle grain
+- **Enhanced Particle System** with connecting lines
+- **Page Transitions** with slide animations
 
 ## Projects
 
