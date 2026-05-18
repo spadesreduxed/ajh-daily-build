@@ -1919,3 +1919,314 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+/**
+ * Day 37 - 2026 Web Features
+ * Building better every day
+ */
+
+// Noise Overlay Generator
+function initNoiseOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'noise-overlay';
+  document.body.appendChild(overlay);
+}
+
+// Blob Background Generator
+function initBlobBackground() {
+  const blob = document.createElement('div');
+  blob.className = 'blob-bg';
+  blob.style.top = '-200px';
+  blob.style.left = '-200px';
+  document.body.appendChild(blob);
+}
+
+// Bento Stats Enhancement
+function initBentoStats() {
+  const stats = document.querySelectorAll('.bento-stat');
+  stats.forEach((stat, index) => {
+    stat.style.animationDelay = `${index * 0.1}s`;
+    stat.classList.add('bounce-in');
+  });
+}
+
+// Magnetic Button Effect
+function initMagneticButtons() {
+  const buttons = document.querySelectorAll('.magnetic-btn');
+  
+  buttons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+    });
+    
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = 'translate(0, 0)';
+    });
+  });
+}
+
+// Kinetic Title Animation
+function initKineticTitle() {
+  const title = document.querySelector('.kinetic-title');
+  if (!title) return;
+  
+  // Add subtle mouse tracking for parallax effect
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 10;
+    const y = (e.clientY / window.innerHeight - 0.5) * 10;
+    
+    title.style.transform = `translate(${x}px, ${y}px)`;
+  });
+}
+
+// Morphing Blob Animation
+function initMorphBlob() {
+  const blob = document.querySelector('.blob-bg');
+  if (!blob) return;
+  
+  let mouseX = 0, mouseY = 0;
+  let blobX = 0, blobY = 0;
+  
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 100;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 100;
+  });
+  
+  function animate() {
+    blobX += (mouseX - blobX) * 0.02;
+    blobY += (mouseY - blobY) * 0.02;
+    
+    blob.style.transform = `translate(${blobX}px, ${blobY}px)`;
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+}
+
+// 3D Card Tilt Effect
+function initTiltCards() {
+  const cards = document.querySelectorAll('.tilt-card');
+  
+  cards.forEach(card => {
+    const inner = card.querySelector('.tilt-card-inner') || card;
+    
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 20;
+      const rotateY = (centerX - x) / 20;
+      
+      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      inner.style.transform = 'rotateX(0) rotateY(0)';
+    });
+  });
+}
+
+// Page Transition Effect
+function initPageTransition() {
+  const transition = document.createElement('div');
+  transition.className = 'page-transition';
+  document.body.appendChild(transition);
+  
+  // Trigger on internal navigation
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href !== '#') {
+        transition.classList.add('active');
+        setTimeout(() => {
+          transition.classList.remove('active');
+        }, 500);
+      }
+    });
+  });
+}
+
+// Liquid Button Ripple
+function initLiquidButtons() {
+  const buttons = document.querySelectorAll('.liquid-btn');
+  
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const ripple = document.createElement('span');
+      ripple.style.cssText = `
+        position: absolute;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        width: 10px;
+        height: 10px;
+        left: ${x}px;
+        top: ${y}px;
+        animation: rippleEffect 0.6s ease-out;
+      `;
+      
+      btn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+}
+
+// Gradient Border Animation
+function initGradientBorders() {
+  const borders = document.querySelectorAll('.gradient-border');
+  
+  borders.forEach(border => {
+    border.style.position = 'relative';
+  });
+}
+
+// Typewriter Effect for Hero
+function initTypewriter() {
+  const elements = document.querySelectorAll('.typewriter');
+  
+  elements.forEach(el => {
+    const text = el.textContent;
+    el.textContent = '';
+    el.style.borderRight = '2px solid var(--accent-primary)';
+    
+    let index = 0;
+    function type() {
+      if (index < text.length) {
+        el.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, 50);
+      } else {
+        setTimeout(() => {
+          el.style.borderRight = 'none';
+        }, 1000);
+      }
+    }
+    
+    type();
+  });
+}
+
+// Bento Grid Mouse Follower
+function initBentoFollower() {
+  const bentoItems = document.querySelectorAll('.bento-item');
+  
+  bentoItems.forEach(item => {
+    item.addEventListener('mousemove', (e) => {
+      const rect = item.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      item.style.background = `
+        radial-gradient(circle at ${x}px ${y}px, rgba(0, 212, 255, 0.1), transparent 50%)
+      `;
+    });
+    
+    item.addEventListener('mouseleave', () => {
+      item.style.background = '';
+    });
+  });
+}
+
+// Enhanced Particle System
+function initEnhancedParticles() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0.4;';
+  document.body.appendChild(canvas);
+  
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animationId;
+  
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  
+  function createParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(window.innerWidth / 15));
+    
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1,
+        color: `rgba(0, 212, 255, ${Math.random() * 0.5 + 0.2})`
+      });
+    }
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach((p, i) => {
+      p.x += p.vx;
+      p.y += p.vy;
+      
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      
+      // Draw connections
+      particles.slice(i + 1).forEach(p2 => {
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+    
+    animationId = requestAnimationFrame(animate);
+  }
+  
+  resize();
+  createParticles();
+  animate();
+  
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
+}
+
+// Initialize Day 37 Features
+document.addEventListener('DOMContentLoaded', () => {
+  initNoiseOverlay();
+  initBlobBackground();
+  initBentoStats();
+  initMagneticButtons();
+  initKineticTitle();
+  initMorphBlob();
+  initTiltCards();
+  initPageTransition();
+  initLiquidButtons();
+  initTypewriter();
+  initBentoFollower();
+  initEnhancedParticles();
+  
+  console.log('Day 37 Features Initialized - Building better every day');
+});
