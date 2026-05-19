@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPageViews();
   initCanvasAnimation();
   initFAQ();
+  initRoleText();
 });
 
 /**
@@ -2230,3 +2231,53 @@ document.addEventListener('DOMContentLoaded', () => {
   
   console.log('Day 37 Features Initialized - Building better every day');
 });
+
+// Role Text Rotator - Day 38
+const roles = [
+  'Full-Stack Developer',
+  'Daily Builder',
+  'Gaming Hub Creator',
+  'Problem Solver',
+  'Code Craftsman',
+  ' Bronx Native',
+  'Never Stopping'
+];
+
+function initRoleText() {
+  const roleEl = document.getElementById('role-text');
+  if (!roleEl) return;
+  
+  let currentIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typeSpeed = 80;
+  
+  function typeRole() {
+    const currentRole = roles[currentIndex];
+    
+    if (isDeleting) {
+      roleEl.textContent = currentRole.substring(0, charIndex - 1);
+      charIndex--;
+      typeSpeed = 40;
+    } else {
+      roleEl.textContent = currentRole.substring(0, charIndex + 1);
+      charIndex++;
+      typeSpeed = 80;
+    }
+    
+    if (!isDeleting && charIndex === currentRole.length) {
+      // Pause at end
+      typeSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      currentIndex = (currentIndex + 1) % roles.length;
+      typeSpeed = 500;
+    }
+    
+    setTimeout(typeRole, typeSpeed);
+  }
+  
+  // Start typing after a brief delay
+  setTimeout(typeRole, 1000);
+}
