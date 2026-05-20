@@ -68,7 +68,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar nav-hidden">
         <div class="nav-brand">
             <span class="brand-icon">⚡</span>
             <span class="brand-text">AJH</span>
@@ -735,50 +735,36 @@
     </section>
 
     <!-- Blog Section -->
-    <section id="blog" class="section">
+    <section id="blog" class="section alt-bg blog-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Latest Builds</span>
+                <span class="section-tag">Updates</span>
                 <h2 class="section-title">Daily Build Log</h2>
+                <p class="section-subtitle">New features, improvements, and experiments</p>
             </div>
-            <div class="blog-grid" id="blog-grid">
-                <article class="blog-card">
-                    <span class="blog-date">May 16, 2026</span>
-                    <h3 class="blog-title">Day 36: Blog Section Cleanup + Interactive FAQ</h3>
-                    <p class="blog-excerpt">Fixed duplicate blog entries and consolidated cards. Added interactive FAQ section with accordion-style collapsible answers. Improved overall blog readability and navigation.</p>
-                    <a href="#blog" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 16, 2026</span>
-                    <h3 class="blog-title">Day 35: Command Palette + Canvas Animation</h3>
-                    <p class="blog-excerpt">Added Ctrl+K command palette for quick navigation with 16 commands. Canvas particle animation in hero. Daily streak tracker and page views counter.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 14, 2026</span>
-                    <h3 class="blog-title">Day 34: Advanced JS + Enhanced CSS</h3>
-                    <p class="blog-excerpt">Added utility functions (debounce, throttle, scrollToElement). Section transitions with IntersectionObserver. 3D hover effects on cards. Testimonials section.</p>
-                    <a href="#home" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 13, 2026</span>
-                    <h3 class="blog-title">Day 33: Testimonials + Enhanced Footer</h3>
-                    <p class="blog-excerpt">Added 3 testimonial cards with community feedback. Enhanced footer with more social links (Spotify, YouTube, Instagram). Updated light theme support.</p>
-                    <a href="#testimonials" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-date">May 12, 2026</span>
-                    <h3 class="blog-title">Day 32: Project Detail Modal</h3>
-                    <p class="blog-excerpt">Added clickable project cards that open detailed modal with description, tech stack, and links. 7 projects now have full details.</p>
-                    <a href="#projects" class="blog-link">Read more <i class="fas fa-arrow-right"></i></a>
-                </article>
-                <article class="blog-card coming-soon">
-                    <div class="blog-coming-soon-content">
-                        <i class="fas fa-hammer"></i>
-                        <h3>More Coming Soon</h3>
-                        <p>New blog entries added daily as the build continues...</p>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">20</span>
+                        <span class="blog-month">May 2026</span>
                     </div>
-                </article>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 39</span>
+                        <h3>Ambient Sound + Smart Nav + Scroll Animations</h3>
+                        <p>Added ambient sound toggle with subtle drone using Web Audio API. Smart navigation auto-hides on scroll down, shows on scroll up. Section and stagger scroll reveal animations with IntersectionObserver for polished entrance effects.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">19</span>
+                        <span class="blog-month">May 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 38</span>
+                        <h3>Role Text Rotator + Hero Enhancement</h3>
+                        <p>Added role text rotator cycling through 7 roles with typewriter effect. Updated hero title with kinetic-title class, gradient underline wave animation, and cursor blink effect. Light theme adaptations included.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1266,6 +1252,11 @@
     <!-- Scroll to Top Button -->
     <button class="scroll-top" aria-label="Scroll to top">
         <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Sound Toggle -->
+    <button class="sound-toggle" id="sound-toggle" aria-label="Toggle ambient sound">
+        <i class="fas fa-volume-mute"></i>
     </button>
 
     <script src="js/main.js"></script>

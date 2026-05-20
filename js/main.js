@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initCanvasAnimation();
   initFAQ();
   initRoleText();
+  initAmbientSound();
+  initSmartNav();
+  initScrollAnimations();
 });
 
 /**
@@ -2280,4 +2283,143 @@ function initRoleText() {
   
   // Start typing after a brief delay
   setTimeout(typeRole, 1000);
+}
+
+// ========== Day 39 Features ==========
+
+// Ambient Sound Toggle
+function initAmbientSound() {
+  const soundToggle = document.getElementById('sound-toggle');
+  if (!soundToggle) return;
+  
+  let isPlaying = false;
+  let audioContext = null;
+  let oscillator = null;
+  let gainNode = null;
+  
+  // Create ambient drone sound
+  function createAmbientSound() {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    oscillator = audioContext.createOscillator();
+    gainNode = audioContext.createGain();
+    
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(80, audioContext.currentTime);
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.start();
+    
+    // Fade in
+    gainNode.gain.linearRampToValueAtTime(0.03, audioContext.currentTime + 2);
+    
+    // Subtle modulation
+    const lfo = audioContext.createOscillator();
+    const lfoGain = audioContext.createGain();
+    lfo.frequency.setValueAtTime(0.1, audioContext.currentTime);
+    lfoGain.gain.setValueAtTime(5, audioContext.currentTime);
+    lfo.connect(lfoGain);
+    lfoGain.connect(oscillator.frequency);
+    lfo.start();
+  }
+  
+  function stopAmbientSound() {
+    if (gainNode) {
+      gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
+      setTimeout(() => {
+        if (oscillator) oscillator.stop();
+        if (audioContext) audioContext.close();
+        audioContext = null;
+        oscillator = null;
+        gainNode = null;
+      }, 1000);
+    }
+  }
+  
+  soundToggle.addEventListener('click', () => {
+    if (!isPlaying) {
+      createAmbientSound();
+      soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+      soundToggle.classList.add('active');
+      isPlaying = true;
+    } else {
+      stopAmbientSound();
+      soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      soundToggle.classList.remove('active');
+      isPlaying = false;
+    }
+  });
+}
+
+// Smart Navigation - Auto-hide/show on scroll
+function initSmartNav() {
+  const navbar = document.querySelector('.navbar');
+  if (!navbar) return;
+  
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+  
+  function updateNav() {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Scrolling down - hide nav
+      navbar.classList.add('nav-hidden');
+    } else {
+      // Scrolling up - show nav
+      navbar.classList.remove('nav-hidden');
+    }
+    
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  });
+}
+
+// Scroll Animations using IntersectionObserver
+function initScrollAnimations() {
+  // Animate sections on scroll into view
+  const sections = document.querySelectorAll('.section');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('section-visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  
+  sections.forEach(section => {
+    section.classList.add('section-scroll-reveal');
+    observer.observe(section);
+  });
+  
+  // Stagger animation for grid items
+  const gridItems = document.querySelectorAll('.about-card, .project-card, .skill-item, .timeline-item, .blog-card');
+  
+  const staggerObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('item-visible');
+        }, index * 50);
+        staggerObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  gridItems.forEach(item => {
+    item.classList.add('stagger-item');
+    staggerObserver.observe(item);
+  });
 }
