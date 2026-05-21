@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initTimeGreeting();
   initFocusTimer();
+  initQuickNotes();
 });
 
 /**
@@ -2519,4 +2520,186 @@ function initFocusTimer() {
   }
   
   updateDisplay();
+}
+
+// Quick Notes Modal
+function initQuickNotes() {
+  const notesBtn = document.getElementById('notes-btn');
+  if (!notesBtn) return;
+  
+  // Create modal if it doesn't exist
+  let notesModal = document.getElementById('notes-modal');
+  if (!notesModal) {
+    notesModal = document.createElement('div');
+    notesModal.id = 'notes-modal';
+    notesModal.className = 'notes-modal';
+    notesModal.innerHTML = `
+      <div class="notes-content">
+        <div class="notes-header">
+          <h3><i class="fas fa-sticky-note"></i> Quick Notes</h3>
+          <button class="notes-close" id="notes-close" aria-label="Close notes"><i class="fas fa-times"></i></button>
+        </div>
+        <textarea class="notes-textarea" id="notes-textarea" placeholder="Jot down your thoughts..."></textarea>
+        <div class="notes-footer">
+          <span class="notes-saved" id="notes-saved">Auto-saved</span>
+          <button class="btn btn-sm" id="notes-clear">Clear</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(notesModal);
+    
+    // Add CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      .notes-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+      }
+      .notes-modal.active {
+        display: flex;
+      }
+      .notes-content {
+        background: var(--bg-card, #1a1a25);
+        border: 1px solid var(--border-color, #2a2a3a);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .notes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color, #2a2a3a);
+      }
+      .notes-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: var(--text-primary, #fff);
+      }
+      .notes-close {
+        background: none;
+        border: none;
+        color: var(--text-muted, #606070);
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 4px;
+      }
+      .notes-close:hover {
+        color: var(--accent-primary, #00d4ff);
+      }
+      .notes-textarea {
+        flex: 1;
+        padding: 16px;
+        background: var(--bg-secondary, #12121a);
+        border: none;
+        color: var(--text-primary, #fff);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        resize: none;
+        min-height: 200px;
+      }
+      .notes-textarea:focus {
+        outline: none;
+      }
+      .notes-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border-color, #2a2a3a);
+      }
+      .notes-saved {
+        font-size: 0.8rem;
+        color: var(--text-muted, #606070);
+      }
+      .btn-sm {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      [data-theme="light"] .notes-content {
+        background: #fff;
+        border-color: #e0e0e8;
+      }
+      [data-theme="light"] .notes-header {
+        border-color: #e0e0e8;
+      }
+      [data-theme="light"] .notes-header h3 {
+        color: #1a1a1a;
+      }
+      [data-theme="light"] .notes-textarea {
+        background: #f5f5f7;
+        color: #1a1a1a;
+      }
+      [data-theme="light"] .notes-footer {
+        border-color: #e0e0e8;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  const notesTextarea = document.getElementById('notes-textarea');
+  const notesClose = document.getElementById('notes-close');
+  const notesClear = document.getElementById('notes-clear');
+  const notesSaved = document.getElementById('notes-saved');
+  
+  // Load saved notes
+  const savedNotes = localStorage.getItem('ajh-quick-notes');
+  if (notesTextarea && savedNotes) {
+    notesTextarea.value = savedNotes;
+  }
+  
+  // Toggle modal
+  notesBtn.addEventListener('click', () => {
+    notesModal.classList.add('active');
+    if (notesTextarea) notesTextarea.focus();
+  });
+  
+  // Close modal
+  if (notesClose) {
+    notesClose.addEventListener('click', () => {
+      notesModal.classList.remove('active');
+    });
+  }
+  
+  notesModal.addEventListener('click', (e) => {
+    if (e.target === notesModal) {
+      notesModal.classList.remove('active');
+    }
+  });
+  
+  // Auto-save notes
+  if (notesTextarea) {
+    notesTextarea.addEventListener('input', () => {
+      localStorage.setItem('ajh-quick-notes', notesTextarea.value);
+      if (notesSaved) {
+        notesSaved.textContent = 'Saved just now';
+        setTimeout(() => {
+          if (notesSaved) notesSaved.textContent = 'Auto-saved';
+        }, 2000);
+      }
+    });
+  }
+  
+  // Clear notes
+  if (notesClear) {
+    notesClear.addEventListener('click', () => {
+      if (notesTextarea) {
+        notesTextarea.value = '';
+        localStorage.removeItem('ajh-quick-notes');
+      }
+    });
+  }
 }
