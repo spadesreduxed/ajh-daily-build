@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initTimeGreeting();
   initFocusTimer();
   initQuickNotes();
+  initProductivityWidgets();
+  initDailyGoals();
+  initBreakReminder();
 });
 
 /**
@@ -2702,4 +2705,116 @@ function initQuickNotes() {
       }
     });
   }
+}
+
+// Productivity Corner Widgets
+function initProductivityWidgets() {
+  // Connect focus timer from hero to productivity section
+  const widgetTimer = document.getElementById('widget-timer');
+  const widgetTimerStart = document.getElementById('widget-timer-start');
+  const heroTimerDisplay = document.getElementById('timer-display');
+  const heroTimerStart = document.getElementById('timer-start');
+  
+  if (widgetTimer && heroTimerDisplay) {
+    // Sync widget timer with hero timer
+    setInterval(() => {
+      if (heroTimerDisplay) {
+        widgetTimer.textContent = heroTimerDisplay.textContent;
+      }
+    }, 1000);
+  }
+  
+  if (widgetTimerStart && heroTimerStart) {
+    widgetTimerStart.addEventListener('click', () => {
+      heroTimerStart.click();
+      widgetTimerStart.innerHTML = heroTimerStart.innerHTML.includes('pause') 
+        ? '<i class="fas fa-pause"></i> Pause' 
+        : '<i class="fas fa-play"></i> Start';
+    });
+  }
+  
+  // Connect notes button
+  const openNotesBtn = document.getElementById('open-notes-btn');
+  const notesBtn = document.getElementById('notes-btn');
+  
+  if (openNotesBtn && notesBtn) {
+    openNotesBtn.addEventListener('click', () => {
+      notesBtn.click();
+    });
+  }
+}
+
+// Daily Goals Tracker
+function initDailyGoals() {
+  const goalBar = document.getElementById('goal-bar');
+  const goalText = document.getElementById('goal-text');
+  
+  if (!goalBar || !goalText) return;
+  
+  const STORAGE_KEY = 'ajh-daily-goals';
+  const today = new Date().toDateString();
+  
+  let goals = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"date":"","completed":0,"total":3}');
+  
+  // Reset if new day
+  if (goals.date !== today) {
+    goals = { date: today, completed: 0, total: 3 };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+  }
+  
+  function updateDisplay() {
+    const percent = (goals.completed / goals.total) * 100;
+    goalBar.style.width = `${percent}%`;
+    goalText.textContent = `${goals.completed}/${goals.total} goals`;
+    
+    if (percent >= 100) {
+      goalBar.style.background = 'linear-gradient(90deg, #00ff88, #00d4ff)';
+    }
+  }
+  
+  updateDisplay();
+  
+  // Click to increment (for demo - in real app would track specific goals)
+  goalBar.parentElement.addEventListener('click', () => {
+    if (goals.completed < goals.total) {
+      goals.completed++;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+      updateDisplay();
+    }
+  });
+}
+
+// Break Reminder
+function initBreakReminder() {
+  const breakBtn = document.getElementById('break-reminder-btn');
+  
+  if (!breakBtn) return;
+  
+  breakBtn.addEventListener('click', () => {
+    // Request notification permission
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+    
+    // Show notification after 5 minutes (for demo - 5 min instead of 25)
+    const reminderText = 'Time for a break! Stand up, stretch, hydrate.';
+    
+    // For demo purposes, show notification after 10 seconds instead of 5 minutes
+    setTimeout(() => {
+      if (Notification.permission === 'granted') {
+        new Notification('Break Reminder', { body: reminderText, icon: '⚡' });
+      } else {
+        // Fallback: show in-page alert
+        alert('Break Reminder: ' + reminderText);
+      }
+    }, 10000); // 10 seconds for demo
+    
+    breakBtn.innerHTML = '<i class="fas fa-check"></i> Break set!';
+    breakBtn.disabled = true;
+    
+    setTimeout(() => {
+      breakBtn.innerHTML = '<i class="fas fa-coffee"></i> Set Break';
+      breakBtn.disabled = false;
+    }, 15000);
+  });
 }

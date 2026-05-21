@@ -2172,6 +2172,141 @@ button:focus-visible,
   border-color: #e0e0e8;
 }
 
+/* Notes Button */
+.notes-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.notes-btn:hover {
+  background: rgba(123, 44, 191, 0.1);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+[data-theme="light"] .notes-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .notes-btn:hover {
+  background: rgba(107, 44, 159, 0.1);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+/* Productivity Corner */
+.productivity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.productivity-card {
+  padding: 28px;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.productivity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.productivity-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.productivity-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.productivity-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.productivity-widget {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.widget-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: rgba(0, 212, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.goal-progress {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-card);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.goal-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.goal-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  min-width: 80px;
+  text-align: right;
+}
+
+[data-theme="light"] .productivity-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 102, 204, 0.2);
+}
+
+[data-theme="light"] .productivity-icon {
+  background: linear-gradient(135deg, #0066cc 0%, #6b2c9f 100%);
+}
+
+[data-theme="light"] .productivity-card h3 {
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .widget-display {
+  background: rgba(0, 102, 204, 0.1);
+  color: #0066cc;
+}
+
 /* Hero visual parallax container */
 .hero-visual {
   will-change: transform, opacity;
