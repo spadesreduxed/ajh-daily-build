@@ -2108,6 +2108,70 @@ button:focus-visible,
   color: #0066cc;
 }
 
+/* Focus Timer */
+.focus-timer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--accent-primary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.timer-toggle:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--accent-primary);
+}
+
+.timer-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  min-width: 45px;
+}
+
+.timer-controls {
+  display: none;
+  gap: 4px;
+}
+
+.timer-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.timer-btn:hover {
+  background: rgba(0, 212, 255, 0.2);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+[data-theme="light"] .timer-toggle {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: #e0e0e8;
+}
+
+[data-theme="light"] .timer-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: #e0e0e8;
+}
+
 /* Hero visual parallax container */
 .hero-visual {
   will-change: transform, opacity;
@@ -2725,8 +2789,26 @@ button:focus-visible,
   color: var(--text-muted);
 }
 
-.page-views i {
+[data-theme="light"] .page-views {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .hero-clock {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .clock-zone {
   color: var(--accent-primary);
+}
+
+/* Time Greeting */
+.time-greeting {
+  display: inline;
+  font-weight: 600;
+}
+
+[data-theme="light"] .time-greeting {
+  color: #0066cc;
 }
 
 /* Canvas Animation */

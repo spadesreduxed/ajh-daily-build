@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAmbientSound();
   initSmartNav();
   initScrollAnimations();
+  initTimeGreeting();
+  initFocusTimer();
 });
 
 /**
@@ -2422,4 +2424,99 @@ function initScrollAnimations() {
     item.classList.add('stagger-item');
     staggerObserver.observe(item);
   });
+}
+
+// Time-based greeting
+function initTimeGreeting() {
+  const greetingEl = document.getElementById('time-greeting');
+  if (!greetingEl) return;
+  
+  const hour = new Date().getHours();
+  let greeting = 'Hello';
+  
+  if (hour >= 5 && hour < 12) {
+    greeting = 'Good morning';
+  } else if (hour >= 12 && hour < 17) {
+    greeting = 'Good afternoon';
+  } else if (hour >= 17 && hour < 21) {
+    greeting = 'Good evening';
+  } else {
+    greeting = 'Good night';
+  }
+  
+  greetingEl.textContent = greeting;
+}
+
+// Focus Timer (Pomodoro-style)
+function initFocusTimer() {
+  const timerToggle = document.getElementById('timer-toggle');
+  const timerDisplay = document.getElementById('timer-display');
+  const timerControls = document.getElementById('timer-controls');
+  const timerStart = document.getElementById('timer-start');
+  const timerReset = document.getElementById('timer-reset');
+  
+  if (!timerToggle || !timerDisplay) return;
+  
+  let timeLeft = 25 * 60; // 25 minutes in seconds
+  let timerInterval = null;
+  let isRunning = false;
+  const FOCUS_TIME = 25 * 60;
+  
+  function updateDisplay() {
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+  
+  function toggleControls() {
+    if (timerControls) {
+      timerControls.style.display = isRunning ? 'flex' : 'none';
+    }
+  }
+  
+  if (timerStart) {
+    timerStart.addEventListener('click', () => {
+      if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        timerStart.innerHTML = '<i class="fas fa-play"></i>';
+      } else {
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timerStart.innerHTML = '<i class="fas fa-play"></i>';
+            timerDisplay.textContent = 'Done!';
+            // Notification if available
+            if (Notification.permission === 'granted') {
+              new Notification('Focus session complete!', { body: 'Great work! Take a break.' });
+            }
+          }
+        }, 1000);
+        isRunning = true;
+        timerStart.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+    });
+  }
+  
+  if (timerReset) {
+    timerReset.addEventListener('click', () => {
+      clearInterval(timerInterval);
+      isRunning = false;
+      timeLeft = FOCUS_TIME;
+      updateDisplay();
+      if (timerStart) timerStart.innerHTML = '<i class="fas fa-play"></i>';
+      toggleControls();
+    });
+  }
+  
+  if (timerToggle) {
+    timerToggle.addEventListener('click', () => {
+      toggleControls();
+    });
+  }
+  
+  updateDisplay();
 }
