@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmartNav();
   initScrollAnimations();
   initTimeGreeting();
+  initHeroDate();
   initFocusTimer();
   initQuickNotes();
   initProductivityWidgets();
@@ -2449,6 +2450,22 @@ function initTimeGreeting() {
   }
   
   greetingEl.textContent = greeting;
+}
+
+// Hero Date Display
+function initHeroDate() {
+  const dateDisplay = document.getElementById('date-display');
+  if (!dateDisplay) return;
+  
+  function updateDate() {
+    const now = new Date();
+    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+    dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+  }
+  
+  updateDate();
+  // Update every minute to catch day changes
+  setInterval(updateDate, 60000);
 }
 
 // Focus Timer (Pomodoro-style)

@@ -2085,6 +2085,36 @@ button:focus-visible,
   font-size: 0.9rem;
 }
 
+.hero-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(123, 44, 191, 0.1);
+  border: 1px solid rgba(123, 44, 191, 0.3);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.hero-date i {
+  color: var(--accent-secondary);
+}
+
+.date-display {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+[data-theme="light"] .hero-date {
+  background: rgba(123, 44, 191, 0.08);
+  border-color: rgba(123, 44, 191, 0.25);
+}
+
+[data-theme="light"] .hero-date i {
+  color: #7b2cbf;
+}
+
 .hero-clock i {
   color: var(--accent-primary);
 }
