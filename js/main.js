@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initProductivityWidgets();
   initDailyGoals();
   initBreakReminder();
+  initWorldClock();
 });
 
 /**
@@ -2466,6 +2467,82 @@ function initHeroDate() {
   updateDate();
   // Update every minute to catch day changes
   setInterval(updateDate, 60000);
+}
+
+// World Clock Modal
+function initWorldClock() {
+  const modal = document.getElementById('world-clock-modal');
+  const btn = document.getElementById('world-clock-btn');
+  const closeBtn = document.getElementById('world-clock-close');
+  
+  if (!modal || !btn) return;
+  
+  // Time zone configurations
+  const timezones = {
+    'wc-new-york': { tz: 'America/New_York', label: 'EST/EDT' },
+    'wc-la': { tz: 'America/Los_Angeles', label: 'PST/PDT' },
+    'wc-london': { tz: 'Europe/London', label: 'GMT/BST' },
+    'wc-tokyo': { tz: 'Asia/Tokyo', label: 'JST' },
+    'wc-sydney': { tz: 'Australia/Sydney', label: 'AEST/AEDT' },
+    'wc-dubai': { tz: 'Asia/Dubai', label: 'GST' },
+    'wc-berlin': { tz: 'Europe/Berlin', label: 'CET/CEST' },
+    'wc-singapore': { tz: 'Asia/Singapore', label: 'SGT' }
+  };
+  
+  function updateWorldClocks() {
+    const now = new Date();
+    Object.keys(timezones).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const timeStr = now.toLocaleTimeString('en-US', {
+          timeZone: timezones[id].tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+        el.textContent = timeStr;
+      }
+    });
+  }
+  
+  function openModal() {
+    modal.classList.add('active');
+    updateWorldClocks();
+    // Update every second while open
+    const interval = setInterval(updateWorldClocks, 1000);
+    modal.dataset.interval = interval;
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeModal() {
+    modal.classList.remove('active');
+    if (modal.dataset.interval) {
+      clearInterval(parseInt(modal.dataset.interval));
+    }
+    document.body.style.overflow = 'auto';
+  }
+  
+  btn.addEventListener('click', () => {
+    if (modal.classList.contains('active')) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  });
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
 }
 
 // Focus Timer (Pomodoro-style)
