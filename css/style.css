@@ -3712,3 +3712,745 @@ button:focus-visible,
 
 .tilt-card:hover .tilt-card-inner {
   transform: rotateX(5
+/* Weather Widget - Day 43 */
+.weather-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 30px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  backdrop-filter: blur(10px);
+}
+
+.weather-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.weather-temp {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.weather-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 10002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-medium);
+}
+
+.weather-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.weather-modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 420px;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: var(--transition-medium);
+  box-shadow: var(--shadow-card);
+}
+
+.weather-modal.active .weather-modal-content {
+  transform: scale(1);
+}
+
+.weather-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.weather-modal-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.weather-modal-header h3 i {
+  color: var(--accent-primary);
+}
+
+.weather-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  transition: var(--transition-fast);
+}
+
+.weather-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.weather-modal-body {
+  padding: 24px;
+}
+
+.weather-current {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.weather-icon-large {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: var(--accent-primary);
+}
+
+.weather-temp-large {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.weather-location {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+.weather-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+.weather-forecast {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.forecast-title {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.forecast-item {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  transition: var(--transition-fast);
+}
+
+.forecast-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.forecast-day {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.forecast-icon {
+  font-size: 1.5rem;
+  margin: 8px 0;
+  color: var(--accent-primary);
+}
+
+.forecast-temps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.forecast-high {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.forecast-low {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.weather-note {
+  margin-top: 20px;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-note i {
+  color: var(--accent-secondary);
+}
+
+/* World Clock Modal - Day 42 */
+.world-clock-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-medium);
+}
+
+.world-clock-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.world-clock-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: var(--transition-medium);
+  box-shadow: var(--shadow-card);
+}
+
+.world-clock-modal.active .world-clock-content {
+  transform: scale(1);
+}
+
+
+.world-clock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.world-clock-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.world-clock-header h3 i {
+  color: var(--accent-primary);
+}
+
+.world-clock-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  transition: var(--transition-fast);
+}
+
+.world-clock-close:hover {
+  color: var(--text-primary);
+}
+
+.world-clock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 24px;
+}
+
+.world-clock-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  transition: var(--transition-fast);
+}
+
+.world-clock-item:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.15);
+  transform: translateY(-3px);
+}
+
+.city-flag {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.city-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+}
+
+.city-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 480px) {
+  .forecast-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .world-clock-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Notes Modal - Day 40 */
+.notes-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-medium);
+}
+
+
+.notes-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.notes-modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: var(--transition-medium);
+  box-shadow: var(--shadow-card);
+}
+
+
+.notes-modal.active .notes-modal-content {
+  transform: scale(1);
+}
+
+.notes-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notes-modal-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.notes-modal-header h3 i {
+  color: var(--accent-secondary);
+}
+
+.notes-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  transition: var(--transition-fast);
+}
+
+.notes-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.notes-modal-body {
+  padding: 24px;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: var(--transition-fast);
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+}
+
+
+.notes-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.notes-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.notes-autosave {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Section Minimap - Day 43 */
+#section-minimap {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 999;
+  font-size: 0.75rem;
+}
+
+.minimap-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  width: 160px;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  transform: translateY(10px);
+}
+
+#section-minimap.expanded .minimap-container,
+.minimap-container:hover {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.minimap-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+.minimap-progress {
+  position: absolute;
+  left: 12px;
+  top: 40px;
+  bottom: 40px;
+  width: 3px;
+  background: var(--bg-card);
+  border-radius: 2px;
+}
+
+.minimap-progress-bar {
+  width: 100%;
+  background: var(--gradient-1);
+  border-radius: 2px;
+  transition: height 0.1s linear;
+  height: 0%;
+}
+
+.minimap-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-left: 10px;
+}
+
+.minimap-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  color: var(--text-secondary);
+}
+
+.minimap-item:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.minimap-item.active {
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--accent-primary);
+}
+
+.minimap-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.minimap-item.active .minimap-dot {
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+.minimap-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.minimap-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 998;
+  transition: all 0.3s ease;
+  display: none;
+}
+
+#section-minimap:not(.expanded) .minimap-container {
+  display: none;
+}
+
+#section-minimap:not(.expanded) .minimap-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#section-minimap.expanded .minimap-toggle {
+  display: none;
+}
+
+/* Terminal Dashboard - Day 43 */
+.terminal-dashboard {
+  margin-top: 15px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  max-width: 280px;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.t-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.t-dot.red { background: #ff5f56; }
+.t-dot.yellow { background: #ffbd2e; }
+.t-dot.green { background: #27c93f; }
+
+.terminal-title {
+  color: #8b949e;
+  font-size: 0.65rem;
+  margin-left: auto;
+}
+
+.terminal-body {
+  padding: 10px 12px;
+}
+
+.t-line {
+  color: #c9d1d9;
+  line-height: 1.6;
+}
+
+.t-prompt {
+  color: #58a6ff;
+  margin-right: 8px;
+}
+
+.t-output {
+  padding-left: 16px;
+  color: #7ee787;
+}
+
+.t-value {
+  color: #ffa657;
+}
+
+.terminal-dashboard .t-line:nth-child(7) .t-prompt {
+  animation: terminalCursor 1s infinite;
+}
+
+@keyframes terminalCursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Scroll Velocity - Day 43 */
+#scroll-velocity {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+#scroll-velocity.visible {
+  opacity: 1;
+}
+
+.velocity-bar {
+  width: 60px;
+  height: 3px;
+  background: var(--bg-secondary);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: width 0.1s linear;
+}
+
+#velocity-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-1);
+}
+
+.velocity-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Mobile adjustments for Day 43 features */
+@media (max-width: 768px) {
+  #section-minimap {
+    display: none;
+  }
+  
+  .terminal-dashboard {
+    display: none;
+  }
+  
+  #scroll-velocity {
+    bottom: 20px;
+    right: 10px;
+  }
+}
+
+/* Light theme adaptations for Day 43 */
+[data-theme="light"] .terminal-dashboard {
+  background: #f6f8fa;
+  border-color: #d0d7de;
+}
+
+[data-theme="light"] .terminal-header {
+  background: #eaeef2;
+  border-color: #d0d7de;
+}
+
+[data-theme="light"] .terminal-title,
+[data-theme="light"] .t-line {
+  color: #24292f;
+}
+
+[data-theme="light"] .t-output {
+  color: #116329;
+}

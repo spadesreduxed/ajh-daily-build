@@ -160,6 +160,10 @@
                 <button class="notes-btn" id="notes-btn" aria-label="Quick notes">
                     <i class="fas fa-sticky-note"></i>
                 </button>
+                <button class="weather-btn" id="weather-btn" aria-label="Weather">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span class="weather-temp" id="weather-temp">--°</span>
+                </button>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -893,7 +897,18 @@
                     <div class="blog-content">
                         <span class="blog-tag">Day 42</span>
                         <h3>World Clock Widget + 8 Major Cities</h3>
-                        <p>Added a world clock modal accessible from the hero meta section. Shows real-time times for New York, LA, London, Tokyo, Sydney, Dubai, Berlin, and Singapore. Times update every second while the modal is open, with hover effects and responsive 2-column grid layout.</p>
+                        <p>Added world clock modal showing live times across 8 global cities. Times update in real-time with timezone DST handling. Responsive 2-column grid layout with hover effects and keyboard/dialog dismiss.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">26</span>
+                        <span class="blog-month">May 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 43</span>
+                        <h3>Section Minimap + Terminal Dashboard + Scroll Velocity</h3>
+                        <p>Added Section Minimap for quick section navigation with progress indicator, Terminal Dashboard widget showing live build stats with retro styling, and Scroll Velocity indicator showing scroll movement speed.</p>
                     </div>
                 </div>
                 <div class="blog-card">
@@ -1411,6 +1426,143 @@
     <button class="sound-toggle" id="sound-toggle" aria-label="Toggle ambient sound">
         <i class="fas fa-volume-mute"></i>
     </button>
+
+    <!-- Weather Modal -->
+    <div class="weather-modal" id="weather-modal">
+        <div class="weather-modal-content">
+            <div class="weather-modal-header">
+                <h3><i class="fas fa-cloud-sun"></i> Weather</h3>
+                <button class="weather-modal-close" id="weather-modal-close" aria-label="Close weather">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="weather-modal-body">
+                <div class="weather-current" id="weather-current">
+                    <div class="weather-icon-large">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="weather-temp-large" id="weather-temp-large">--°F</div>
+                    <div class="weather-location" id="weather-location">The Bronx, NY</div>
+                    <div class="weather-desc" id="weather-desc">Loading weather data...</div>
+                </div>
+                <div class="weather-forecast" id="weather-forecast">
+                    <div class="forecast-title">5-Day Forecast</div>
+                    <div class="forecast-grid" id="forecast-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="weather-note">
+                    <i class="fas fa-info-circle"></i> Weather data from Open-Meteo API (free, no key required)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- World Clock Modal -->
+    <div class="world-clock-modal" id="world-clock-modal">
+        <div class="world-clock-content">
+            <div class="world-clock-header">
+                <h3><i class="fas fa-globe"></i> World Clock</h3>
+                <button class="world-clock-close" id="world-clock-close" aria-label="Close world clock">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="world-clock-grid" id="world-clock-grid">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Notes Modal -->
+    <div class="notes-modal" id="notes-modal">
+        <div class="notes-modal-content">
+            <div class="notes-modal-header">
+                <h3><i class="fas fa-sticky-note"></i> Quick Notes</h3>
+                <button class="notes-modal-close" id="notes-modal-close" aria-label="Close notes">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notes-modal-body">
+                <textarea class="notes-textarea" id="notes-textarea" placeholder="Jot down your ideas here..."></textarea>
+                <div class="notes-footer">
+                    <span class="notes-autosave" id="notes-autosave">Auto-saved</span>
+                    <button class="btn btn-sm" id="notes-clear"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal -->
+    <div class="project-modal" id="project-modal">
+        <div class="project-modal-content">
+            <div class="project-modal-header">
+                <div class="project-modal-icon" id="project-modal-icon">
+                    <i class="fas fa-vault"></i>
+                </div>
+                <div class="project-modal-title-section">
+                    <h3 class="project-modal-title" id="project-modal-title">Project Title</h3>
+                    <span class="project-modal-badge" id="project-modal-badge">Category</span>
+                </div>
+                <button class="project-modal-close" id="project-modal-close" aria-label="Close project">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="project-modal-body">
+                <p class="project-modal-desc" id="project-modal-desc">Project description</p>
+                <div class="project-modal-tech" id="project-modal-tech">
+                    <span class="tech-tag">Tech</span>
+                </div>
+                <div class="project-modal-stats" id="project-modal-stats">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+            <div class="project-modal-footer">
+                <a href="#" class="btn btn-primary" id="project-modal-github" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+                <a href="#" class="btn btn-outline" id="project-modal-demo" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Live Demo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Modal -->
+    <div class="demo-modal" id="demo-modal">
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3 class="demo-modal-title" id="demo-modal-title">Demo</h3>
+                <button class="demo-modal-close" id="demo-modal-close" aria-label="Close demo">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="demo-modal-body">
+                <iframe id="demo-iframe" src="" frameborder="0"></iframe>
+            </div>
+            <div class="demo-modal-footer">
+                <a href="#" class="btn btn-outline" id="demo-modal-link" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Open External
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="nav-search-modal" id="nav-search-modal">
+        <div class="search-container">
+            <input type="text" class="search-input" id="search-input" placeholder="Search anything..." autocomplete="off">
+            <button class="search-close" id="search-close" aria-label="Close search">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="search-results" id="search-results"></div>
+            <div class="search-hints">
+                <span class="hint-label">Quick:</span>
+                <button class="hint-tag" data-section="#projects">Projects</button>
+                <button class="hint-tag" data-section="#stats">Stats</button>
+                <button class="hint-tag" data-section="#blog">Blog</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

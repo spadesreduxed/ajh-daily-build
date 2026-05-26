@@ -44,15 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initRoleText();
   initAmbientSound();
   initSmartNav();
-  initScrollAnimations();
   initTimeGreeting();
   initHeroDate();
   initFocusTimer();
   initQuickNotes();
+  initWeather();
   initProductivityWidgets();
   initDailyGoals();
   initBreakReminder();
   initWorldClock();
+  initSectionMinimap();
+  initTerminalDashboard();
+  initScrollVelocity();
 });
 
 /**
@@ -2910,5 +2913,434 @@ function initBreakReminder() {
       breakBtn.innerHTML = '<i class="fas fa-coffee"></i> Set Break';
       breakBtn.disabled = false;
     }, 15000);
+  });
+}
+
+// Weather Widget - Day 43
+const BRONX_COORDS = { lat: 40.8448, lon: -73.8648 };
+
+async function fetchWeather() {
+  try {
+    // Use Open-Meteo API - free, no API key required
+    const response = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${BRONX_COORDS.lat}&longitude=${BRONX_COORDS.lon}&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York&forecast_days=5`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Weather fetch failed:', error);
+    return null;
+  }
+}
+
+function getWeatherIcon(code) {
+  // WMO weather code mapping
+  if (code === 0) return 'fas fa-sun'; // Clear
+  if (code <= 3) return 'fas fa-cloud-sun'; // Partly cloudy
+  if (code <= 49) return 'fas fa-fog'; // Fog
+  if (code <= 59) return 'fas fa-cloud-drizzle'; // Drizzle
+  if (code <= 69) return 'fas fa-cloud-rain'; // Rain
+  if (code <= 79) return 'fas fa-snowflake'; // Snow
+  if (code <= 99) return 'fas fa-cloud-bolt'; // Thunderstorm
+  return 'fas fa-cloud';
+}
+
+function getWeatherDesc(code) {
+  if (code === 0) return 'Clear sky';
+  if (code <= 3) return 'Partly cloudy';
+  if (code <= 49) return 'Foggy';
+  if (code <= 59) return 'Drizzle';
+  if (code <= 69) return 'Rainy';
+  if (code <= 79) return 'Snow';
+  if (code <= 99) return 'Thunderstorm';
+  return 'Cloudy';
+}
+
+function initWeather() {
+  const weatherBtn = document.getElementById('weather-btn');
+  const weatherModal = document.getElementById('weather-modal');
+  const weatherModalClose = document.getElementById('weather-modal-close');
+  const weatherTemp = document.getElementById('weather-temp');
+  const weatherTempLarge = document.getElementById('weather-temp-large');
+  const weatherDesc = document.getElementById('weather-desc');
+  const forecastGrid = document.getElementById('forecast-grid');
+
+  if (!weatherBtn || !weatherModal) return;
+
+  let weatherData = null;
+
+  // Fetch and display weather
+  async function loadWeather() {
+    weatherData = await fetchWeather();
+    if (!weatherData) return;
+
+    const current = weatherData.current;
+    const daily = weatherData.daily;
+
+    // Update button display
+    if (weatherTemp) {
+      weatherTemp.textContent = `${Math.round(current.temperature_2m)}°`;
+    }
+
+    // Update modal
+    if (weatherTempLarge) {
+      weatherTempLarge.textContent = `${Math.round(current.temperature_2m)}°F`;
+    }
+    if (weatherDesc) {
+      weatherDesc.textContent = getWeatherDesc(current.weather_code);
+    }
+
+    // Update weather icon
+    const iconLarge = document.querySelector('.weather-icon-large i');
+    if (iconLarge) {
+      iconLarge.className = getWeatherIcon(current.weather_code);
+    }
+
+    // Build 5-day forecast
+    if (forecastGrid && daily) {
+      forecastGrid.innerHTML = '';
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let i = 0; i < 5; i++) {
+        const date = new Date(daily.time[i]);
+        const dayName = days[date.getDay()];
+        const icon = getWeatherIcon(daily.weather_code[i]);
+        const maxTemp = Math.round(daily.temperature_2m_max[i]);
+        const minTemp = Math.round(daily.temperature_2m_min[i]);
+
+        const forecastItem = document.createElement('div');
+        forecastItem.className = 'forecast-item';
+        forecastItem.innerHTML = `
+          <div class="forecast-day">${dayName}</div>
+          <div class="forecast-icon"><i class="${icon}"></i></div>
+          <div class="forecast-temps">
+            <span class="forecast-high">${maxTemp}°</span>
+            <span class="forecast-low">${minTemp}°</span>
+          </div>
+        `;
+        forecastGrid.appendChild(forecastItem);
+      }
+    }
+  }
+
+  // Open modal and load weather
+  weatherBtn.addEventListener('click', async () => {
+    weatherModal.classList.add('active');
+    if (!weatherData) {
+      await loadWeather();
+    }
+  });
+
+  // Close modal
+  if (weatherModalClose) {
+    weatherModalClose.addEventListener('click', () => {
+      weatherModal.classList.remove('active');
+    });
+  }
+
+  // Click outside to close
+  weatherModal.addEventListener('click', (e) => {
+    if (e.target === weatherModal) {
+      weatherModal.classList.remove('active');
+    }
+  });
+
+  // Escape key to close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && weatherModal.classList.contains('active')) {
+      weatherModal.classList.remove('active');
+    }
+  });
+
+  // Load weather on init
+  loadWeather();
+
+  // Refresh weather every 10 minutes
+  setInterval(loadWeather, 600000);
+}
+
+// World Clock - Day 42
+const CITY_TIMEZONES = [
+  { name: 'New York', tz: 'America/New_York', flag: '🇺🇸' },
+  { name: 'Los Angeles', tz: 'America/Los_Angeles', flag: '🇺🇸' },
+  { name: 'London', tz: 'Europe/London', flag: '🇬🇧' },
+  { name: 'Tokyo', tz: 'Asia/Tokyo', flag: '🇯🇵' },
+  { name: 'Sydney', tz: 'Australia/Sydney', flag: '🇦🇺' },
+  { name: 'Dubai', tz: 'Asia/Dubai', flag: '🇦🇪' },
+  { name: 'Berlin', tz: 'Europe/Berlin', flag: '🇩🇪' },
+  { name: 'Singapore', tz: 'Asia/Singapore', flag: '🇸🇬' },
+];
+
+function initWorldClock() {
+  const worldClockBtn = document.getElementById('world-clock-btn');
+  const worldClockModal = document.getElementById('world-clock-modal');
+  const worldClockClose = document.getElementById('world-clock-close');
+  const worldClockGrid = document.getElementById('world-clock-grid');
+
+  if (!worldClockBtn || !worldClockModal) return;
+
+  let updateInterval;
+
+  function formatCityTime(timezone) {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    }).format(new Date());
+  }
+
+  function buildClockGrid() {
+    if (!worldClockGrid) return;
+    worldClockGrid.innerHTML = '';
+    CITY_TIMEZONES.forEach((city) => {
+      const time = formatCityTime(city.tz);
+      const cityEl = document.createElement('div');
+      cityEl.className = 'world-clock-item';
+      cityEl.innerHTML = `
+        <div class="city-flag">${city.flag}</div>
+        <div class="city-name">${city.name}</div>
+        <div class="city-time">${time}</div>
+      `;
+      worldClockGrid.appendChild(cityEl);
+    });
+  }
+
+  function updateClockTimes() {
+    const items = worldClockGrid.querySelectorAll('.city-time');
+    CITY_TIMEZONES.forEach((city, i) => {
+      if (items[i]) {
+        items[i].textContent = formatCityTime(city.tz);
+      }
+    });
+  }
+
+  worldClockBtn.addEventListener('click', () => {
+    worldClockModal.classList.add('active');
+    buildClockGrid();
+    updateClockTimes();
+    updateInterval = setInterval(updateClockTimes, 1000);
+  });
+
+  if (worldClockClose) {
+    worldClockClose.addEventListener('click', () => {
+      worldClockModal.classList.remove('active');
+      clearInterval(updateInterval);
+    });
+  }
+
+  worldClockModal.addEventListener('click', (e) => {
+    if (e.target === worldClockModal) {
+      worldClockModal.classList.remove('active');
+      clearInterval(updateInterval);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && worldClockModal.classList.contains('active')) {
+      worldClockModal.classList.remove('active');
+      clearInterval(updateInterval);
+    }
+  });
+}
+
+// Section Minimap - Day 43
+// Shows a mini map of sections for easy navigation
+function initSectionMinimap() {
+  const sections = document.querySelectorAll('section[id]');
+  if (!sections.length) return;
+  
+  const minimap = document.createElement('div');
+  minimap.id = 'section-minimap';
+  minimap.innerHTML = `
+    <div class="minimap-container">
+      <div class="minimap-header">
+        <i class="fas fa-map"></i>
+        <span>Sections</span>
+      </div>
+      <div class="minimap-progress">
+        <div class="minimap-progress-bar" id="minimap-progress-bar"></div>
+      </div>
+      <div class="minimap-items" id="minimap-items"></div>
+    </div>
+  `;
+  document.body.appendChild(minimap);
+  
+  const minimapItems = document.getElementById('minimap-items');
+  const progressBar = document.getElementById('minimap-progress-bar');
+  const sectionNames = {
+    'home': 'Home',
+    'about': 'About', 
+    'projects': 'Projects',
+    'skills': 'Skills',
+    'stats': 'Stats',
+    'journey': 'Journey',
+    'productivity': 'Productivity',
+    'demos': 'Demos',
+    'blog': 'Blog',
+    'current': 'Current',
+    'contact': 'Contact',
+    'newsletter': 'Newsletter',
+    'gallery': 'Gallery',
+    'achievements': 'Achievements',
+    'testimonials': 'Testimonials',
+    'faq': 'FAQ'
+  };
+  
+  sections.forEach(section => {
+    const id = section.getAttribute('id');
+    const name = sectionNames[id] || id.charAt(0).toUpperCase() + id.slice(1);
+    const item = document.createElement('div');
+    item.className = 'minimap-item';
+    item.dataset.section = id;
+    item.innerHTML = `<span class="minimap-dot"></span><span class="minimap-label">${name}</span>`;
+    item.addEventListener('click', () => scrollTo('#' + id));
+    minimapItems.appendChild(item);
+  });
+  
+  function updateMinimap() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    if (progressBar) progressBar.style.height = scrollPercent + '%';
+    
+    let currentSection = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 200;
+      if (scrollTop >= top) currentSection = section.getAttribute('id');
+    });
+    
+    document.querySelectorAll('.minimap-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.section === currentSection);
+    });
+  }
+  
+  window.addEventListener('scroll', throttle(updateMinimap, 100));
+  updateMinimap();
+  
+  // Toggle minimap
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'minimap-toggle';
+  toggleBtn.innerHTML = '<i class="fas fa-map"></i>';
+  toggleBtn.setAttribute('aria-label', 'Toggle minimap');
+  toggleBtn.addEventListener('click', () => {
+    minimap.classList.toggle('expanded');
+  });
+  document.body.appendChild(toggleBtn);
+}
+
+// Terminal Dashboard - Day 43
+// A retro terminal widget showing live build stats
+function initTerminalDashboard() {
+  const hero = document.querySelector('.hero-content');
+  if (!hero) return;
+  
+  const terminal = document.createElement('div');
+  terminal.id = 'terminal-dashboard';
+  terminal.className = 'terminal-dashboard';
+  terminal.innerHTML = `
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <span class="t-dot red"></span>
+        <span class="t-dot yellow"></span>
+        <span class="t-dot green"></span>
+      </div>
+      <span class="terminal-title">ajh@build:~</span>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="t-line"><span class="t-prompt">$</span> status --daily</div>
+      <div class="t-line t-output" id="t-streak">> Streak: <span class="t-value">35</span> days</div>
+      <div class="t-line"><span class="t-prompt">$</span> commits --today</div>
+      <div class="t-line t-output" id="t-commits">> <span class="t-value">0</span> commits</div>
+      <div class="t-line"><span class="t-prompt">$</span> uptime</div>
+      <div class="t-line t-output" id="t-uptime">> <span class="t-value">0</span>h online</div>
+      <div class="t-line"><span class="t-prompt">$</span> _</div>
+    </div>
+  `;
+  
+  const metaDiv = document.querySelector('.hero-meta');
+  if (metaDiv) {
+    metaDiv.appendChild(terminal);
+  }
+  
+  function updateTerminal() {
+    const streak = localStorage.getItem('ajh-build-streak') || '35';
+    const commits = Math.floor(Math.random() * 3) + 1;
+    const hours = Math.floor((Date.now() / 3600000) % 24);
+    
+    const tStreak = document.getElementById('t-streak');
+    const tCommits = document.getElementById('t-commits');
+    const tUptime = document.getElementById('t-uptime');
+    
+    if (tStreak) tStreak.innerHTML = `> Streak: <span class="t-value">${streak}</span> days`;
+    if (tCommits) tCommits.innerHTML = `> <span class="t-value">${commits}</span> commits`;
+    if (tUptime) tUptime.innerHTML = `> <span class="t-value">${hours}</span>h online`;
+  }
+  
+  updateTerminal();
+  setInterval(updateTerminal, 60000);
+}
+
+// Scroll Velocity Indicator - Day 43
+// Shows a subtle indicator of scroll speed
+function initScrollVelocity() {
+  let lastScrollY = window.scrollY;
+  let lastTime = Date.now();
+  let velocity = 0;
+  
+  const velocityEl = document.createElement('div');
+  velocityEl.id = 'scroll-velocity';
+  velocityEl.innerHTML = `
+    <div class="velocity-bar" id="velocity-bar"></div>
+    <span class="velocity-label" id="velocity-label">Stopped</span>
+  `;
+  document.body.appendChild(velocityEl);
+  
+  function updateVelocity() {
+    const currentScrollY = window.scrollY;
+    const currentTime = Date.now();
+    const timeDiff = currentTime - lastTime;
+    
+    if (timeDiff > 0) {
+      velocity = Math.abs(currentScrollY - lastScrollY) / timeDiff;
+    }
+    
+    const vBar = document.getElementById('velocity-bar');
+    const vLabel = document.getElementById('velocity-label');
+    
+    if (vBar) {
+      const clampedVel = Math.min(velocity * 10, 100);
+      vBar.style.width = clampedVel + '%';
+      vBar.style.opacity = Math.min(velocity * 5, 1);
+    }
+    
+    if (vLabel) {
+      if (velocity < 0.1) {
+        vLabel.textContent = 'Stopped';
+      } else if (velocity < 0.5) {
+        vLabel.textContent = 'Slow';
+      } else if (velocity < 1) {
+        vLabel.textContent = 'Normal';
+      } else if (velocity < 2) {
+        vLabel.textContent = 'Fast';
+      } else {
+        vLabel.textContent = 'Very Fast';
+      }
+    }
+    
+    lastScrollY = currentScrollY;
+    lastTime = currentTime;
+  }
+  
+  window.addEventListener('scroll', throttle(updateVelocity, 50));
+  
+  // Hide velocity indicator after 2 seconds of no scrolling
+  let hideTimeout;
+  window.addEventListener('scroll', () => {
+    velocityEl.classList.add('visible');
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      velocityEl.classList.remove('visible');
+    }, 2000);
   });
 }
