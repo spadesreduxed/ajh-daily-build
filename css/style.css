@@ -4454,3 +4454,428 @@ button:focus-visible,
 [data-theme="light"] .t-output {
   color: #116329;
 }
+/* ========================================
+   DAY 44: Code Playground + API Status
+   ======================================== */
+
+/* Code Playground Modal */
+.playground-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.playground-modal.active {
+    display: flex;
+}
+
+.playground-content {
+    width: 90%;
+    max-width: 1000px;
+    height: 80vh;
+    max-height: 700px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(0, 217, 255, 0.15);
+}
+
+.playground-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.playground-header h3 {
+    font-size: 1.1rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.playground-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.playground-btn {
+    padding: 8px 16px;
+    background: var(--primary);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.playground-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+}
+
+.playground-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.playground-close:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.playground-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.playground-editor {
+    flex: 1;
+    display: flex;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    min-height: 200px;
+}
+
+.playground-line-numbers {
+    padding: 15px 10px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-align: right;
+    user-select: none;
+    min-width: 50px;
+    line-height: 1.5;
+}
+
+.playground-code {
+    flex: 1;
+    padding: 15px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+    tab-size: 2;
+}
+
+.playground-code::placeholder {
+    color: var(--text-muted);
+}
+
+.playground-output {
+    height: 150px;
+    background: var(--bg-secondary);
+    display: flex;
+    flex-direction: column;
+}
+
+.playground-output-header {
+    padding: 10px 15px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.playground-result {
+    flex: 1;
+    padding: 15px;
+    margin: 0;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.playground-footer {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 20px;
+}
+
+.playground-shortcut {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.playground-shortcut kbd {
+    padding: 2px 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+/* API Status Modal */
+.status-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-modal.active {
+    display: flex;
+}
+
+.status-content {
+    width: 90%;
+    max-width: 600px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.status-header h3 {
+    font-size: 1rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-close:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.status-body {
+    padding: 20px;
+}
+
+.status-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.status-item-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.status-item-icon.healthy {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.status-item-icon.warning {
+    background: rgba(255, 200, 0, 0.15);
+    color: #ffc800;
+}
+
+.status-item-icon.error {
+    background: rgba(255, 80, 80, 0.15);
+    color: #ff5050;
+}
+
+.status-item-details h4 {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.status-item-details span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.healthy {
+    background: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.status-indicator.warning {
+    background: #ffc800;
+    box-shadow: 0 0 10px #ffc800;
+}
+
+.status-indicator.error {
+    background: #ff5050;
+    box-shadow: 0 0 10px #ff5050;
+}
+
+.status-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    margin-top: 15px;
+}
+
+.status-last-check {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Status FAB Button */
+.status-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    box-shadow: 0 8px 30px rgba(0, 217, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    transition: all 0.3s;
+}
+
+.status-fab:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 12px 40px rgba(0, 217, 255, 0.4);
+}
+
+.status-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .playground-content {
+        width: 95%;
+        height: 90vh;
+    }
+    
+    .playground-header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .playground-controls {
+        order: 3;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .playground-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .playground-output {
+        height: 120px;
+    }
+    
+    .status-fab {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+    }
+}

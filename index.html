@@ -901,6 +901,17 @@
                     </div>
                 </div>
                 <div class="blog-card">
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">27</span>
+                        <span class="blog-month">May 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 44</span>
+                        <h3>Code Playground + API Status Dashboard</h3>
+                        <p>Added Code Playground modal - an in-browser JavaScript editor with line numbers, syntax examples, and live output. Added API Status Dashboard showing real-time status of GitHub Pages, Google Fonts, Font Awesome, RSS, Service Worker, and PWA Manifest with animated indicators.</p>
+                    </div>
+                </div>
                     <div class="blog-date">
                         <span class="blog-day">26</span>
                         <span class="blog-month">May 2026</span>
@@ -1567,3 +1578,71 @@
     <script src="js/main.js"></script>
 </body>
 </html>
+
+    <!-- Code Playground Modal -->
+    <div class="playground-modal" id="playground-modal">
+        <div class="playground-content">
+            <div class="playground-header">
+                <h3><i class="fas fa-code"></i> Code Playground</h3>
+                <div class="playground-controls">
+                    <button class="playground-btn" id="playground-run" title="Run Code (Ctrl+Enter)">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                    <button class="playground-btn" id="playground-clear" title="Clear Output">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="playground-btn" id="playground-examples" title="Load Example">
+                        <i class="fas fa-book"></i>
+                    </button>
+                    <button class="playground-close" id="playground-close" aria-label="Close playground">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="playground-body">
+                <div class="playground-editor">
+                    <div class="playground-line-numbers" id="playground-lines">1</div>
+                    <textarea class="playground-code" id="playground-code" placeholder="// Write your JavaScript here..." spellcheck="false"></textarea>
+                </div>
+                <div class="playground-output">
+                    <div class="playground-output-header">
+                        <i class="fas fa-terminal"></i> Output
+                    </div>
+                    <pre class="playground-result" id="playground-result">// Output will appear here...</pre>
+                </div>
+            </div>
+            <div class="playground-footer">
+                <span class="playground-shortcut"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to run</span>
+                <span class="playground-shortcut"><kbd>Ctrl</kbd>+<kbd>L</kbd> to clear</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Status Dashboard -->
+    <div class="status-modal" id="status-modal">
+        <div class="status-content">
+            <div class="status-header">
+                <h3><i class="fas fa-heartbeat"></i> Project Status</h3>
+                <button class="status-close" id="status-close" aria-label="Close status">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="status-body">
+                <div class="status-grid" id="status-grid">
+                    <!-- Filled by JS -->
+                </div>
+                <div class="status-footer">
+                    <span class="status-last-check" id="status-last-check">Last checked: Just now</span>
+                    <button class="btn btn-sm" id="status-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Button (Floating) -->
+    <button class="status-fab" id="status-fab" aria-label="Project status">
+        <i class="fas fa-heartbeat"></i>
+        <span class="status-dot"></span>
+    </button>

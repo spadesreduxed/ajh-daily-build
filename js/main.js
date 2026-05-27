@@ -3344,3 +3344,247 @@ function initScrollVelocity() {
     }, 2000);
   });
 }
+/**
+ * Day 44: Code Playground + API Status Dashboard
+ */
+
+function initCodePlayground() {
+    const modal = document.getElementById('playground-modal');
+    const codeArea = document.getElementById('playground-code');
+    const resultArea = document.getElementById('playground-result');
+    const lineNumbers = document.getElementById('playground-lines');
+    const runBtn = document.getElementById('playground-run');
+    const clearBtn = document.getElementById('playground-clear');
+    const examplesBtn = document.getElementById('playground-examples');
+    const closeBtn = document.getElementById('playground-close');
+    
+    if (!modal || !codeArea) return;
+    
+    // Open playground via quick actions or keyboard shortcut
+    window.openPlayground = () => {
+        modal.classList.add('active');
+        codeArea.focus();
+        if (!codeArea.value) {
+            loadPlaygroundExample();
+        }
+    };
+    
+    function closePlayground() {
+        modal.classList.remove('active');
+    }
+    
+    function updateLineNumbers() {
+        const lines = codeArea.value.split('\n').length;
+        lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('<br>');
+    }
+    
+    function runCode() {
+        const code = codeArea.value;
+        resultArea.innerHTML = '';
+        
+        // Capture console.log output
+        const logs = [];
+        const customConsole = {
+            log: (...args) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ')),
+            error: (...args) => logs.push('❌ ' + args.map(a => String(a)).join(' ')),
+            warn: (...args) => logs.push('⚠️ ' + args.map(a => String(a)).join(' ')),
+            info: (...args) => logs.push('ℹ️ ' + args.map(a => String(a)).join(' '))
+        };
+        
+        try {
+            // Create a function with custom console
+            const fn = new Function('console', code);
+            fn(customConsole);
+            
+            if (logs.length > 0) {
+                resultArea.innerHTML = logs.join('\n');
+            } else {
+                resultArea.innerHTML = '// Code executed successfully (no output)';
+            }
+            resultArea.style.color = 'var(--accent)';
+        } catch (err) {
+            resultArea.innerHTML = '❌ Error: ' + err.message;
+            resultArea.style.color = '#ff5050';
+        }
+    }
+    
+    function clearCode() {
+        codeArea.value = '';
+        resultArea.innerHTML = '// Output will appear here...';
+        resultArea.style.color = 'var(--accent)';
+        updateLineNumbers();
+    }
+    
+    const examples = [
+        `// Example 1: Fibonacci Sequence
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+for (let i = 0; i < 10; i++) {
+    console.log(\`F(\${i}) = \${fibonacci(i)}\`);
+}`,
+        `// Example 2: Array Methods
+const numbers = [1, 2, 3, 4, 5];
+
+console.log('Sum:', numbers.reduce((a, b) => a + b, 0));
+console.log('Even:', numbers.filter(n => n % 2 === 0));
+console.log('Doubled:', numbers.map(n => n * 2));`,
+        `// Example 3: Async/Await Demo
+async function fetchData() {
+    console.log('Fetching data...');
+    await new Promise(r => setTimeout(r, 500));
+    return { name: 'AJH', status: 'Building daily!' };
+}
+
+fetchData().then(data => console.log(JSON.stringify(data)));`
+    ];
+    
+    let currentExample = 0;
+    
+    function loadPlaygroundExample() {
+        codeArea.value = examples[currentExample];
+        currentExample = (currentExample + 1) % examples.length;
+        updateLineNumbers();
+        resultArea.innerHTML = '// Output will appear here...';
+    }
+    
+    codeArea.addEventListener('input', updateLineNumbers);
+    codeArea.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = codeArea.selectionStart;
+            const end = codeArea.selectionEnd;
+            codeArea.value = codeArea.value.substring(0, start) + '  ' + codeArea.value.substring(end);
+            codeArea.selectionStart = codeArea.selectionEnd = start + 2;
+        }
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            runCode();
+        }
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            clearCode();
+        }
+    });
+    
+    runBtn.addEventListener('click', runCode);
+    clearBtn.addEventListener('click', clearCode);
+    examplesBtn.addEventListener('click', loadPlaygroundExample);
+    closeBtn.addEventListener('click', closePlayground);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closePlayground();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closePlayground();
+        }
+    });
+}
+
+function initAPIStatus() {
+    const modal = document.getElementById('status-modal');
+    const fab = document.getElementById('status-fab');
+    const closeBtn = document.getElementById('status-close');
+    const refreshBtn = document.getElementById('status-refresh');
+    const grid = document.getElementById('status-grid');
+    const lastCheck = document.getElementById('status-last-check');
+    
+    if (!modal || !fab) return;
+    
+    const services = [
+        { name: 'GitHub Pages', icon: 'fa-github', url: 'https://github.com', status: 'unknown' },
+        { name: 'Google Fonts', icon: 'fa-font', url: 'https://fonts.googleapis.com', status: 'unknown' },
+        { name: 'Font Awesome', icon: 'fa-icons', url: 'https://cdnjs.cloudflare.com', status: 'unknown' },
+        { name: 'RSS Feed', icon: 'fa-rss', url: '/feed.xml', status: 'unknown' },
+        { name: 'Service Worker', icon: 'fa-cog', url: 'sw.js', status: 'unknown' },
+        { name: 'PWA Manifest', icon: 'fa-mobile-alt', url: '/manifest.json', status: 'unknown' }
+    ];
+    
+    async function checkService(service) {
+        try {
+            if (service.url.startsWith('/') || service.url === 'sw.js') {
+                // Local resource check
+                const response = await fetch(service.url + '?t=' + Date.now(), { method: 'HEAD', mode: 'no-cors' });
+                return 'healthy';
+            } else {
+                // External URL check
+                const response = await fetch('https://corsproxy.io/?' + encodeURIComponent(service.url), { 
+                    method: 'HEAD', 
+                    mode: 'cors' 
+                });
+                return response.ok ? 'healthy' : 'warning';
+            }
+        } catch {
+            return 'error';
+        }
+    }
+    
+    async function updateStatus() {
+        const items = [];
+        for (const service of services) {
+            service.status = await checkService(service);
+            const iconClass = service.status === 'healthy' ? 'healthy' : service.status === 'warning' ? 'warning' : 'error';
+            items.push(`
+                <div class="status-item">
+                    <div class="status-item-info">
+                        <div class="status-item-icon ${iconClass}">
+                            <i class="fas ${service.icon}"></i>
+                        </div>
+                        <div class="status-item-details">
+                            <h4>${service.name}</h4>
+                            <span>${service.status === 'healthy' ? 'Operational' : service.status === 'warning' ? 'Degraded' : 'Offline'}</span>
+                        </div>
+                    </div>
+                    <div class="status-indicator ${iconClass}"></div>
+                </div>
+            `);
+        }
+        grid.innerHTML = items.join('');
+        lastCheck.textContent = 'Last checked: Just now';
+    }
+    
+    function openStatus() {
+        modal.classList.add('active');
+        updateStatus();
+    }
+    
+    function closeStatus() {
+        modal.classList.remove('active');
+    }
+    
+    fab.addEventListener('click', openStatus);
+    closeBtn.addEventListener('click', closeStatus);
+    refreshBtn.addEventListener('click', updateStatus);
+    
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeStatus();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeStatus();
+        }
+    });
+    
+    // Add playground button to quick actions
+    const quickActions = document.querySelector('.quick-actions');
+    if (quickActions) {
+        const playgroundBtn = document.createElement('button');
+        playgroundBtn.className = 'quick-action-btn';
+        playgroundBtn.setAttribute('data-action', 'playground');
+        playgroundBtn.setAttribute('aria-label', 'Code Playground');
+        playgroundBtn.innerHTML = '<i class="fas fa-code"></i>';
+        playgroundBtn.addEventListener('click', () => window.openPlayground && window.openPlayground());
+        quickActions.appendChild(playgroundBtn);
+    }
+}
+
+// Initialize Day 44 features
+document.addEventListener('DOMContentLoaded', () => {
+    initCodePlayground();
+    initAPIStatus();
+});
