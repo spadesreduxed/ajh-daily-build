@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFocusTimer();
   initQuickNotes();
   initWeather();
+  initCryptoTracker();
   initProductivityWidgets();
   initDailyGoals();
   initBreakReminder();
@@ -3588,3 +3589,135 @@ document.addEventListener('DOMContentLoaded', () => {
     initCodePlayground();
     initAPIStatus();
 });
+
+// ==========================================
+// CRYPTO PRICE TRACKER - Day 45
+// ==========================================
+
+const COINGECKO_API = 'https://api.coingecko.com/api/v3';
+
+async function fetchCryptoPrices() {
+  try {
+    const response = await fetch(`${COINGECKO_API}/simple/price?ids=bitcoin,ethereum,solana,dogecoin&vs_currencies=usd&include_24hr_change=true`);
+    if (!response.ok) throw new Error('API rate limited');
+    return await response.json();
+  } catch (error) {
+    console.warn('Crypto API error:', error);
+    return null;
+  }
+}
+
+function updateCryptoDisplay(data) {
+  if (!data) return;
+
+  const btcPriceEl = document.getElementById('btc-price');
+  const btcChangeEl = document.getElementById('btc-change');
+  const ethPriceEl = document.getElementById('eth-price');
+  const ethChangeEl = document.getElementById('eth-change');
+  const solPriceEl = document.getElementById('sol-price');
+  const solChangeEl = document.getElementById('sol-change');
+  const dogePriceEl = document.getElementById('doge-price');
+  const dogeChangeEl = document.getElementById('doge-change');
+  const tickerEl = document.getElementById('crypto-ticker');
+
+  if (data.bitcoin) {
+    const btc = data.bitcoin;
+    if (btcPriceEl) btcPriceEl.textContent = `$${formatCryptoNum(btc.usd)}`;
+    if (btcChangeEl) {
+      const change = btc.usd_24h_change || 0;
+      btcChangeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+      btcChangeEl.className = `crypto-change ${change >= 0 ? 'positive' : 'negative'}`;
+    }
+    if (tickerEl) tickerEl.textContent = `$${formatCryptoNum(btc.usd)}`;
+  }
+
+  if (data.ethereum) {
+    const eth = data.ethereum;
+    if (ethPriceEl) ethPriceEl.textContent = `$${formatCryptoNum(eth.usd)}`;
+    if (ethChangeEl) {
+      const change = eth.usd_24h_change || 0;
+      ethChangeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+      ethChangeEl.className = `crypto-change ${change >= 0 ? 'positive' : 'negative'}`;
+    }
+  }
+
+  if (data.solana) {
+    const sol = data.solana;
+    if (solPriceEl) solPriceEl.textContent = `$${formatCryptoNum(sol.usd)}`;
+    if (solChangeEl) {
+      const change = sol.usd_24h_change || 0;
+      solChangeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+      solChangeEl.className = `crypto-change ${change >= 0 ? 'positive' : 'negative'}`;
+    }
+  }
+
+  if (data.dogecoin) {
+    const doge = data.dogecoin;
+    if (dogePriceEl) dogePriceEl.textContent = `$${formatCryptoNum(doge.usd)}`;
+    if (dogeChangeEl) {
+      const change = doge.usd_24h_change || 0;
+      dogeChangeEl.textContent = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+      dogeChangeEl.className = `crypto-change ${change >= 0 ? 'positive' : 'negative'}`;
+    }
+  }
+}
+
+function formatCryptoNum(num) {
+  if (num >= 1000) return num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  if (num >= 100) return num.toFixed(1);
+  if (num >= 1) return num.toFixed(2);
+  return num.toFixed(4);
+}
+
+function initCryptoTracker() {
+  const cryptoBtn = document.getElementById('crypto-btn');
+  const cryptoModal = document.getElementById('crypto-modal');
+  const cryptoModalClose = document.getElementById('crypto-modal-close');
+  const cryptoRefresh = document.getElementById('crypto-refresh');
+
+  if (!cryptoBtn || !cryptoModal) return;
+
+  let refreshInterval = null;
+
+  async function loadCrypto() {
+    const data = await fetchCryptoPrices();
+    updateCryptoDisplay(data);
+  }
+
+  function openCrypto() {
+    cryptoModal.classList.add('active');
+    loadCrypto();
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(loadCrypto, 60000);
+  }
+
+  function closeCrypto() {
+    cryptoModal.classList.remove('active');
+    if (refreshInterval) {
+      clearInterval(refreshInterval);
+      refreshInterval = null;
+    }
+  }
+
+  cryptoBtn.addEventListener('click', openCrypto);
+
+  if (cryptoModalClose) {
+    cryptoModalClose.addEventListener('click', closeCrypto);
+  }
+
+  cryptoModal.addEventListener('click', (e) => {
+    if (e.target === cryptoModal) closeCrypto();
+  });
+
+  if (cryptoRefresh) {
+    cryptoRefresh.addEventListener('click', loadCrypto);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cryptoModal.classList.contains('active')) {
+      closeCrypto();
+    }
+  });
+
+  loadCrypto();
+}

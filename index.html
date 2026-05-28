@@ -164,6 +164,10 @@
                     <i class="fas fa-cloud-sun"></i>
                     <span class="weather-temp" id="weather-temp">--°</span>
                 </button>
+                <button class="crypto-btn" id="crypto-btn" aria-label="Crypto prices">
+                    <i class="fab fa-bitcoin"></i>
+                    <span class="crypto-ticker" id="crypto-ticker">$---</span>
+                </button>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -901,7 +905,6 @@
                     </div>
                 </div>
                 <div class="blog-card">
-                <div class="blog-card">
                     <div class="blog-date">
                         <span class="blog-day">27</span>
                         <span class="blog-month">May 2026</span>
@@ -912,6 +915,18 @@
                         <p>Added Code Playground modal - an in-browser JavaScript editor with line numbers, syntax examples, and live output. Added API Status Dashboard showing real-time status of GitHub Pages, Google Fonts, Font Awesome, RSS, Service Worker, and PWA Manifest with animated indicators.</p>
                     </div>
                 </div>
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">28</span>
+                        <span class="blog-month">May 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 45</span>
+                        <h3>Crypto Price Tracker + Live Ticker</h3>
+                        <p>Added Crypto Price Tracker modal showing real-time prices for Bitcoin, Ethereum, Solana, and Dogecoin with 24h change indicators. Hero now displays live crypto ticker with current BTC price. Uses CoinGecko API for accurate pricing data with auto-refresh every 60 seconds.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
                     <div class="blog-date">
                         <span class="blog-day">26</span>
                         <span class="blog-month">May 2026</span>
@@ -1646,3 +1661,69 @@
         <i class="fas fa-heartbeat"></i>
         <span class="status-dot"></span>
     </button>
+
+    <!-- Crypto Price Modal -->
+    <div class="crypto-modal" id="crypto-modal">
+        <div class="crypto-modal-content">
+            <div class="crypto-modal-header">
+                <h3><i class="fab fa-bitcoin"></i> Crypto Prices</h3>
+                <button class="crypto-modal-close" id="crypto-modal-close" aria-label="Close crypto">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="crypto-modal-body">
+                <div class="crypto-grid" id="crypto-grid">
+                    <div class="crypto-card" data-coin="bitcoin">
+                        <div class="crypto-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div class="crypto-info">
+                            <span class="crypto-name">Bitcoin</span>
+                            <span class="crypto-symbol">BTC</span>
+                        </div>
+                        <div class="crypto-price">
+                            <span class="crypto-value" id="btc-price">$---</span>
+                            <span class="crypto-change" id="btc-change">--%</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" data-coin="ethereum">
+                        <div class="crypto-icon"><i class="fab fa-ethereum"></i></div>
+                        <div class="crypto-info">
+                            <span class="crypto-name">Ethereum</span>
+                            <span class="crypto-symbol">ETH</span>
+                        </div>
+                        <div class="crypto-price">
+                            <span class="crypto-value" id="eth-price">$---</span>
+                            <span class="crypto-change" id="eth-change">--%</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" data-coin="solana">
+                        <div class="crypto-icon"><i class="fas fa-coins"></i></div>
+                        <div class="crypto-info">
+                            <span class="crypto-name">Solana</span>
+                            <span class="crypto-symbol">SOL</span>
+                        </div>
+                        <div class="crypto-price">
+                            <span class="crypto-value" id="sol-price">$---</span>
+                            <span class="crypto-change" id="sol-change">--%</span>
+                        </div>
+                    </div>
+                    <div class="crypto-card" data-coin="dogecoin">
+                        <div class="crypto-icon"><i class="fas fa-dog"></i></div>
+                        <div class="crypto-info">
+                            <span class="crypto-name">Dogecoin</span>
+                            <span class="crypto-symbol">DOGE</span>
+                        </div>
+                        <div class="crypto-price">
+                            <span class="crypto-value" id="doge-price">$---</span>
+                            <span class="crypto-change" id="doge-change">--%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="crypto-footer">
+                    <span class="crypto-disclaimer">Prices from CoinGecko API</span>
+                    <button class="btn btn-sm" id="crypto-refresh">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
