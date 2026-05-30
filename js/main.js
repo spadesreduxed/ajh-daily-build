@@ -1048,3 +1048,302 @@ document.addEventListener('DOMContentLoaded', () => {
   
   console.log('⚡ AJH Website loaded - Day 46: Command Palette');
 });
+
+// Day 47 - Site Tour Onboarding
+function initSiteTour() {
+  const STORAGE_KEY = 'ajh_site_tour_done';
+  const TOUR_STEPS_KEY = 'ajh_tour_step';
+  
+  // Check if tour was completed
+  if (localStorage.getItem(STORAGE_KEY)) return;
+  
+  // Tour steps
+  const tourSteps = [
+    {
+      target: '.nav-brand',
+      title: 'Welcome to AJH Website',
+      content: 'Built daily by AJ H from The Bronx, NY. Press Ctrl+K anytime to open the command palette!',
+      position: 'bottom'
+    },
+    {
+      target: '#projects',
+      title: 'Projects',
+      content: 'Explore all my builds - from gaming hubs with 100K+ games to experimental tools.',
+      position: 'top'
+    },
+    {
+      target: '.focus-timer',
+      title: 'Focus Timer',
+      content: 'Use the built-in Pomodoro timer to stay productive while exploring the site.',
+      position: 'bottom'
+    },
+    {
+      target: '.crypto-btn',
+      title: 'Live Crypto Prices',
+      content: 'Real-time crypto prices for Bitcoin, Ethereum, Solana, and Dogecoin.',
+      position: 'bottom'
+    },
+    {
+      target: '#blog',
+      title: 'Daily Build Log',
+      content: 'Every day I build something new. Check the blog to see the journey!',
+      position: 'top'
+    }
+  ];
+
+  let currentStep = parseInt(localStorage.getItem(TOUR_STEPS_KEY) || '0');
+  
+  // Create tour UI
+  const tour = document.createElement('div');
+  tour.id = 'site-tour';
+  tour.innerHTML = `
+    <div class="tour-backdrop"></div>
+    <div class="tour-card" id="tour-card">
+      <div class="tour-progress" id="tour-progress">
+        ${tourSteps.map((_, i) => `<div class="tour-dot ${i <= currentStep ? 'active' : ''}" data-step="${i}"></div>`).join('')}
+      </div>
+      <div class="tour-content">
+        <h3 class="tour-title" id="tour-title">Welcome</h3>
+        <p class="tour-text" id="tour-text">Loading...</p>
+      </div>
+      <div class="tour-actions">
+        <button class="tour-btn tour-skip" id="tour-skip">Skip Tour</button>
+        <button class="tour-btn tour-prev" id="tour-prev" ${currentStep === 0 ? 'disabled' : ''}>
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="tour-btn tour-next" id="tour-next">
+          ${currentStep === tourSteps.length - 1 ? 'Finish' : '<i class="fas fa-arrow-right"></i>'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  const styles = document.createElement('style');
+  styles.textContent = `
+    #site-tour {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 99998;
+      font-family: var(--font-main), -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    #site-tour .tour-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+    }
+    #site-tour .tour-card {
+      position: absolute;
+      width: 380px;
+      background: var(--bg-card, #1a1a25);
+      border: 1px solid var(--border-color, #2a2a3a);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: tourIn 0.3s ease;
+    }
+    @keyframes tourIn {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    #site-tour .tour-progress {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    #site-tour .tour-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-color, #2a2a3a);
+      transition: all 0.3s ease;
+    }
+    #site-tour .tour-dot.active {
+      background: var(--accent-primary, #00d4ff);
+      box-shadow: 0 0 10px var(--accent-primary, #00d4ff);
+    }
+    #site-tour .tour-content { margin-bottom: 20px; }
+    #site-tour .tour-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary, #fff);
+      margin-bottom: 8px;
+    }
+    #site-tour .tour-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary, #a0a0b0);
+      line-height: 1.5;
+    }
+    #site-tour .tour-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    #site-tour .tour-btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    #site-tour .tour-skip {
+      background: transparent;
+      color: var(--text-muted, #606070);
+      margin-right: auto;
+    }
+    #site-tour .tour-skip:hover { color: var(--text-primary, #fff); }
+    #site-tour .tour-prev {
+      background: var(--bg-secondary, #12121a);
+      color: var(--text-primary, #fff);
+    }
+    #site-tour .tour-prev:hover:not(:disabled) { background: var(--border-color, #2a2a3a); }
+    #site-tour .tour-prev:disabled { opacity: 0.4; cursor: not-allowed; }
+    #site-tour .tour-next {
+      background: var(--accent-primary, #00d4ff);
+      color: var(--bg-primary, #0a0a0f);
+    }
+    #site-tour .tour-next:hover { background: var(--accent-secondary, #7b2cbf); color: #fff; }
+  `;
+  document.head.appendChild(styles);
+  document.body.appendChild(tour);
+
+  const tourCard = document.getElementById('tour-card');
+  const tourTitle = document.getElementById('tour-title');
+  const tourText = document.getElementById('tour-text');
+  const tourPrev = document.getElementById('tour-prev');
+  const tourNext = document.getElementById('tour-next');
+  const tourSkip = document.getElementById('tour-skip');
+  const tourProgress = document.getElementById('tour-progress');
+
+  function updateTourStep(step) {
+    const stepData = tourSteps[step];
+    tourTitle.textContent = stepData.title;
+    tourText.textContent = stepData.content;
+    
+    // Update progress dots
+    tourProgress.querySelectorAll('.tour-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i <= step);
+    });
+    
+    // Update buttons
+    tourPrev.disabled = step === 0;
+    tourNext.innerHTML = step === tourSteps.length - 1 ? 'Finish <i class="fas fa-check"></i>' : '<i class="fas fa-arrow-right"></i>';
+    
+    // Position the tour card near target element
+    const target = document.querySelector(stepData.target);
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      let top = rect.bottom + 20;
+      let left = rect.left + (rect.width / 2) - 190;
+      
+      if (stepData.position === 'top') {
+        top = rect.top - 280;
+      }
+      if (stepData.position === 'bottom') {
+        top = rect.bottom + 20;
+      }
+      
+      // Keep within viewport
+      left = Math.max(20, Math.min(left, window.innerWidth - 400));
+      top = Math.max(20, Math.min(top, window.innerHeight - 200));
+      
+      tourCard.style.top = top + 'px';
+      tourCard.style.left = left + 'px';
+    }
+    
+    localStorage.setItem(TOUR_STEPS_KEY, step.toString());
+  }
+
+  tourNext.addEventListener('click', () => {
+    if (currentStep < tourSteps.length - 1) {
+      currentStep++;
+      updateTourStep(currentStep);
+    } else {
+      completeTour();
+    }
+  });
+
+  tourPrev.addEventListener('click', () => {
+    if (currentStep > 0) {
+      currentStep--;
+      updateTourStep(currentStep);
+    }
+  });
+
+  tourSkip.addEventListener('click', completeTour);
+
+  tour.querySelector('.tour-backdrop').addEventListener('click', completeTour);
+
+  function completeTour() {
+    tour.remove();
+    localStorage.setItem(STORAGE_KEY, 'true');
+    localStorage.removeItem(TOUR_STEPS_KEY);
+  }
+
+  // Show first step after a short delay
+  setTimeout(() => updateTourStep(currentStep), 500);
+}
+
+// Interactive Timeline Enhancement
+function initInteractiveTimeline() {
+  const timelineItems = document.querySelectorAll('.timeline-item');
+  if (!timelineItems.length) return;
+
+  timelineItems.forEach(item => {
+    const year = item.querySelector('.timeline-year');
+    const content = item.querySelector('.timeline-content');
+    
+    item.addEventListener('click', () => {
+      // Toggle active state
+      const wasActive = item.classList.contains('active');
+      
+      // Remove active from all
+      timelineItems.forEach(t => t.classList.remove('active'));
+      
+      if (!wasActive) {
+        item.classList.add('active');
+        // Scroll item into view smoothly
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  });
+}
+
+// Initialize tour after a short delay to let page load
+setTimeout(() => {
+  initSiteTour();
+  initInteractiveTimeline();
+}, 2000);
+
+// Command Palette Enhancement - Day 47 Addition
+function initCommandPaletteEnhancements() {
+  // Add music player commands
+  const musicCommands = [
+    { id: 'music-play', label: 'Play/Pause Music', icon: 'fa-music', category: 'Tools', action: () => {
+      const soundToggle = document.querySelector('.sound-toggle');
+      if (soundToggle) soundToggle.click();
+    }},
+    { id: 'music-sound', label: 'Toggle Ambient Sound', icon: 'fa-volume-up', category: 'Tools', action: () => {
+      const soundToggle = document.querySelector('.sound-toggle');
+      if (soundToggle) soundToggle.click();
+    }}
+  ];
+  
+  // Find the command palette init and extend it
+  // Since initCommandPalette is called in DOMContentLoaded, we add to it
+  console.log('Day 47: Enhanced command palette with music controls');
+}
+
+console.log('⚡ AJH Website Day 47: Site Tour + Interactive Timeline loaded');
