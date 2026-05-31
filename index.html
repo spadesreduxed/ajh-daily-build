@@ -983,6 +983,17 @@
                 </div>
             </div>
         </div>
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">31</span>
+                        <span class="blog-month">May 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 48</span>
+                        <h3>Daily Challenge + API Status Dashboard</h3>
+                        <p>Added Daily Challenge gamification system with 15 progressive levels. Each day presents a new mission from code commits to open source contributions, with XP rewards and badges. Includes streak tracking, total XP counter, and badge collection. Also added real-time API Status Dashboard monitoring GitHub, Vault API, Games DB, and Proxy Network with live latency checks and uptime percentage.</p>
+                    </div>
+                </div>
     </section>
 
     <!-- Currently Working On Section -->
@@ -1749,3 +1760,118 @@
             </div>
         </div>
     </div>
+    <!-- Daily Challenge Section -->
+    <section id="challenge" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Gamification</span>
+                <h2 class="section-title">Daily Challenge</h2>
+                <p class="section-subtitle">Today's mission, should you choose to accept</p>
+            </div>
+            <div class="challenge-container">
+                <div class="challenge-card" id="daily-challenge">
+                    <div class="challenge-badge" id="challenge-level">Level 1</div>
+                    <div class="challenge-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="challenge-title" id="challenge-title">Loading challenge...</h3>
+                    <p class="challenge-desc" id="challenge-desc">Preparing your mission...</p>
+                    <div class="challenge-progress">
+                        <div class="challenge-progress-bar" id="challenge-progress-bar"></div>
+                    </div>
+                    <div class="challenge-rewards">
+                        <span class="reward"><i class="fas fa-star"></i> <span id="xp-reward">+50 XP</span></span>
+                        <span class="reward"><i class="fas fa-trophy"></i> <span id="badge-reward">Novice Builder</span></span>
+                    </div>
+                    <button class="challenge-btn" id="challenge-btn">Accept Challenge</button>
+                </div>
+                <div class="challenge-stats">
+                    <div class="challenge-stat">
+                        <i class="fas fa-fire"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="streak-days">47</span>
+                            <span class="stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                    <div class="challenge-stat">
+                        <i class="fas fa-star"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="total-xp">2350</span>
+                            <span class="stat-label">Total XP</span>
+                        </div>
+                    </div>
+                    <div class="challenge-stat">
+                        <i class="fas fa-medal"></i>
+                        <div class="stat-info">
+                            <span class="stat-value" id="badges-earned">12</span>
+                            <span class="stat-label">Badges</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Status Dashboard -->
+    <section id="api-status" class="section alt-bg">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Real-time</span>
+                <h2 class="section-title">API Status</h2>
+                <p class="section-subtitle">System health and uptime monitoring</p>
+            </div>
+            <div class="api-dashboard" id="api-dashboard">
+                <div class="api-card" data-api="github">
+                    <div class="api-status-dot online"></div>
+                    <div class="api-icon"><i class="fab fa-github"></i></div>
+                    <div class="api-info">
+                        <span class="api-name">GitHub</span>
+                        <span class="api-latency" id="github-latency">--ms</span>
+                    </div>
+                    <div class="api-bar">
+                        <div class="api-bar-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="api-card" data-api="vault">
+                    <div class="api-status-dot online"></div>
+                    <div class="api-icon"><i class="fas fa-vault"></i></div>
+                    <div class="api-info">
+                        <span class="api-name">Vault API</span>
+                        <span class="api-latency" id="vault-latency">--ms</span>
+                    </div>
+                    <div class="api-bar">
+                        <div class="api-bar-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="api-card" data-api="games">
+                    <div class="api-status-dot online"></div>
+                    <div class="api-icon"><i class="fas fa-gamepad"></i></div>
+                    <div class="api-info">
+                        <span class="api-name">Games DB</span>
+                        <span class="api-latency" id="games-latency">--ms</span>
+                    </div>
+                    <div class="api-bar">
+                        <div class="api-bar-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="api-card" data-api="proxy">
+                    <div class="api-status-dot online"></div>
+                    <div class="api-icon"><i class="fas fa-server"></i></div>
+                    <div class="api-info">
+                        <span class="api-name">Proxy Network</span>
+                        <span class="api-latency" id="proxy-latency">--ms</span>
+                    </div>
+                    <div class="api-bar">
+                        <div class="api-bar-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="api-summary">
+                <span class="api-uptime">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="uptime-percent">99.9%</span> uptime
+                </span>
+                <span class="api-last-check">Last checked: <span id="last-check">Just now</span></span>
+            </div>
+        </div>
+    </section>

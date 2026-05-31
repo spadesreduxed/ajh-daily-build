@@ -1045,11 +1045,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Day 46 - Command Palette
   initCommandPalette();
+  initDailyChallenge();
+  initAPIStatus();
   
-  console.log('⚡ AJH Website loaded - Day 46: Command Palette');
+  console.log('⚡ AJH Website loaded - Day 48: Daily Challenge + API Status');
 });
 
-// Day 47 - Site Tour Onboarding
+// Day 48 - Daily Challenge + API Status
 function initSiteTour() {
   const STORAGE_KEY = 'ajh_site_tour_done';
   const TOUR_STEPS_KEY = 'ajh_tour_step';
@@ -1347,3 +1349,228 @@ function initCommandPaletteEnhancements() {
 }
 
 console.log('⚡ AJH Website Day 47: Site Tour + Interactive Timeline loaded');
+/* ========================================
+   DAILY CHALLENGE SYSTEM
+   ======================================== */
+
+const challenges = [
+  { level: 1, title: "First Commit", desc: "Make your first commit to any project today", xp: 50, badge: "Novice Builder" },
+  { level: 2, title: "Code Review", desc: "Review and comment on someone else's code", xp: 75, badge: "Code Reviewer" },
+  { level: 3, title: "Bug Hunter", desc: "Find and report 3 bugs in your projects", xp: 100, badge: "Bug Smasher" },
+  { level: 4, title: "Feature Builder", desc: "Implement a new feature from your backlog", xp: 125, badge: "Feature Builder" },
+  { level: 5, title: "Documentation Update", desc: "Update docs for a project you've been neglecting", xp: 75, badge: "Docs Champion" },
+  { level: 6, title: "Refactor Master", desc: "Refactor at least 100 lines of legacy code", xp: 150, badge: "Code Artisan" },
+  { level: 7, title: "Test Driven", desc: "Write tests for a feature before implementing", xp: 100, badge: "Test Driven" },
+  { level: 8, title: "Performance Boost", desc: "Optimize something that was running slow", xp: 125, badge: "Speed Demon" },
+  { level: 9, title: "Community Help", desc: "Help someone on Stack Overflow or Discord", xp: 100, badge: "Community Helper" },
+  { level: 10, title: "Ship It", desc: "Deploy a project you've been working on", xp: 200, badge: "Ship Master" },
+  { level: 11, title: "Security Scan", desc: "Run a security scan on your codebase", xp: 100, badge: "Security Guard" },
+  { level: 12, title: "Design Day", desc: "Redesign a UI component with modern styling", xp: 125, badge: "Design Pro" },
+  { level: 13, title: "Open Source", desc: "Make a PR to an open source project", xp: 200, badge: "OSS Contributor" },
+  { level: 14, title: "Mentor Mode", desc: "Write a tutorial or guide for something you built", xp: 150, badge: "Teacher" },
+  { level: 15, title: "Master Builder", desc: "Complete all subtasks in your project board", xp: 300, badge: "Master Builder" }
+];
+
+function initDailyChallenge() {
+  const challengeCard = document.getElementById('daily-challenge');
+  if (!challengeCard) return;
+
+  // Get stored progress
+  const storedDay = localStorage.getItem('ajh-challenge-day');
+  const today = new Date().toDateString();
+  
+  // Reset if new day
+  if (storedDay !== today) {
+    localStorage.setItem('ajh-challenge-day', today);
+    localStorage.setItem('ajh-challenge-progress', '0');
+    localStorage.setItem('ajh-challenge-completed', 'false');
+  }
+
+  // Load saved progress
+  const streakDays = parseInt(localStorage.getItem('ajh-streak-days')) || 47;
+  const totalXP = parseInt(localStorage.getItem('ajh-total-xp')) || 2350;
+  const badges = parseInt(localStorage.getItem('ajh-badges')) || 12;
+
+  document.getElementById('streak-days').textContent = streakDays;
+  document.getElementById('total-xp').textContent = totalXP;
+  document.getElementById('badges-earned').textContent = badges;
+
+  // Pick challenge based on day of year
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const challengeIndex = dayOfYear % challenges.length;
+  const challenge = challenges[challengeIndex];
+
+  document.getElementById('challenge-level').textContent = 'Level ' + challenge.level;
+  document.getElementById('challenge-title').textContent = challenge.title;
+  document.getElementById('challenge-desc').textContent = challenge.desc;
+  document.getElementById('xp-reward').textContent = '+' + challenge.xp + ' XP';
+  document.getElementById('badge-reward').textContent = challenge.badge;
+
+  // Load saved progress
+  const progress = parseInt(localStorage.getItem('ajh-challenge-progress')) || 0;
+  document.getElementById('challenge-progress-bar').style.width = progress + '%';
+
+  const btn = document.getElementById('challenge-btn');
+  const completed = localStorage.getItem('ajh-challenge-completed') === 'true';
+  
+  if (completed) {
+    btn.textContent = 'Completed! ✓';
+    btn.classList.add('completed');
+    btn.disabled = true;
+  }
+
+  btn.addEventListener('click', () => {
+    if (completed) return;
+    
+    // Simulate progress
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      document.getElementById('challenge-progress-bar').style.width = progress + '%';
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        completeChallenge(challenge, streakDays, totalXP, badges);
+      }
+    }, 300);
+  });
+}
+
+function completeChallenge(challenge, streakDays, totalXP, badges) {
+  localStorage.setItem('ajh-challenge-completed', 'true');
+  
+  // Update stats
+  const newStreak = streakDays + 1;
+  const newXP = totalXP + challenge.xp;
+  const newBadges = badges + 1;
+  
+  localStorage.setItem('ajh-streak-days', newStreak);
+  localStorage.setItem('ajh-total-xp', newXP);
+  localStorage.setItem('ajh-badges', newBadges);
+
+  document.getElementById('streak-days').textContent = newStreak;
+  document.getElementById('total-xp').textContent = newXP;
+  document.getElementById('badges-earned').textContent = newBadges;
+
+  const btn = document.getElementById('challenge-btn');
+  btn.textContent = 'Completed! ✓';
+  btn.classList.add('completed');
+  btn.disabled = true;
+
+  // Show notification
+  showNotification('Challenge Complete! +' + challenge.xp + ' XP earned!', 'success');
+}
+
+/* ========================================
+   API STATUS DASHBOARD
+   ======================================== */
+
+const apis = [
+  { id: 'github', name: 'GitHub', url: 'https://api.github.com' },
+  { id: 'vault', name: 'Vault API', url: 'https://vaultv6.com/api/health' },
+  { id: 'games', name: 'Games DB', url: 'https://vaultv6.com/api/games/count' },
+  { id: 'proxy', name: 'Proxy Network', url: 'https://vaultv6.com/api/status' }
+];
+
+async function checkAPI(api) {
+  const start = performance.now();
+  try {
+    const response = await fetch(api.url, { method: 'HEAD', cache: 'no-cache' });
+    const latency = Math.round(performance.now() - start);
+    return { ...api, online: response.ok, latency };
+  } catch (e) {
+    return { ...api, online: false, latency: null };
+  }
+}
+
+async function initAPIStatus() {
+  const dashboard = document.getElementById('api-dashboard');
+  if (!dashboard) return;
+
+  async function updateStatus() {
+    const results = await Promise.all(apis.map(checkAPI));
+    
+    let onlineCount = 0;
+    results.forEach(result => {
+      const card = dashboard.querySelector(`[data-api="${result.id}"]`);
+      if (!card) return;
+
+      const dot = card.querySelector('.api-status-dot');
+      const latencyEl = document.getElementById(result.id + '-latency');
+      const bar = card.querySelector('.api-bar-fill');
+
+      if (result.online) {
+        dot.classList.remove('offline');
+        dot.classList.add('online');
+        latencyEl.textContent = result.latency + 'ms';
+        bar.style.width = Math.min(100, 100 - result.latency / 10) + '%';
+        onlineCount++;
+      } else {
+        dot.classList.remove('online');
+        dot.classList.add('offline');
+        latencyEl.textContent = 'ERR';
+        bar.style.width = '20%';
+        bar.style.background = 'linear-gradient(90deg, #ff4444, #ff6666)';
+      }
+    });
+
+    const uptime = ((onlineCount / results.length) * 100).toFixed(1);
+    document.getElementById('uptime-percent').textContent = uptime + '%';
+    document.getElementById('last-check').textContent = 'Just now';
+  }
+
+  updateStatus();
+  setInterval(updateStatus, 30000); // Check every 30 seconds
+}
+
+/* ========================================
+   NOTIFICATION SYSTEM
+   ======================================== */
+
+function showNotification(message, type = 'info') {
+  // Remove existing notifications
+  const existing = document.querySelector('.ajh-notification');
+  if (existing) existing.remove();
+
+  const notification = document.createElement('div');
+  notification.className = 'ajh-notification ' + type;
+  notification.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'info-circle') + '"></i><span>' + message + '</span>';
+  
+  // Add styles
+  notification.style.cssText = `
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 1px solid ${type === 'success' ? '#00ff88' : 'var(--accent-primary)'};
+    border-radius: 12px;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+  `;
+  
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease forwards';
+    setTimeout(() => notification.remove(), 300);
+  }, 4000);
+}
+
+// Add animation styles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
