@@ -895,6 +895,17 @@
             <div class="blog-grid">
                 <div class="blog-card">
                     <div class="blog-date">
+                        <span class="blog-day">01</span>
+                        <span class="blog-month">June 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 49</span>
+                        <h3>Music Player - Lo-fi Beats for Coding</h3>
+                        <p>Added a fully functional music player with visualizer, playback controls, playlist management, and volume control. Features animated bars that react when playing/paused, shuffle and repeat modes, progress bar with seeking, collapsible playlist, and keyboard shortcuts (space to play/pause). Simulated playback for demo tracks with real-time progress tracking.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <div class="blog-date">
                         <span class="blog-day">30</span>
                         <span class="blog-month">May 2026</span>
                     </div>
@@ -1872,6 +1883,79 @@
                     <span id="uptime-percent">99.9%</span> uptime
                 </span>
                 <span class="api-last-check">Last checked: <span id="last-check">Just now</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Music Player Section -->
+    <section id="music" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Audio</span>
+                <h2 class="section-title">Music Player</h2>
+                <p class="section-subtitle">Lo-fi beats for coding sessions</p>
+            </div>
+            <div class="music-player">
+                <div class="music-visualizer" id="music-visualizer">
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                    <div class="visualizer-bar"></div>
+                </div>
+                <div class="music-info">
+                    <div class="music-art">
+                        <i class="fas fa-music" id="music-art-icon"></i>
+                    </div>
+                    <div class="music-details">
+                        <span class="music-track" id="music-track">Select a track</span>
+                        <span class="music-artist" id="music-artist">--</span>
+                    </div>
+                </div>
+                <div class="music-progress">
+                    <span class="music-time" id="music-current">0:00</span>
+                    <div class="progress-bar" id="music-progress-bar">
+                        <div class="progress-fill" id="music-progress-fill"></div>
+                    </div>
+                    <span class="music-time" id="music-duration">0:00</span>
+                </div>
+                <div class="music-controls">
+                    <button class="music-btn" id="music-shuffle" aria-label="Shuffle">
+                        <i class="fas fa-shuffle"></i>
+                    </button>
+                    <button class="music-btn" id="music-prev" aria-label="Previous">
+                        <i class="fas fa-backward-step"></i>
+                    </button>
+                    <button class="music-btn music-btn-main" id="music-play" aria-label="Play">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="music-btn" id="music-next" aria-label="Next">
+                        <i class="fas fa-forward-step"></i>
+                    </button>
+                    <button class="music-btn" id="music-repeat" aria-label="Repeat">
+                        <i class="fas fa-repeat"></i>
+                    </button>
+                </div>
+                <div class="music-volume">
+                    <button class="music-btn" id="music-mute" aria-label="Mute">
+                        <i class="fas fa-volume-high"></i>
+                    </button>
+                    <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+                </div>
+                <div class="music-playlist" id="music-playlist">
+                    <div class="playlist-header">
+                        <span>Playlist</span>
+                        <button class="playlist-toggle" id="playlist-toggle">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="playlist-tracks" id="playlist-tracks">
+                        <!-- Tracks added by JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </section>

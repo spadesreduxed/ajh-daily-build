@@ -1047,6 +1047,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCommandPalette();
   initDailyChallenge();
   initAPIStatus();
+  initMusicPlayer();
   
   console.log('⚡ AJH Website loaded - Day 48: Daily Challenge + API Status');
 });
@@ -1574,3 +1575,232 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+/* ========================================
+   MUSIC PLAYER
+   ======================================== */
+
+// Music tracks data (simulated since we can't load real audio files easily)
+const musicTracks = [
+  { name: "Lofi Study Session", artist: "ChillBeats", duration: "3:24", url: null },
+  { name: "Code Rhythm", artist: "ByteWave", duration: "2:58", url: null },
+  { name: "Night coding", artist: "SynthWave", duration: "4:12", url: null },
+  { name: "Focus Flow", artist: "Ambient Lab", duration: "3:45", url: null },
+  { name: "Bronx Beats", artist: "AJH Mix", duration: "3:08", url: null }
+];
+
+let currentTrack = 0;
+let isPlaying = false;
+let volume = 0.7;
+
+function initMusicPlayer() {
+  const playBtn = document.getElementById('music-play');
+  const prevBtn = document.getElementById('music-prev');
+  const nextBtn = document.getElementById('music-next');
+  const shuffleBtn = document.getElementById('music-shuffle');
+  const repeatBtn = document.getElementById('music-repeat');
+  const volumeSlider = document.getElementById('volume-slider');
+  const muteBtn = document.getElementById('music-mute');
+  const playlistToggle = document.getElementById('playlist-toggle');
+  const progressBar = document.getElementById('music-progress-bar');
+  
+  if (!playBtn) return;
+  
+  // Render playlist
+  renderPlaylist();
+  
+  // Update track info
+  updateTrackInfo();
+  
+  // Play/Pause
+  playBtn.addEventListener('click', togglePlay);
+  
+  // Previous
+  prevBtn.addEventListener('click', () => {
+    currentTrack = (currentTrack - 1 + musicTracks.length) % musicTracks.length;
+    updateTrackInfo();
+    if (isPlaying) simulatePlay();
+  });
+  
+  // Next
+  nextBtn.addEventListener('click', () => {
+    currentTrack = (currentTrack + 1) % musicTracks.length;
+    updateTrackInfo();
+    if (isPlaying) simulatePlay();
+  });
+  
+  // Shuffle
+  shuffleBtn.addEventListener('click', () => {
+    shuffleBtn.classList.toggle('active');
+    if (shuffleBtn.classList.contains('active')) {
+      currentTrack = Math.floor(Math.random() * musicTracks.length);
+      updateTrackInfo();
+    }
+  });
+  
+  // Repeat
+  repeatBtn.addEventListener('click', () => {
+    repeatBtn.classList.toggle('active');
+  });
+  
+  // Volume
+  volumeSlider.addEventListener('input', (e) => {
+    volume = e.target.value / 100;
+    updateVolumeIcon();
+  });
+  
+  // Mute
+  muteBtn.addEventListener('click', () => {
+    if (volume > 0) {
+      volumeSlider.dataset.prevVolume = volume;
+      volume = 0;
+      volumeSlider.value = 0;
+    } else {
+      volume = volumeSlider.dataset.prevVolume || 0.7;
+      volumeSlider.value = volume * 100;
+    }
+    updateVolumeIcon();
+  });
+  
+  // Playlist toggle
+  playlistToggle.addEventListener('click', () => {
+    playlistToggle.classList.toggle('collapsed');
+    document.getElementById('playlist-tracks').classList.toggle('expanded');
+  });
+  
+  // Progress bar click
+  progressBar.addEventListener('click', (e) => {
+    // Simulate seeking - just visual feedback
+    const rect = progressBar.getBoundingClientRect();
+    const percent = ((e.clientX - rect.left) / rect.width) * 100;
+    document.getElementById('music-progress-fill').style.width = percent + '%';
+  });
+  
+  // Keyboard controls
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      togglePlay();
+    }
+  });
+}
+
+function togglePlay() {
+  const player = document.querySelector('.music-player');
+  const playBtn = document.getElementById('music-play');
+  
+  isPlaying = !isPlaying;
+  
+  if (isPlaying) {
+    player.classList.remove('paused');
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    simulatePlay();
+  } else {
+    player.classList.add('paused');
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    stopProgress();
+  }
+}
+
+let progressInterval;
+let progressPercent = 0;
+
+function simulatePlay() {
+  stopProgress();
+  progressPercent = 0;
+  
+  const track = musicTracks[currentTrack];
+  const [min, sec] = track.duration.split(':').map(Number);
+  const totalSec = min * 60 + sec;
+  
+  progressInterval = setInterval(() => {
+    if (!isPlaying) return;
+    
+    progressPercent += 0.5;
+    const percent = (progressPercent / totalSec) * 100;
+    document.getElementById('music-progress-fill').style.width = Math.min(percent, 100) + '%';
+    document.getElementById('music-current').textContent = formatTime(progressPercent);
+    
+    if (progressPercent >= totalSec) {
+      handleTrackEnd();
+    }
+  }, 100);
+}
+
+function stopProgress() {
+  if (progressInterval) {
+    clearInterval(progressInterval);
+    progressInterval = null;
+  }
+}
+
+function handleTrackEnd() {
+  const repeatBtn = document.getElementById('music-repeat');
+  if (repeatBtn.classList.contains('active')) {
+    progressPercent = 0;
+    document.getElementById('music-progress-fill').style.width = '0%';
+    document.getElementById('music-current').textContent = '0:00';
+    simulatePlay();
+  } else {
+    currentTrack = (currentTrack + 1) % musicTracks.length;
+    updateTrackInfo();
+    if (isPlaying) simulatePlay();
+  }
+}
+
+function formatTime(seconds) {
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return min + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function updateTrackInfo() {
+  const track = musicTracks[currentTrack];
+  document.getElementById('music-track').textContent = track.name;
+  document.getElementById('music-artist').textContent = track.artist;
+  document.getElementById('music-duration').textContent = track.duration;
+  document.getElementById('music-current').textContent = '0:00';
+  document.getElementById('music-progress-fill').style.width = '0%';
+  
+  // Update active state in playlist
+  document.querySelectorAll('.playlist-track').forEach((el, i) => {
+    el.classList.toggle('active', i === currentTrack);
+  });
+}
+
+function updateVolumeIcon() {
+  const muteBtn = document.getElementById('music-mute');
+  if (volume === 0) {
+    muteBtn.innerHTML = '<i class="fas fa-volume-xmark"></i>';
+  } else if (volume < 0.5) {
+    muteBtn.innerHTML = '<i class="fas fa-volume-low"></i>';
+  } else {
+    muteBtn.innerHTML = '<i class="fas fa-volume-high"></i>';
+  }
+}
+
+function renderPlaylist() {
+  const container = document.getElementById('playlist-tracks');
+  if (!container) return;
+  
+  container.innerHTML = musicTracks.map((track, i) => `
+    <div class="playlist-track ${i === currentTrack ? 'active' : ''}" data-index="${i}">
+      <span class="track-number">${i + 1}</span>
+      <div class="track-info">
+        <span class="track-name">${track.name}</span>
+        <span class="track-artist">${track.artist}</span>
+      </div>
+      <span class="track-duration">${track.duration}</span>
+    </div>
+  `).join('');
+  
+  // Add click handlers
+  container.querySelectorAll('.playlist-track').forEach(el => {
+    el.addEventListener('click', () => {
+      currentTrack = parseInt(el.dataset.index);
+      updateTrackInfo();
+      if (!isPlaying) togglePlay();
+    });
+  });
+}
