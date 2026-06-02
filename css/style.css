@@ -5852,3 +5852,156 @@ button:focus-visible,
 [data-theme="light"] .progress-bar {
   background: #e8e8f0;
 }
+
+/* Stats Section - Bento Grid */
+.stats-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stats-bento .stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-bento .stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--gradient-1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stats-bento .stat-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-primary);
+}
+
+.stats-bento .stat-card:hover::before {
+  opacity: 1;
+}
+
+.stats-bento .stat-card.large {
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(123, 44, 191, 0.1) 100%);
+}
+
+.stats-bento .stat-card i {
+  font-size: 2rem;
+  color: var(--accent-primary);
+  margin-bottom: 15px;
+}
+
+.stats-bento .stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.stats-bento .stat-card.large .stat-number {
+  font-size: 3.5rem;
+}
+
+.stats-bento .stat-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stats-bento .stat-sublabel {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.stats-highlight {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.highlight-icon {
+  font-size: 1.5rem;
+}
+
+.highlight-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .stats-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-bento .stat-card.large {
+    grid-column: span 2;
+  }
+  .stats-bento .stat-card.large .stat-number {
+    font-size: 2.5rem;
+  }
+}
+
+/* Hero Insights */
+.hero-insights {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.insight-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  font-size: 0.85rem;
+}
+
+.insight-item i {
+  color: var(--accent-primary);
+}
+
+.live-count {
+  font-weight: 700;
+  color: var(--accent-tertiary);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.insight-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.insight-label {
+  color: var(--text-muted);
+}

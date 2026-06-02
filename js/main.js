@@ -1048,8 +1048,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initDailyChallenge();
   initAPIStatus();
   initMusicPlayer();
+  initLiveVisitorCounter();
   
-  console.log('⚡ AJH Website loaded - Day 48: Daily Challenge + API Status');
+  console.log('⚡ AJH Website loaded - Day 50: Stats Bento Grid + Live Visitors');
 });
 
 // Day 48 - Daily Challenge + API Status
@@ -1803,4 +1804,35 @@ function renderPlaylist() {
       if (!isPlaying) togglePlay();
     });
   });
+}
+
+// Live Visitor Counter
+function initLiveVisitorCounter() {
+  const liveCountEl = document.getElementById('live-view-count');
+  if (!liveCountEl) return;
+  
+  // Simulated live count - in production would connect to real analytics
+  let baseCount = Math.floor(Math.random() * 200) + 100;
+  
+  function updateLiveCount() {
+    // Simulate small fluctuations
+    const change = Math.floor(Math.random() * 5) - 2;
+    baseCount = Math.max(50, baseCount + change);
+    liveCountEl.textContent = baseCount;
+  }
+  
+  updateLiveCount();
+  setInterval(updateLiveCount, 5000);
+  
+  // Animate on scroll into view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(liveCountEl, baseCount);
+      }
+    });
+  });
+  
+  const statsSection = document.getElementById('stats');
+  if (statsSection) observer.observe(statsSection);
 }
