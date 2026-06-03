@@ -1049,6 +1049,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAPIStatus();
   initMusicPlayer();
   initLiveVisitorCounter();
+  initKeyboardGame();
   
   console.log('⚡ AJH Website loaded - Day 50: Stats Bento Grid + Live Visitors');
 });
@@ -1835,4 +1836,100 @@ function initLiveVisitorCounter() {
   
   const statsSection = document.getElementById('stats');
   if (statsSection) observer.observe(statsSection);
+}
+
+/* ========================================
+   KEYBOARD GAME
+   ======================================== */
+
+function initKeyboardGame() {
+  const gameContainer = document.getElementById('hero-game');
+  const gameTarget = document.getElementById('game-target');
+  const scoreEl = document.getElementById('game-score');
+  const comboEl = document.getElementById('game-combo');
+  
+  if (!gameContainer || !gameTarget) return;
+  
+  let score = 0;
+  let combo = 0;
+  let targetKey = '';
+  let gameActive = false;
+  let timeoutId = null;
+  
+  const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  
+  function showGame() {
+    gameContainer.classList.add('active');
+    gameActive = true;
+    nextKey();
+  }
+  
+  function hideGame() {
+    gameContainer.classList.remove('active');
+    gameActive = false;
+    score = 0;
+    combo = 0;
+    updateDisplay();
+  }
+  
+  function nextKey() {
+    if (!gameActive) return;
+    
+    targetKey = keys[Math.floor(Math.random() * keys.length)];
+    gameTarget.textContent = targetKey;
+    gameTarget.classList.remove('miss', 'hit');
+    
+    // Auto-timeout after 3 seconds
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      handleMiss();
+    }, 3000);
+  }
+  
+  function handleHit() {
+    score += 10 * (combo + 1);
+    combo++;
+    gameTarget.classList.add('hit');
+    if (timeoutId) clearTimeout(timeoutId);
+    updateDisplay();
+    setTimeout(nextKey, 200);
+  }
+  
+  function handleMiss() {
+    combo = 0;
+    gameTarget.classList.add('miss');
+    updateDisplay();
+    setTimeout(nextKey, 300);
+  }
+  
+  function updateDisplay() {
+    scoreEl.textContent = score;
+    comboEl.textContent = combo + 'x';
+  }
+  
+  // Keyboard listener
+  document.addEventListener('keydown', (e) => {
+    if (!gameActive) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    const key = e.key.toUpperCase();
+    if (key === targetKey) {
+      handleHit();
+    } else if (keys.includes(key)) {
+      handleMiss();
+    }
+  });
+  
+  // Start game when user presses 'G' key
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key.toUpperCase() === 'G' && !gameActive) {
+      showGame();
+    }
+    if (e.key === 'Escape' && gameActive) {
+      hideGame();
+    }
+  });
+  
+  console.log('🎮 Keyboard Game loaded - Press G to start, ESC to stop');
 }

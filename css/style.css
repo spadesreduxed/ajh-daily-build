@@ -6005,3 +6005,105 @@ button:focus-visible,
 .insight-label {
   color: var(--text-muted);
 }
+
+/* Hero Keyboard Game */
+.hero-game {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 25px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  animation: slideUp 0.4s ease;
+}
+
+.hero-game.active {
+  display: flex;
+}
+
+.game-instruction {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.game-target {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--bg-primary);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+  animation: pulseScale 0.8s ease-in-out infinite;
+}
+
+.game-target.miss {
+  animation: shake 0.3s ease;
+  background: linear-gradient(135deg, #ff4444, #ff6666);
+}
+
+.game-target.hit {
+  animation: popScale 0.2s ease;
+}
+
+.game-score, .game-combo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.game-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-primary);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes popScale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Keyboard Game Media Query */
+@media (max-width: 768px) {
+  .hero-game {
+    padding: 15px;
+  }
+  .game-target {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+}
