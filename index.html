@@ -105,6 +105,7 @@
             <li><a href="#current">Current</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
+            <li><a href="#quotes">Quotes</a></li>
             <li><a href="#stats">Stats</a></li>
             <li><a href="#journey">Journey</a></li>
             <li><a href="#faq">FAQ</a></li>
@@ -206,11 +207,11 @@
                 </div>
                 <div class="insight-item">
                     <i class="fas fa-bolt"></i>
-                    <span class="insight-value">Day 51</span>
+                    <span class="insight-value">Day 52</span>
                 </div>
                 <div class="insight-item">
                     <i class="fas fa-fire"></i>
-                    <span class="insight-value">50</span>
+                    <span class="insight-value">51</span>
                     <span class="insight-label">streak</span>
                 </div>
             </div>
@@ -692,7 +693,7 @@
             <div class="stats-bento">
                 <div class="stat-card large">
                     <i class="fas fa-fire"></i>
-                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-number" data-count="51">0</div>
                     <div class="stat-label">Day Streak 🔥</div>
                     <div class="stat-sublabel">Never missed a day</div>
                 </div>
@@ -713,7 +714,7 @@
                 </div>
                 <div class="stat-card large">
                     <i class="fas fa-rocket"></i>
-                    <div class="stat-number" data-count="51">0</div>
+                    <div class="stat-number" data-count="52">0</div>
                     <div class="stat-label">Features Built</div>
                     <div class="stat-sublabel">And counting...</div>
                 </div>
@@ -934,6 +935,17 @@
                 <p class="section-subtitle">New features, improvements, and experiments</p>
             </div>
             <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">04</span>
+                        <span class="blog-month">June 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 52</span>
+                        <h3>Daily Quote Vault - Inspirational Words for Builders</h3>
+                        <p>Added a new Daily Quote Vault section that displays inspirational quotes with author attribution. Quotes rotate automatically, you can save favorites to localStorage, share quotes via clipboard, and discover a fresh quote on demand. A motivational boost for every builder keeping the streak alive.</p>
+                    </div>
+                </div>
                 <div class="blog-card">
                     <div class="blog-date">
                         <span class="blog-day">03</span>
@@ -1428,6 +1440,50 @@
                             <h4>James T.</h4>
                             <span>Long-time Supporter</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily Quote Vault Section -->
+    <section id="quotes" class="section quotes-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Wisdom</span>
+                <h2 class="section-title">Daily Quote Vault</h2>
+                <p class="section-subtitle">Words that keep the streak alive</p>
+            </div>
+            <div class="quote-vault">
+                <div class="quote-card glass-card" id="quote-card">
+                    <div class="quote-mark">"</div>
+                    <blockquote class="quote-text" id="quote-text">Loading inspiration...</blockquote>
+                    <div class="quote-author" id="quote-author">— Anonymous</div>
+                    <div class="quote-category" id="quote-category">Builder</div>
+                    <div class="quote-actions">
+                        <button class="btn btn-sm quote-btn" id="quote-new" aria-label="New quote">
+                            <i class="fas fa-sync-alt"></i> New Quote
+                        </button>
+                        <button class="btn btn-sm quote-btn quote-btn-fav" id="quote-fav" aria-label="Save favorite">
+                            <i class="far fa-heart"></i> Save
+                        </button>
+                        <button class="btn btn-sm quote-btn" id="quote-share" aria-label="Share quote">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+                <div class="quote-counter">
+                    <span class="quote-counter-label">Quotes Read</span>
+                    <span class="quote-counter-value" id="quote-count">0</span>
+                </div>
+                <div class="quote-favorites" id="quote-favorites">
+                    <div class="quote-fav-header">
+                        <i class="fas fa-heart"></i>
+                        <span>Saved Quotes</span>
+                        <span class="quote-fav-count" id="quote-fav-count">0</span>
+                    </div>
+                    <div class="quote-fav-list" id="quote-fav-list">
+                        <div class="quote-fav-empty">No saved quotes yet. Tap the heart to keep the words that hit home.</div>
                     </div>
                 </div>
             </div>

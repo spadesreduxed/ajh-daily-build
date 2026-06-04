@@ -1050,8 +1050,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initMusicPlayer();
   initLiveVisitorCounter();
   initKeyboardGame();
-  
-  console.log('⚡ AJH Website loaded - Day 50: Stats Bento Grid + Live Visitors');
+  initQuoteVault();
+
+  console.log('⚡ AJH Website loaded - Day 52: Daily Quote Vault');
 });
 
 // Day 48 - Daily Challenge + API Status
@@ -1932,4 +1933,235 @@ function initKeyboardGame() {
   });
   
   console.log('🎮 Keyboard Game loaded - Press G to start, ESC to stop');
+}
+// =========================================
+// Day 52: Daily Quote Vault
+// =========================================
+
+function initQuoteVault() {
+  const quoteText = document.getElementById('quote-text');
+  const quoteAuthor = document.getElementById('quote-author');
+  const quoteCategory = document.getElementById('quote-category');
+  const quoteCard = document.getElementById('quote-card');
+  const quoteCountEl = document.getElementById('quote-count');
+  const quoteFavCount = document.getElementById('quote-fav-count');
+  const quoteFavList = document.getElementById('quote-fav-list');
+  const newBtn = document.getElementById('quote-new');
+  const favBtn = document.getElementById('quote-fav');
+  const shareBtn = document.getElementById('quote-share');
+
+  if (!quoteText || !quoteCard) return;
+
+  const quotes = [
+    { text: 'The best way to predict the future is to build it.', author: 'Peter Drucker', category: 'Builder' },
+    { text: 'Ship today. Improve tomorrow. Never stop building.', author: 'AJ H', category: 'Daily Builder' },
+    { text: 'Code is poetry. Every commit is a stanza.', author: 'WordPress Founders', category: 'Craft' },
+    { text: 'First, solve the problem. Then, write the code.', author: 'John Johnson', category: 'Engineering' },
+    { text: 'Make it work, make it right, make it fast.', author: 'Kent Beck', category: 'Engineering' },
+    { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs', category: 'Passion' },
+    { text: 'Discipline equals freedom.', author: 'Jocko Willink', category: 'Discipline' },
+    { text: 'You don\'t have to be great to start, but you have to start to be great.', author: 'Zig Ziglar', category: 'Start' },
+    { text: 'A day without shipping is a day wasted.', author: 'The Daily Builder', category: 'Daily Builder' },
+    { text: 'Done is better than perfect.', author: 'Sheryl Sandberg', category: 'Shipping' },
+    { text: 'Build something 100 people love, not something 1 million people kind of like.', author: 'Paul Graham', category: 'Strategy' },
+    { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci', category: 'Craft' },
+    { text: 'The function of good software is to make the complex appear simple.', author: 'Grady Booch', category: 'Engineering' },
+    { text: 'Programs must be written for people to read, and only incidentally for machines to execute.', author: 'Harold Abelson', category: 'Code' },
+    { text: 'Move fast and fix things.', author: 'The Daily Builder', category: 'Daily Builder' },
+    { text: 'If you are not embarrassed by the first version of your product, you\'ve launched too late.', author: 'Reid Hoffman', category: 'Shipping' },
+    { text: 'Streaks beat talent when talent forgets to show up.', author: 'AJ H', category: 'Discipline' },
+    { text: 'Every great developer you know got there by solving problems they were unqualified to solve — until they actually did.', author: 'Patrick McKenzie', category: 'Growth' },
+    { text: 'Pressure makes diamonds. Daily building is the press.', author: 'The Daily Builder', category: 'Daily Builder' },
+    { text: 'The hardest part is starting. After that, it gets easier. After that, it gets better.', author: 'Seth Godin', category: 'Start' },
+    { text: 'A website is never finished. It\'s just temporarily shipped.', author: 'The Daily Builder', category: 'Builder' },
+    { text: 'Consistency is the architecture of mastery.', author: 'Robin Sharma', category: 'Discipline' },
+    { text: 'The best error message is the one that never shows up.', author: 'Thomas Fuchs', category: 'Engineering' },
+    { text: 'Optimism is an occupational hazard of programming: feedback is the treatment.', author: 'Kent Beck', category: 'Growth' },
+    { text: 'Talk is cheap. Show me the code.', author: 'Linus Torvalds', category: 'Code' },
+    { text: 'I have not failed. I\'ve just found 10,000 ways that won\'t work.', author: 'Thomas Edison', category: 'Persistence' },
+    { text: 'The future belongs to those who build it, one commit at a time.', author: 'AJ H', category: 'Daily Builder' },
+    { text: 'Make the thing. Ship the thing. Repeat for 50 days straight.', author: 'The Daily Builder', category: 'Daily Builder' },
+    { text: 'Real artists ship.', author: 'Steve Jobs', category: 'Shipping' },
+    { text: 'A goal without a daily plan is just a wish.', author: 'Antoine de Saint-Exupéry', category: 'Daily Builder' }
+  ];
+
+  const STORAGE_COUNT = 'ajh_quote_count';
+  const STORAGE_FAVS = 'ajh_quote_favs';
+  const STORAGE_LAST = 'ajh_quote_last_idx';
+  const STORAGE_LAST_DATE = 'ajh_quote_last_date';
+
+  let currentIndex = -1;
+  let count = parseInt(localStorage.getItem(STORAGE_COUNT) || '0', 10);
+  let favs = JSON.parse(localStorage.getItem(STORAGE_FAVS) || '[]');
+
+  function updateCount(delta = 0) {
+    count += delta;
+    if (count < 0) count = 0;
+    localStorage.setItem(STORAGE_COUNT, count.toString());
+    if (quoteCountEl) quoteCountEl.textContent = count.toString();
+  }
+
+  function updateFavButton() {
+    if (!favBtn) return;
+    const isFav = favs.some(f => f.text === quoteText.textContent);
+    if (isFav) {
+      favBtn.classList.add('active');
+      favBtn.querySelector('i').className = 'fas fa-heart';
+      favBtn.innerHTML = '<i class="fas fa-heart"></i> Saved';
+    } else {
+      favBtn.classList.remove('active');
+      favBtn.innerHTML = '<i class="far fa-heart"></i> Save';
+    }
+  }
+
+  function renderFavs() {
+    if (!quoteFavList || !quoteFavCount) return;
+    quoteFavCount.textContent = favs.length.toString();
+    if (favs.length === 0) {
+      quoteFavList.innerHTML = '<div class="quote-fav-empty">No saved quotes yet. Tap the heart to keep the words that hit home.</div>';
+      return;
+    }
+    quoteFavList.innerHTML = favs.map((f, i) => `
+      <div class="quote-fav-item" data-idx="${i}">
+        <button class="quote-fav-remove" data-remove="${i}" aria-label="Remove"><i class="fas fa-times"></i></button>
+        <div class="fav-quote">"${f.text}"</div>
+        <div class="fav-author">— ${f.author}</div>
+      </div>
+    `).join('');
+  }
+
+  function pickNextIndex() {
+    if (quotes.length <= 1) return 0;
+    let next;
+    do {
+      next = Math.floor(Math.random() * quotes.length);
+    } while (next === currentIndex);
+    return next;
+  }
+
+  function showQuote(animate = true) {
+    currentIndex = pickNextIndex();
+    const q = quotes[currentIndex];
+
+    if (animate && quoteCard) {
+      quoteCard.classList.remove('fade-in');
+      void quoteCard.offsetWidth;
+      quoteCard.classList.add('fade-in');
+    }
+
+    quoteText.textContent = q.text;
+    quoteAuthor.textContent = `— ${q.author}`;
+    quoteCategory.textContent = q.category;
+    updateFavButton();
+    updateCount(1);
+    localStorage.setItem(STORAGE_LAST, currentIndex.toString());
+    localStorage.setItem(STORAGE_LAST_DATE, new Date().toDateString());
+  }
+
+  function initQuoteOfTheDay() {
+    const today = new Date().toDateString();
+    const lastDate = localStorage.getItem(STORAGE_LAST_DATE);
+    const lastIdx = parseInt(localStorage.getItem(STORAGE_LAST) || '-1', 10);
+    if (lastDate === today && lastIdx >= 0 && lastIdx < quotes.length) {
+      currentIndex = lastIdx;
+      const q = quotes[currentIndex];
+      quoteText.textContent = q.text;
+      quoteAuthor.textContent = `— ${q.author}`;
+      quoteCategory.textContent = q.category;
+      updateFavButton();
+    } else {
+      showQuote(false);
+    }
+  }
+
+  if (newBtn) {
+    newBtn.addEventListener('click', () => showQuote(true));
+  }
+
+  if (favBtn) {
+    favBtn.addEventListener('click', () => {
+      const text = quoteText.textContent;
+      const author = quoteAuthor.textContent.replace(/^—\s*/, '');
+      const existingIdx = favs.findIndex(f => f.text === text);
+      if (existingIdx >= 0) {
+        favs.splice(existingIdx, 1);
+      } else {
+        favs.unshift({ text, author, ts: Date.now() });
+        quoteCard.classList.remove('saved-pulse');
+        void quoteCard.offsetWidth;
+        quoteCard.classList.add('saved-pulse');
+      }
+      localStorage.setItem(STORAGE_FAVS, JSON.stringify(favs));
+      updateFavButton();
+      renderFavs();
+    });
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      const shareText = `"${quoteText.textContent}" — ${quoteAuthor.textContent.replace(/^—\s*/, '')}`;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: 'AJH Quote Vault', text: shareText, url: window.location.href });
+        } catch (e) { /* user cancelled */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          setTimeout(() => {
+            shareBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share';
+          }, 1600);
+        } catch (e) {
+          alert(shareText);
+        }
+      }
+    });
+  }
+
+  if (quoteFavList) {
+    quoteFavList.addEventListener('click', (e) => {
+      const removeBtn = e.target.closest('[data-remove]');
+      if (removeBtn) {
+        e.stopPropagation();
+        const idx = parseInt(removeBtn.getAttribute('data-remove'), 10);
+        favs.splice(idx, 1);
+        localStorage.setItem(STORAGE_FAVS, JSON.stringify(favs));
+        renderFavs();
+        updateFavButton();
+        return;
+      }
+      const item = e.target.closest('.quote-fav-item');
+      if (item) {
+        const idx = parseInt(item.getAttribute('data-idx'), 10);
+        const fav = favs[idx];
+        if (fav) {
+          currentIndex = quotes.findIndex(q => q.text === fav.text);
+          if (currentIndex < 0) currentIndex = 0;
+          const q = quotes[currentIndex];
+          quoteCard.classList.remove('fade-in');
+          void quoteCard.offsetWidth;
+          quoteCard.classList.add('fade-in');
+          quoteText.textContent = q.text;
+          quoteAuthor.textContent = `— ${q.author}`;
+          quoteCategory.textContent = q.category;
+          updateFavButton();
+          updateCount(1);
+        }
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'n' || e.key === 'N') {
+      if (e.metaKey || e.ctrlKey) return;
+      showQuote(true);
+    }
+  });
+
+  if (quoteCountEl) quoteCountEl.textContent = count.toString();
+  renderFavs();
+  initQuoteOfTheDay();
+
+  console.log('📜 Quote Vault loaded - Press N for a new quote');
 }
