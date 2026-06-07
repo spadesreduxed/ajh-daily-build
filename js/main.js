@@ -1051,8 +1051,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveVisitorCounter();
   initKeyboardGame();
   initQuoteVault();
+  initBadges();
 
-  console.log('⚡ AJH Website loaded - Day 52: Daily Quote Vault');
+  console.log('⚡ AJH Website loaded - Day 53: Achievement Badges');
 });
 
 // Day 48 - Daily Challenge + API Status
@@ -2164,4 +2165,164 @@ function initQuoteVault() {
   initQuoteOfTheDay();
 
   console.log('📜 Quote Vault loaded - Press N for a new quote');
+}
+
+// ========================================
+// Day 53 - Achievement Badges
+// ========================================
+function initBadges() {
+  const STORAGE_KEY = 'ajh_badges_unlocked';
+  const grid = document.getElementById('badges-grid');
+  if (!grid) return;
+
+  const BADGES = [
+    { id: 'first_visit', icon: 'fa-door-open', name: 'First Steps', desc: 'Visit the site for the first time', check: () => true },
+    { id: 'midnight', icon: 'fa-moon', name: 'Midnight Builder', desc: 'Visit between midnight and 4am', check: () => { const h = new Date().getHours(); return h >= 0 && h < 4; } },
+    { id: 'early_bird', icon: 'fa-sun', name: 'Early Bird', desc: 'Visit between 5am and 8am', check: () => { const h = new Date().getHours(); return h >= 5 && h < 8; } },
+    { id: 'scroll_deep', icon: 'fa-arrow-down', name: 'Scroll Master', desc: 'Reach the bottom of the page', check: () => (window._ajh_scrolledBottom = true) },
+    { id: 'theme_toggler', icon: 'fa-palette', name: 'Theme Switcher', desc: 'Toggle light or dark theme', check: () => (window._ajh_themeToggled = true) },
+    { id: 'quote_lover', icon: 'fa-heart', name: 'Quote Collector', desc: 'Save 5 favorite quotes', check: () => { try { const favs = JSON.parse(localStorage.getItem('ajh_quote_favs') || '[]'); return favs.length >= 5; } catch(e) { return false; } } },
+    { id: 'keyboard_warrior', icon: 'fa-keyboard', name: 'Keyboard Warrior', desc: 'Hit 10 keys in the hero game', check: () => (window._ajh_kbHits || 0) >= 10 },
+    { id: 'music_fan', icon: 'fa-music', name: 'Music Fan', desc: 'Play a track in the music player', check: () => (window._ajh_musicPlayed = true) },
+    { id: 'command_k', icon: 'fa-terminal', name: 'Power User', desc: 'Open the command palette', check: () => (window._ajh_paletteOpened = true) },
+    { id: 'secret_finder', icon: 'fa-user-secret', name: 'Secret Finder', desc: 'Trigger the easter egg', check: () => (window._ajh_easterEgg = true) },
+    { id: 'streak_7', icon: 'fa-fire', name: 'Week Warrior', desc: 'Visit 7 days in a row', check: () => { try { const days = JSON.parse(localStorage.getItem('ajh_visit_days') || '[]'); const today = new Date().toDateString(); if (!days.includes(today)) days.push(today); localStorage.setItem('ajh_visit_days', JSON.stringify(days)); if (days.length < 7) return false; const sorted = days.map(d => new Date(d)).sort((a, b) => a - b); for (let i = 0; i <= sorted.length - 7; i++) { const diff = (sorted[i+6] - sorted[i]) / (1000 * 60 * 60 * 24); if (diff <= 6.5) return true; } return false; } catch (e) { return false; } } },
+    { id: 'curious_explorer', icon: 'fa-compass', name: 'Curious Explorer', desc: 'Open 3 different modals', check: () => { try { return (parseInt(localStorage.getItem('ajh_modals_opened') || '0', 10)) >= 3; } catch(e) { return false; } } },
+  ];
+
+  let unlocked = {};
+  try { unlocked = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { unlocked = {}; }
+
+  const renderGrid = () => {
+    grid.innerHTML = BADGES.map(b => {
+      const isUnlocked = !!unlocked[b.id];
+      return '<div class="badge-card ' + (isUnlocked ? 'unlocked' : 'locked') + '" data-badge="' + b.id + '" title="' + b.desc + '"><div class="badge-icon"><i class="fas ' + b.icon + '"></i></div><div class="badge-name">' + b.name + '</div><div class="badge-desc">' + b.desc + '</div><span class="badge-status">' + (isUnlocked ? 'Unlocked' : 'Locked') + '</span></div>';
+    }).join('');
+  };
+
+  const updateCounters = () => {
+    const earned = BADGES.filter(b => unlocked[b.id]).length;
+    const earnedEl = document.getElementById('badges-earned-num');
+    const totalEl = document.getElementById('badges-total-num');
+    const fillEl = document.getElementById('badges-progress-fill');
+    const miniEl = document.getElementById('badges-count-mini');
+    if (earnedEl) earnedEl.textContent = earned;
+    if (totalEl) totalEl.textContent = BADGES.length;
+    if (fillEl) fillEl.style.width = (earned / BADGES.length * 100) + '%';
+    if (miniEl) miniEl.textContent = earned;
+  };
+
+  const showConfetti = () => {
+    const container = document.createElement('div');
+    container.className = 'badge-confetti';
+    const colors = ['#ffbd2e', '#7b2cbf', '#00d4ff', '#ff6b6b', '#51cf66', '#ffd43b'];
+    for (let i = 0; i < 40; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = (Math.random() * 0.4) + 's';
+      piece.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+      container.appendChild(piece);
+    }
+    document.body.appendChild(container);
+    setTimeout(() => container.remove(), 4000);
+  };
+
+  const showToast = (badge) => {
+    const existing = document.querySelector('.badge-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'badge-toast';
+    toast.innerHTML = '<div class="badge-toast-icon"><i class="fas ' + badge.icon + '"></i></div><div class="badge-toast-text"><span class="badge-toast-label">🎉 Badge Unlocked!</span><span class="badge-toast-name">' + badge.name + '</span></div>';
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 600); }, 3500);
+  };
+
+  const tryUnlock = (badge) => {
+    if (unlocked[badge.id]) return;
+    unlocked[badge.id] = Date.now();
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocked)); } catch (e) {}
+    renderGrid();
+    updateCounters();
+    setTimeout(() => {
+      const card = grid.querySelector('[data-badge="' + badge.id + '"]');
+      if (card) { card.classList.add('just-unlocked'); setTimeout(() => card.classList.remove('just-unlocked'), 800); }
+    }, 50);
+    showConfetti();
+    showToast(badge);
+  };
+
+  const checkAll = () => {
+    BADGES.forEach(b => {
+      if (unlocked[b.id]) return;
+      try { if (b.check()) tryUnlock(b); } catch (e) {}
+    });
+  };
+
+  renderGrid();
+  updateCounters();
+
+  if (!unlocked.first_visit) {
+    setTimeout(() => tryUnlock(BADGES.find(b => b.id === 'first_visit')), 800);
+  }
+
+  let bottomCheck = false;
+  const onScroll = () => {
+    if (bottomCheck) return;
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 200)) {
+      bottomCheck = true;
+      window._ajh_scrolledBottom = true;
+      if (!unlocked.scroll_deep) tryUnlock(BADGES.find(b => b.id === 'scroll_deep'));
+    }
+  };
+  window.addEventListener('scroll', debounce(onScroll, 400), { passive: true });
+
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      window._ajh_themeToggled = true;
+      if (!unlocked.theme_toggler) tryUnlock(BADGES.find(b => b.id === 'theme_toggler'));
+    });
+  }
+
+  let lastFavCount = 0;
+  setInterval(() => {
+    try {
+      const favs = JSON.parse(localStorage.getItem('ajh_quote_favs') || '[]');
+      if (favs.length !== lastFavCount) {
+        lastFavCount = favs.length;
+        if (favs.length >= 5 && !unlocked.quote_lover) tryUnlock(BADGES.find(b => b.id === 'quote_lover'));
+      }
+    } catch (e) {}
+  }, 1000);
+
+  setInterval(() => { if ((window._ajh_kbHits || 0) >= 10 && !unlocked.keyboard_warrior) tryUnlock(BADGES.find(b => b.id === 'keyboard_warrior')); }, 500);
+  setInterval(() => { if (window._ajh_musicPlayed && !unlocked.music_fan) tryUnlock(BADGES.find(b => b.id === 'music_fan')); }, 1000);
+  setInterval(() => { if (window._ajh_paletteOpened && !unlocked.command_k) tryUnlock(BADGES.find(b => b.id === 'command_k')); }, 500);
+  setInterval(() => { if (window._ajh_easterEgg && !unlocked.secret_finder) tryUnlock(BADGES.find(b => b.id === 'secret_finder')); }, 500);
+  setInterval(() => {
+    try {
+      const count = parseInt(localStorage.getItem('ajh_modals_opened') || '0', 10);
+      if (count >= 3 && !unlocked.curious_explorer) tryUnlock(BADGES.find(b => b.id === 'curious_explorer'));
+    } catch (e) {}
+  }, 1000);
+
+  if (!unlocked.streak_7) {
+    const streakBadge = BADGES.find(b => b.id === 'streak_7');
+    try { if (streakBadge.check()) tryUnlock(streakBadge); } catch (e) {}
+  }
+
+  setInterval(checkAll, 30000);
+
+  const badgesBtn = document.getElementById('badges-btn');
+  if (badgesBtn) {
+    badgesBtn.addEventListener('click', () => {
+      const target = document.getElementById('badges');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  console.log('🏆 Achievement Badges loaded - ' + Object.keys(unlocked).length + '/' + BADGES.length + ' unlocked');
 }

@@ -6397,3 +6397,405 @@ button:focus-visible,
     font-size: 6rem;
   }
 }
+
+
+/* ========================================
+   Day 53 - Achievement Badges
+   ======================================== */
+
+.badges-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.badges-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 10% 20%, rgba(255, 189, 46, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 90% 80%, rgba(123, 44, 191, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.badges-progress {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.badges-progress-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.badges-earned-count {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: var(--font-mono);
+}
+
+.badges-progress-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.badges-progress-bar {
+  height: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.badges-progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--gradient-1);
+  border-radius: 50px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.badges-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.badge-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px 16px 18px;
+  text-align: center;
+  cursor: help;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.badge-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--gradient-1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.badge-card.locked {
+  filter: grayscale(0.9);
+  opacity: 0.55;
+}
+
+.badge-card.locked:hover {
+  filter: grayscale(0.5);
+  opacity: 0.85;
+  transform: translateY(-4px);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.badge-card.unlocked {
+  border-color: rgba(255, 189, 46, 0.4);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 189, 46, 0.05) 100%);
+}
+
+.badge-card.unlocked::before {
+  opacity: 1;
+}
+
+.badge-card.unlocked:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(255, 189, 46, 0.7);
+  box-shadow: 0 12px 32px rgba(255, 189, 46, 0.15);
+}
+
+.badge-card.just-unlocked {
+  animation: badgePop 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.badge-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.badge-card.unlocked .badge-icon {
+  background: var(--gradient-1);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 24px rgba(255, 189, 46, 0.4);
+}
+
+.badge-card.unlocked .badge-icon::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 189, 46, 0.4);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 0; }
+}
+
+.badge-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.badge-card.locked .badge-name {
+  color: var(--text-muted);
+}
+
+.badge-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  max-width: 140px;
+}
+
+.badge-card.locked .badge-desc::before {
+  content: '🔒 ';
+}
+
+.badge-card.unlocked .badge-desc::before {
+  content: '✨ ';
+  color: var(--accent-tertiary);
+}
+
+.badge-status {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+.badge-card.locked .badge-status {
+  background: rgba(96, 96, 112, 0.15);
+  color: var(--text-muted);
+}
+
+.badge-card.unlocked .badge-status {
+  background: rgba(255, 189, 46, 0.15);
+  color: #ffbd2e;
+  border: 1px solid rgba(255, 189, 46, 0.3);
+}
+
+.badges-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.badges-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badges-legend i {
+  color: var(--accent-primary);
+}
+
+/* Hero badges button */
+.badges-btn {
+  background: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.badges-btn:hover {
+  border-color: #ffbd2e;
+  color: #ffbd2e;
+  background: rgba(255, 189, 46, 0.1);
+}
+
+.badges-count-mini {
+  background: var(--gradient-1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  min-width: 14px;
+  text-align: center;
+}
+
+/* Confetti container for badge unlocks */
+.badge-confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confettiFall 2.5s linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* Badge unlock toast */
+.badge-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150%);
+  background: var(--bg-card);
+  border: 2px solid #ffbd2e;
+  border-radius: 16px;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 9999;
+  box-shadow: 0 16px 48px rgba(255, 189, 46, 0.3);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 90vw;
+}
+
+.badge-toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.badge-toast-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--gradient-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.badge-toast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.badge-toast-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #ffbd2e;
+  font-weight: 700;
+}
+
+.badge-toast-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .badge-card {
+    padding: 18px 12px 14px;
+    min-height: 160px;
+  }
+  .badge-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+  .badge-name {
+    font-size: 0.85rem;
+  }
+  .badge-desc {
+    font-size: 0.7rem;
+  }
+  .badges-legend {
+    gap: 16px;
+    font-size: 0.75rem;
+  }
+}

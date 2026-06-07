@@ -105,6 +105,7 @@
             <li><a href="#current">Current</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
+            <li><a href="#badges">Badges</a></li>
             <li><a href="#quotes">Quotes</a></li>
             <li><a href="#stats">Stats</a></li>
             <li><a href="#journey">Journey</a></li>
@@ -169,6 +170,10 @@
                     <i class="fab fa-bitcoin"></i>
                     <span class="crypto-ticker" id="crypto-ticker">$---</span>
                 </button>
+                <button class="badges-btn" id="badges-btn" aria-label="View badges" title="View your badges">
+                    <i class="fas fa-trophy"></i>
+                    <span class="badges-count-mini" id="badges-count-mini">0</span>
+                </button>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -187,7 +192,7 @@
             <div class="daily-streak">
                 <span class="streak-icon">🔥</span>
                 <div class="streak-info">
-                    <span class="streak-count">35 days</span>
+                    <span class="streak-count">53 days</span>
                     <span class="streak-label">Daily Streak</span>
                 </div>
             </div>
@@ -207,11 +212,11 @@
                 </div>
                 <div class="insight-item">
                     <i class="fas fa-bolt"></i>
-                    <span class="insight-value">Day 52</span>
+                    <span class="insight-value">Day 53</span>
                 </div>
                 <div class="insight-item">
                     <i class="fas fa-fire"></i>
-                    <span class="insight-value">51</span>
+                    <span class="insight-value">52</span>
                     <span class="insight-label">streak</span>
                 </div>
             </div>
@@ -693,7 +698,7 @@
             <div class="stats-bento">
                 <div class="stat-card large">
                     <i class="fas fa-fire"></i>
-                    <div class="stat-number" data-count="51">0</div>
+                    <div class="stat-number" data-count="53">0</div>
                     <div class="stat-label">Day Streak 🔥</div>
                     <div class="stat-sublabel">Never missed a day</div>
                 </div>
@@ -780,6 +785,34 @@
         </div>
     </section>
 
+    <!-- Achievement Badges Section (Day 53) -->
+    <section id="badges" class="section alt-bg badges-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Unlockable</span>
+                <h2 class="section-title">Achievement Badges</h2>
+                <p class="section-subtitle">Explore the site to earn badges. Progress auto-saves locally.</p>
+            </div>
+            <div class="badges-progress">
+                <div class="badges-progress-info">
+                    <span class="badges-earned-count"><span id="badges-earned-num">0</span> / <span id="badges-total-num">12</span></span>
+                    <span class="badges-progress-label">Badges Unlocked</span>
+                </div>
+                <div class="badges-progress-bar">
+                    <div class="badges-progress-fill" id="badges-progress-fill"></div>
+                </div>
+            </div>
+            <div class="badges-grid" id="badges-grid">
+                <!-- Badges rendered by JS -->
+            </div>
+            <div class="badges-legend">
+                <span><i class="fas fa-lock"></i> Locked</span>
+                <span><i class="fas fa-unlock"></i> Unlocked</span>
+                <span><i class="fas fa-question-circle"></i> Hint hover</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Productivity Corner -->
     <section id="productivity" class="section">
         <div class="container">
@@ -838,7 +871,7 @@
                     <div class="productivity-widget streak-widget">
                         <div class="streak-visual" id="streak-visual">
                             <span class="streak-flame">🔥</span>
-                            <span class="streak-number" id="streak-number">35</span>
+                            <span class="streak-number" id="streak-number">53</span>
                             <span class="streak-label">days</span>
                         </div>
                     </div>
@@ -1067,8 +1100,6 @@
                         <p>Added role text rotator cycling through 7 roles with typewriter effect. Updated hero title with kinetic-title class, gradient underline wave animation, and cursor blink effect. Light theme adaptations included.</p>
                     </div>
                 </div>
-            </div>
-        </div>
                 <div class="blog-card">
                     <div class="blog-date">
                         <span class="blog-day">31</span>
@@ -1080,6 +1111,19 @@
                         <p>Added Daily Challenge gamification system with 15 progressive levels. Each day presents a new mission from code commits to open source contributions, with XP rewards and badges. Includes streak tracking, total XP counter, and badge collection. Also added real-time API Status Dashboard monitoring GitHub, Vault API, Games DB, and Proxy Network with live latency checks and uptime percentage.</p>
                     </div>
                 </div>
+                <div class="blog-card">
+                    <div class="blog-date">
+                        <span class="blog-day">06</span>
+                        <span class="blog-month">June 2026</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Day 53</span>
+                        <h3>Achievement Badges - Unlock as You Explore</h3>
+                        <p>Added a new Achievement Badges section with 12 unlockable badges that respond to your activity across the site. Earn the Keyboard Warrior badge by hitting 10 hits in the hero game, Quote Collector by saving 5 quotes, Midnight Builder by visiting after midnight, and 9 more. Progress auto-saves to localStorage. Locked badges show as grayscale silhouettes with hints. Each unlock triggers a confetti burst and toast notification. The site now rewards curiosity — explore to discover them all.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Currently Working On Section -->
@@ -1607,7 +1651,7 @@
     </footer>
 
     <!-- Scroll to Top Button -->
-    <button class="scroll-top" aria-label="Scroll to top">
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">
         <i class="fas fa-arrow-up"></i>
     </button>
 
